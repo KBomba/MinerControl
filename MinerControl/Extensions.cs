@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace MinerControl
 {
@@ -28,7 +26,7 @@ namespace MinerControl
 
         public static void AddRange<T>(this IList<T> list, IEnumerable<T> items)
         {
-            foreach (var item in items)
+            foreach (T item in items)
                 list.Add(item);
         }
 
@@ -38,20 +36,20 @@ namespace MinerControl
             if (decimalValue.HasValue) return decimalValue.Value;
 
             var doubleValue = raw as double?;
-            if (doubleValue.HasValue) return (decimal)doubleValue.Value;
+            if (doubleValue.HasValue) return (decimal) doubleValue.Value;
 
             var floatValue = raw as float?;
-            if (floatValue.HasValue) return (decimal)floatValue.Value;
+            if (floatValue.HasValue) return (decimal) floatValue.Value;
 
             var longValue = raw as long?;
-            if (longValue.HasValue) return (decimal)longValue.Value;
+            if (longValue.HasValue) return longValue.Value;
 
             var intValue = raw as int?;
-            if (intValue.HasValue) return (decimal)intValue.Value;
+            if (intValue.HasValue) return intValue.Value;
 
             decimal parseValue;
             var style = NumberStyles.AllowDecimalPoint;
-            var culture = CultureInfo.CreateSpecificCulture("en-US");
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
 
             if (decimal.TryParse(raw.ToString(), style, culture, out parseValue)) return parseValue;
 

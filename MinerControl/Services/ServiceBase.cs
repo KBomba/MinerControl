@@ -9,33 +9,89 @@ namespace MinerControl.Services
     public abstract class ServiceBase<TEntry> : PropertyChangedBase, IService
         where TEntry : PriceEntryBase, new()
     {
-        private ServiceEnum _serviceEnum;
-        private DateTime? _lastUpdated;
+        protected string _account;
         private decimal _balance;
-
-        public MiningEngine MiningEngine { get; set; }
-        public ServiceEnum ServiceEnum { get { return _serviceEnum; } protected set { SetField(ref _serviceEnum, value, () => ServiceEnum, () => ServicePrint); } }
-        public DateTime? LastUpdated { get { return _lastUpdated; } protected set { SetField(ref _lastUpdated, value, () => LastUpdated, () => LastUpdatedPrint); } }
-        public decimal Balance { get { return _balance; } protected set { SetField(ref _balance, value, () => Balance, () => BalancePrint, () => CurrencyPrint); } }
-        public decimal Currency { get { return Balance * MiningEngine.Exchange; } }
-
-        public virtual string ServicePrint { get { return ServiceEnum.ToString(); } }
-        public string LastUpdatedPrint { get { return LastUpdated == null ? string.Empty : LastUpdated.Value.ToString("HH:mm:ss"); } }
-        public string BalancePrint { get { return Balance == 0.0m ? string.Empty : Balance.ToString("N8"); } }
-        public string CurrencyPrint { get { return Currency == 0.0m ? string.Empty : Currency.ToString("N4"); } }
-        public string TimeMiningPrint
-        {
-            get
-            {
-                var seconds = PriceEntries.Sum(o => o.TimeMiningWithCurrent.TotalSeconds);
-                return TimeSpan.FromSeconds(seconds).FormatTime(true);
-            }
-        }
+        private DateTime? _lastUpdated;
+        protected string _param1;
+        protected string _param2;
+        protected string _param3;
+        private ServiceEnum _serviceEnum;
+        protected decimal _weight = 1.0m;
+        protected string _worker;
 
         public ServiceBase()
         {
             DonationAccount = string.Empty;
             DonationWorker = string.Empty;
+        }
+
+        protected IList<TEntry> PriceEntries
+        {
+            get
+            {
+                return
+                    MiningEngine.PriceEntries.Where(o => o.ServiceEntry.ServiceEnum == ServiceEnum)
+                        .Select(o => (TEntry) o)
+                        .ToList();
+            }
+        }
+
+        protected string DonationAccount { get; set; }
+        protected string DonationWorker { get; set; }
+        protected IDictionary<string, string> AlgoTranslations { get; set; }
+
+        public MiningEngine MiningEngine { get; set; }
+
+        public ServiceEnum ServiceEnum
+        {
+            get { return _serviceEnum; }
+            protected set { SetField(ref _serviceEnum, value, () => ServiceEnum, () => ServicePrint); }
+        }
+
+        public DateTime? LastUpdated
+        {
+            get { return _lastUpdated; }
+            protected set { SetField(ref _lastUpdated, value, () => LastUpdated, () => LastUpdatedPrint); }
+        }
+
+        public decimal Balance
+        {
+            get { return _balance; }
+            protected set { SetField(ref _balance, value, () => Balance, () => BalancePrint, () => CurrencyPrint); }
+        }
+
+        public decimal Currency
+        {
+            get { return Balance*MiningEngine.Exchange; }
+        }
+
+        public virtual string ServicePrint
+        {
+            get { return ServiceEnum.ToString(); }
+        }
+
+        public string LastUpdatedPrint
+        {
+            get { return LastUpdated == null ? string.Empty : LastUpdated.Value.ToString("HH:mm:ss"); }
+        }
+
+        public string BalancePrint
+        {
+            get { return Balance == 0.0m ? string.Empty : Balance.ToString("N8"); }
+        }
+
+        public string CurrencyPrint
+        {
+            get { return Currency == 0.0m ? string.Empty : Currency.ToString("N4"); }
+        }
+
+        public string TimeMiningPrint
+        {
+            get
+            {
+                double seconds = PriceEntries.Sum(o => o.TimeMiningWithCurrent.TotalSeconds);
+                return TimeSpan.FromSeconds(seconds).FormatTime(true);
+            }
         }
 
         public void UpdateTime()
@@ -47,18 +103,6 @@ namespace MinerControl.Services
         {
             OnPropertyChanged(() => CurrencyPrint);
         }
-
-        protected IList<TEntry> PriceEntries { get { return MiningEngine.PriceEntries.Where(o => o.ServiceEntry.ServiceEnum == ServiceEnum).Select(o => (TEntry)o).ToList(); } }
-
-        protected string _account;
-        protected string _worker;
-        protected string _param1;
-        protected string _param2;
-        protected string _param3;
-        protected decimal _weight = 1.0m;
-        protected string DonationAccount { get; set;}
-        protected string DonationWorker { get; set; }
-        protected IDictionary<string, string> AlgoTranslations { get; set; }
 
         public abstract void Initialize(IDictionary<string, object> data);
         public abstract void CheckPrices();
@@ -113,7 +157,7 @@ namespace MinerControl.Services
             entry.ServiceEntry = this;
 
             entry.AlgoName = item.GetString("algo");
-            var algo = MiningEngine.AlgorithmEntries.Single(o => o.Name == entry.AlgoName);
+            AlgorithmEntry algo = MiningEngine.AlgorithmEntries.Single(o => o.Name == entry.AlgoName);
             entry.Name = algo.Display;
             entry.PriceId = item.GetString("priceid");
             entry.Hashrate = algo.Hashrate;
@@ -122,13 +166,14 @@ namespace MinerControl.Services
             entry.Folder = ProcessedSubstitutions(item.GetString("folder"), algo) ?? string.Empty;
             entry.Command = ProcessedSubstitutions(item.GetString("command"), algo);
             entry.Arguments = ProcessedSubstitutions(item.GetString("arguments"), algo) ?? string.Empty;
-            if(item.ContainsKey("usewindow"))
+            if (item.ContainsKey("usewindow"))
                 entry.UseWindow = bool.Parse(item["usewindow"].ToString());
             if (!string.IsNullOrWhiteSpace(DonationAccount))
             {
                 entry.DonationFolder = ProcessedDonationSubstitutions(item.GetString("folder"), algo) ?? string.Empty;
                 entry.DonationCommand = ProcessedDonationSubstitutions(item.GetString("command"), algo);
-                entry.DonationArguments = ProcessedDonationSubstitutions(item.GetString("arguments"), algo) ?? string.Empty;
+                entry.DonationArguments = ProcessedDonationSubstitutions(item.GetString("arguments"), algo) ??
+                                          string.Empty;
             }
 
             return entry;
@@ -147,15 +192,19 @@ namespace MinerControl.Services
 
         protected TEntry GetEntry(string algo)
         {
-            return PriceEntries.FirstOrDefault(o => (o.PriceId != null && o.PriceId == algo) || (o.PriceId == null && o.AlgoName == GetAlgoName(algo)));
+            return
+                PriceEntries.FirstOrDefault(
+                    o =>
+                        (o.PriceId != null && o.PriceId == algo) ||
+                        (o.PriceId == null && o.AlgoName == GetAlgoName(algo)));
         }
 
         protected void ClearStalePrices()
         {
             if (!LastUpdated.HasValue || LastUpdated.Value.AddMinutes(30) > DateTime.Now) return;
 
-            foreach (var entry in PriceEntries)
-               entry.Price = 0;
+            foreach (TEntry entry in PriceEntries)
+                entry.Price = 0;
         }
     }
 }

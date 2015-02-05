@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MinerControl.PriceEntries;
 using MinerControl.Utility;
 
@@ -23,26 +22,26 @@ namespace MinerControl.Services
             ServiceEnum = ServiceEnum.HamsterPool;
             //DonationAccount = "MinerControl";  //Too hard to configure donation for this one.
             //DonationWorker = "1";
-            
+
             AlgoTranslations = new Dictionary<string, string>
-                {
-                    {"nscrypt", "scryptn"}
-                };
+            {
+                {"nscrypt", "scryptn"}
+            };
         }
 
         public override void Initialize(IDictionary<string, object> data)
         {
             ExtractCommon(data);
             _apikey = data.GetString("apikey");
-            _donation = data["donation"].ExtractDecimal() / 100;
+            _donation = data["donation"].ExtractDecimal()/100;
 
             var items = data["algos"] as object[];
-            foreach (var rawitem in items)
+            foreach (object rawitem in items)
             {
                 var item = rawitem as Dictionary<string, object>;
-                var entry = CreateEntry(item);
+                HamsterPoolPriceEntry entry = CreateEntry(item);
                 entry.Donation = _donation;
-                
+
                 Add(entry);
             }
         }
@@ -50,8 +49,13 @@ namespace MinerControl.Services
         public override void CheckPrices()
         {
             ClearStalePrices();
-            WebUtil.DownloadJson(string.Format("https://hamsterpool.com/index.php?page=api&action=algorithm_btc_per_mh", _apikey), ProcessPrices);
-            WebUtil.DownloadJson(string.Format("https://hamsterpool.com/index.php?page=api&action=user_algorithm_balance_btc&api_key={0}", _apikey), ProcessBalances);
+            WebUtil.DownloadJson(
+                string.Format("https://hamsterpool.com/index.php?page=api&action=algorithm_btc_per_mh", _apikey),
+                ProcessPrices);
+            WebUtil.DownloadJson(
+                string.Format(
+                    "https://hamsterpool.com/index.php?page=api&action=user_algorithm_balance_btc&api_key={0}", _apikey),
+                ProcessBalances);
         }
 
         private void ProcessPrices(object jsonData)
@@ -59,15 +63,15 @@ namespace MinerControl.Services
             var data = jsonData as Dictionary<string, object>;
             lock (MiningEngine)
             {
-                foreach (var key in data.Keys)
+                foreach (string key in data.Keys)
                 {
-                    var algo = key.ToLower();
-                    var price = data[key].ExtractDecimal();
+                    string algo = key.ToLower();
+                    decimal price = data[key].ExtractDecimal();
 
-                    var entry = GetEntry(algo);
+                    HamsterPoolPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
-                    entry.Price = price * 1000;
+                    entry.Price = price*1000;
                 }
 
                 MiningEngine.PricesUpdated = true;
@@ -82,12 +86,12 @@ namespace MinerControl.Services
             var data = jsonData as Dictionary<string, object>;
             lock (MiningEngine)
             {
-                foreach (var key in data.Keys)
+                foreach (string key in data.Keys)
                 {
-                    var algo = key.ToLower();
-                    var balance = data[key].ExtractDecimal();
+                    string algo = key.ToLower();
+                    decimal balance = data[key].ExtractDecimal();
 
-                    var entry = GetEntry(algo);
+                    HamsterPoolPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
                     entry.Balance = balance;

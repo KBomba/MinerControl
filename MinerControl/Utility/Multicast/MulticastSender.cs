@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -9,14 +7,25 @@ namespace MinerControl.Utility.Multicast
 {
     public class MulticastSender : IDisposable
     {
-        private IPEndPoint _endPoint;
-        private int _timeToLive;
+        private readonly IPEndPoint _endPoint;
+        private readonly int _timeToLive;
+        private bool _disposed;
         private UdpClient _udpClient;
 
         public MulticastSender(IPEndPoint endPoint, int timeToLive)
         {
             _endPoint = endPoint;
             _timeToLive = timeToLive;
+        }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+            if (_udpClient != null)
+            {
+                Stop();
+            }
+            _disposed = true;
         }
 
         public void Start()
@@ -45,18 +54,6 @@ namespace MinerControl.Utility.Multicast
         public void Send(string data)
         {
             Send(Encoding.Unicode.GetBytes(data));
-        }
-
-        private bool _disposed;
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-            if (_udpClient != null)
-            {
-                Stop();
-            }
-            _disposed = true;
         }
     }
 }

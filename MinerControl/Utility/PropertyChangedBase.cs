@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace MinerControl.Utility
 {
@@ -16,7 +14,7 @@ namespace MinerControl.Utility
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) 
+            if (handler != null)
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
@@ -42,7 +40,8 @@ namespace MinerControl.Utility
             OnPropertyChanged(me.Member.Name);
         }
 
-        protected void SetField<T>(ref T field, T value, Expression<Func<T>> selectorExpression, params Expression<Func<object>>[] additonal)
+        protected void SetField<T>(ref T field, T value, Expression<Func<T>> selectorExpression,
+            params Expression<Func<object>>[] additonal)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;

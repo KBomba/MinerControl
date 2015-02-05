@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace MinerControl.Utility
 {
     public static class ProcessUtil
     {
         /// <summary>
-        /// Kill a process, and all of its children, grandchildren, etc.
+        ///     Kill a process, and all of its children, grandchildren, etc.
         /// </summary>
         /// <param name="pid">Process ID.</param>
         public static void KillProcessAndChildren(int pid)
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher
-              ("Select * From Win32_Process Where ParentProcessID=" + pid);
+            var searcher = new ManagementObjectSearcher
+                ("Select * From Win32_Process Where ParentProcessID=" + pid);
             ManagementObjectCollection moc = searcher.Get();
             foreach (ManagementObject mo in moc)
             {
@@ -42,7 +39,7 @@ namespace MinerControl.Utility
         {
             try
             {
-                if (process == null || process.HasExited == true)
+                if (process == null || process.HasExited)
                     return;
 
                 process.Kill();
@@ -59,7 +56,7 @@ namespace MinerControl.Utility
 
         //http://stackoverflow.com/questions/2647820/toggle-process-startinfo-windowstyle-processwindowstyle-hidden-at-runtime
         [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         public static void HideWindow(Process process)
         {
@@ -74,7 +71,7 @@ namespace MinerControl.Utility
         }
 
         [DllImport("user32.dll")]
-        static extern int SetWindowText(IntPtr hWnd, string text);
+        private static extern int SetWindowText(IntPtr hWnd, string text);
 
         public static void SetWindowTitle(Process process, string title)
         {
@@ -82,7 +79,7 @@ namespace MinerControl.Utility
         }
 
         /// <summary>
-        /// Safely check if process exists and has not exited.
+        ///     Safely check if process exists and has not exited.
         /// </summary>
         public static bool IsRunning(this Process process)
         {

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MinerControl.PriceEntries;
 using MinerControl.Utility;
 
@@ -39,17 +37,17 @@ namespace MinerControl.Services
             DonationAccount = "MinerControl";
             DonationWorker = "1";
         }
-        
+
         public override void Initialize(IDictionary<string, object> data)
         {
             ExtractCommon(data);
             _apikey = data.GetString("apikey");
 
             var items = data["algos"] as object[];
-            foreach (var rawitem in items)
+            foreach (object rawitem in items)
             {
                 var item = rawitem as Dictionary<string, object>;
-                var entry = CreateEntry(item);
+                LtcRabbitPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
             }
@@ -59,7 +57,10 @@ namespace MinerControl.Services
         {
             ClearStalePrices();
             WebUtil.DownloadJson("https://www.ltcrabbit.com/index.php?page=api&action=public", ProcessPrices);
-            WebUtil.DownloadJson(string.Format("https://www.ltcrabbit.com/index.php?page=api&action=getappdata&appname=MinerControl&appversion=1&api_key={0}", _apikey), ProcessBalances);
+            WebUtil.DownloadJson(
+                string.Format(
+                    "https://www.ltcrabbit.com/index.php?page=api&action=getappdata&appname=MinerControl&appversion=1&api_key={0}",
+                    _apikey), ProcessBalances);
         }
 
         private void ProcessPrices(object jsonData)
@@ -70,16 +71,16 @@ namespace MinerControl.Services
 
             lock (MiningEngine)
             {
-                foreach (var key in current.Keys)
+                foreach (string key in current.Keys)
                 {
-                    var rawitem = current[key];
+                    object rawitem = current[key];
                     var item = rawitem as Dictionary<string, object>;
-                    var algo = key.ToLower();
+                    string algo = key.ToLower();
 
-                    var entry = GetEntry(algo);
+                    LtcRabbitPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
-                    entry.Price = item["btc_mh"].ExtractDecimal() * 1000;
+                    entry.Price = item["btc_mh"].ExtractDecimal()*1000;
                 }
 
                 MiningEngine.PricesUpdated = true;
@@ -98,18 +99,18 @@ namespace MinerControl.Services
             var user = getappdata["user"] as Dictionary<string, object>;
             Balance = user["balance_btc"].ExtractDecimal();
 
-            var entry = GetEntry("x11");
+            LtcRabbitPriceEntry entry = GetEntry("x11");
             if (entry != null)
             {
-                var hashrate = user["hashrate_x11"].ExtractDecimal();
-                entry.AcceptSpeed = hashrate / 1000;
+                decimal hashrate = user["hashrate_x11"].ExtractDecimal();
+                entry.AcceptSpeed = hashrate/1000;
             }
 
-           entry = GetEntry("scrypt");
+            entry = GetEntry("scrypt");
             if (entry != null)
             {
-                var hashrate = user["hashrate_scrypt"].ExtractDecimal();
-                entry.AcceptSpeed = hashrate / 1000;
+                decimal hashrate = user["hashrate_scrypt"].ExtractDecimal();
+                entry.AcceptSpeed = hashrate/1000;
             }
         }
     }

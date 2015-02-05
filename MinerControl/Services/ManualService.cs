@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using MinerControl.PriceEntries;
 
 namespace MinerControl.Services
@@ -18,10 +15,10 @@ namespace MinerControl.Services
             ExtractCommon(data);
 
             var items = data["algos"] as object[];
-            foreach (var rawitem in items)
+            foreach (object rawitem in items)
             {
                 var item = rawitem as Dictionary<string, object>;
-                var entry = CreateEntry(item);
+                ManualPriceEntry entry = CreateEntry(item);
 
                 if (item.ContainsKey("price"))
                     entry.Price = item["price"].ExtractDecimal();

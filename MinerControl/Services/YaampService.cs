@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MinerControl.PriceEntries;
 using MinerControl.Utility;
 
@@ -28,7 +27,7 @@ namespace MinerControl.Services
             ServiceEnum = ServiceEnum.YAAMP;
             DonationAccount = "1PMj3nrVq5CH4TXdJSnHHLPdvcXinjG72y";
         }
-        
+
         public override void Initialize(IDictionary<string, object> data)
         {
             ExtractCommon(data);
@@ -37,10 +36,10 @@ namespace MinerControl.Services
                 _priceMode = int.Parse(data["pricemode"].ToString());
 
             var items = data["algos"] as object[];
-            foreach (var rawitem in items)
+            foreach (object rawitem in items)
             {
                 var item = rawitem as Dictionary<string, object>;
-                var entry = CreateEntry(item);
+                YaampPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
             }
@@ -59,25 +58,25 @@ namespace MinerControl.Services
 
             lock (MiningEngine)
             {
-                foreach (var key in data.Keys)
+                foreach (string key in data.Keys)
                 {
-                    var rawitem = data[key];
+                    object rawitem = data[key];
                     var item = rawitem as Dictionary<string, object>;
-                    var algo = key.ToLower();
+                    string algo = key.ToLower();
 
-                    var entry = GetEntry(algo);
+                    YaampPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
                     switch (_priceMode)
                     {
                         case 1:
-                            entry.Price = item["estimate_last24h"].ExtractDecimal() * 1000;
+                            entry.Price = item["estimate_last24h"].ExtractDecimal()*1000;
                             break;
                         case 2:
-                            entry.Price = item["actual_last24h"].ExtractDecimal() * 1000;
+                            entry.Price = item["actual_last24h"].ExtractDecimal()*1000;
                             break;
                         default:
-                            entry.Price = item["estimate_current"].ExtractDecimal() * 1000;
+                            entry.Price = item["estimate_current"].ExtractDecimal()*1000;
                             break;
                     }
                     entry.FeePercent = item["fees"].ExtractDecimal();
@@ -98,17 +97,17 @@ namespace MinerControl.Services
             {
                 Balance = data["unpaid"].ExtractDecimal();
 
-                foreach (var entry in PriceEntries)
+                foreach (YaampPriceEntry entry in PriceEntries)
                     entry.AcceptSpeed = 0;
 
                 if (!data.ContainsKey("miners")) return;
                 var miners = data["miners"] as Dictionary<string, object>;
-                foreach (var key in miners.Keys)
+                foreach (string key in miners.Keys)
                 {
-                    var entry = GetEntry(key.ToLower());
+                    YaampPriceEntry entry = GetEntry(key.ToLower());
                     if (entry == null) continue;
                     var item = miners[key] as Dictionary<string, object>;
-                    entry.AcceptSpeed = item["hashrate"].ExtractDecimal() / 1000000;
+                    entry.AcceptSpeed = item["hashrate"].ExtractDecimal()/1000000;
                 }
 
                 MiningEngine.PricesUpdated = true;

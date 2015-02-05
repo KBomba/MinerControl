@@ -44,10 +44,10 @@ namespace MinerControl.Services
             DonationAccount = "1PMj3nrVq5CH4TXdJSnHHLPdvcXinjG72y";
             DonationWorker = "1";
 
-            AlgoTranslations = new Dictionary<string, string>                
-                {
-                    {"nscrypt", "scryptn"}
-                };
+            AlgoTranslations = new Dictionary<string, string>
+            {
+                {"nscrypt", "scryptn"}
+            };
         }
 
         public override void Initialize(IDictionary<string, object> data)
@@ -55,10 +55,10 @@ namespace MinerControl.Services
             ExtractCommon(data);
 
             var items = data["algos"] as object[];
-            foreach (var rawitem in items)
+            foreach (object rawitem in items)
             {
                 var item = rawitem as Dictionary<string, object>;
-                var entry = CreateEntry(item);
+                WafflePoolPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
             }
@@ -76,18 +76,18 @@ namespace MinerControl.Services
             var data = jsonData as Dictionary<string, object>;
             lock (MiningEngine)
             {
-                foreach (var key in data.Keys)
+                foreach (string key in data.Keys)
                 {
-                    var rawitem = data[key];
+                    object rawitem = data[key];
                     var item = rawitem as Dictionary<string, object>;
 
-                    var entry = GetEntry(key.ToLower());
+                    WafflePoolPriceEntry entry = GetEntry(key.ToLower());
                     if (entry == null) continue;
 
                     var earnings = item["earnings"] as object[];
                     var earning = earnings[0] as Dictionary<string, object>;
 
-                    entry.Price = earning["permhs"].ExtractDecimal() * 1000;
+                    entry.Price = earning["permhs"].ExtractDecimal()*1000;
                 }
 
                 MiningEngine.PricesUpdated = true;
@@ -103,23 +103,23 @@ namespace MinerControl.Services
 
             lock (MiningEngine)
             {
-                foreach (var entry in PriceEntries)
+                foreach (WafflePoolPriceEntry entry in PriceEntries)
                 {
                     entry.Balance = 0;
                     entry.AcceptSpeed = 0;
                     entry.RejectSpeed = 0;
                 }
 
-                foreach (var key in data.Keys)
+                foreach (string key in data.Keys)
                 {
-                    var rawitem = data[key];
+                    object rawitem = data[key];
                     var item = rawitem as Dictionary<string, object>;
 
-                    var entry = GetEntry(key.ToLower());
+                    WafflePoolPriceEntry entry = GetEntry(key.ToLower());
                     if (entry == null) continue;
 
-                    entry.AcceptSpeed = item["hashrate"].ExtractDecimal() / 1000000;
-                    entry.RejectSpeed = item["stalerate"].ExtractDecimal() / 1000000;
+                    entry.AcceptSpeed = item["hashrate"].ExtractDecimal()/1000000;
+                    entry.RejectSpeed = item["stalerate"].ExtractDecimal()/1000000;
 
                     var balances = item["balances"] as Dictionary<string, object>;
                     entry.Balance = balances["confirmed"].ExtractDecimal() + balances["unconverted"].ExtractDecimal();

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 
 namespace MinerControl.Utility
 {
@@ -14,23 +12,26 @@ namespace MinerControl.Utility
         private PropertyDescriptor _sortProperty;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SortableBindingList{T}"/> class.
+        ///     Initializes a new instance of the <see cref="SortableBindingList{T}" /> class.
         /// </summary>
         public SortableBindingList()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SortableBindingList{T}"/> class.
+        ///     Initializes a new instance of the <see cref="SortableBindingList{T}" /> class.
         /// </summary>
-        /// <param name="list">An <see cref="T:System.Collections.Generic.IList`1" /> of items to be contained in the <see cref="T:System.ComponentModel.BindingList`1" />.</param>
+        /// <param name="list">
+        ///     An <see cref="T:System.Collections.Generic.IList`1" /> of items to be contained in the
+        ///     <see cref="T:System.ComponentModel.BindingList`1" />.
+        /// </param>
         public SortableBindingList(IList<T> list)
             : base(list)
         {
         }
 
         /// <summary>
-        /// Gets a value indicating whether the list supports sorting.
+        ///     Gets a value indicating whether the list supports sorting.
         /// </summary>
         protected override bool SupportsSortingCore
         {
@@ -38,7 +39,7 @@ namespace MinerControl.Utility
         }
 
         /// <summary>
-        /// Gets a value indicating whether the list is sorted.
+        ///     Gets a value indicating whether the list is sorted.
         /// </summary>
         protected override bool IsSortedCore
         {
@@ -46,7 +47,7 @@ namespace MinerControl.Utility
         }
 
         /// <summary>
-        /// Gets the direction the list is sorted.
+        ///     Gets the direction the list is sorted.
         /// </summary>
         protected override ListSortDirection SortDirectionCore
         {
@@ -54,7 +55,8 @@ namespace MinerControl.Utility
         }
 
         /// <summary>
-        /// Gets the property descriptor that is used for sorting the list if sorting is implemented in a derived class; otherwise, returns null
+        ///     Gets the property descriptor that is used for sorting the list if sorting is implemented in a derived class;
+        ///     otherwise, returns null
         /// </summary>
         protected override PropertyDescriptor SortPropertyCore
         {
@@ -62,7 +64,7 @@ namespace MinerControl.Utility
         }
 
         /// <summary>
-        /// Removes any sort applied with ApplySortCore if sorting is implemented
+        ///     Removes any sort applied with ApplySortCore if sorting is implemented
         /// </summary>
         protected override void RemoveSortCore()
         {
@@ -72,7 +74,7 @@ namespace MinerControl.Utility
         }
 
         /// <summary>
-        /// Sorts the items if overridden in a derived class
+        ///     Sorts the items if overridden in a derived class
         /// </summary>
         /// <param name="prop"></param>
         /// <param name="direction"></param>
@@ -81,7 +83,7 @@ namespace MinerControl.Utility
             _sortProperty = prop;
             _sortDirection = direction;
 
-            List<T> list = Items as List<T>;
+            var list = Items as List<T>;
             if (list == null) return;
 
             list.Sort(Compare);
@@ -90,10 +92,10 @@ namespace MinerControl.Utility
             //fire an event that the list has been changed.
             OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
         }
-        
+
         private int Compare(T lhs, T rhs)
         {
-            var result = OnComparison(lhs, rhs);
+            int result = OnComparison(lhs, rhs);
             //invert if descending
             if (_sortDirection == ListSortDirection.Descending)
                 result = -result;
@@ -114,7 +116,7 @@ namespace MinerControl.Utility
             }
             if (lhsValue is IComparable)
             {
-                return ((IComparable)lhsValue).CompareTo(rhsValue);
+                return ((IComparable) lhsValue).CompareTo(rhsValue);
             }
             if (lhsValue.Equals(rhsValue))
             {

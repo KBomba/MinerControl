@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Script.Serialization;
@@ -31,11 +29,11 @@ namespace MinerControl.Utility
         {
             try
             {
-                var pageString = e.Result;
+                string pageString = e.Result;
                 if (pageString == null) return;
                 var jsonProcessor = e.UserState as Action<object>;
                 var serializer = new JavaScriptSerializer();
-                var data = serializer.DeserializeObject(pageString);
+                object data = serializer.DeserializeObject(pageString);
 
                 jsonProcessor(data);
             }

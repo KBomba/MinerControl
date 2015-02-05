@@ -1,5 +1,4 @@
-﻿
-namespace MinerControl
+﻿namespace MinerControl
 {
     public class AlgorithmEntry
     {

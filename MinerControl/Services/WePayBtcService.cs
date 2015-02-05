@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MinerControl.PriceEntries;
 using MinerControl.Utility;
 
@@ -30,10 +28,10 @@ namespace MinerControl.Services
             ExtractCommon(data);
 
             var items = data["algos"] as object[];
-            foreach (var rawitem in items)
+            foreach (object rawitem in items)
             {
                 var item = rawitem as Dictionary<string, object>;
-                var entry = CreateEntry(item);
+                WePayBtcPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
             }
@@ -44,23 +42,23 @@ namespace MinerControl.Services
             ClearStalePrices();
             WebUtil.DownloadJson("http://wepaybtc.com/payouts.json", ProcessPrices);
         }
-        
+
         private void ProcessPrices(object jsonData)
         {
             var data = jsonData as Dictionary<string, object>;
 
             lock (MiningEngine)
             {
-                foreach (var key in data.Keys)
+                foreach (string key in data.Keys)
                 {
-                    var rawitem = data[key];
+                    object rawitem = data[key];
                     var item = rawitem as Dictionary<string, object>;
-                    var algo = key.ToLower();
+                    string algo = key.ToLower();
 
-                    var entry = GetEntry(algo);
+                    WePayBtcPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
-                    entry.Price = data[key].ExtractDecimal() * 1000;
+                    entry.Price = data[key].ExtractDecimal()*1000;
                 }
 
                 MiningEngine.PricesUpdated = true;

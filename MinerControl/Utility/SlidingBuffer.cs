@@ -7,8 +7,8 @@ namespace MinerControl.Utility
 
     public class SlidingBuffer<T> : IEnumerable<T>
     {
-        private readonly Queue<T> _queue;
         private readonly int _maxCount;
+        private readonly Queue<T> _queue;
 
         public SlidingBuffer(int maxCount)
         {
@@ -16,11 +16,9 @@ namespace MinerControl.Utility
             _queue = new Queue<T>(maxCount);
         }
 
-        public void Add(T item)
+        public int Count
         {
-            if (_queue.Count == _maxCount)
-                _queue.Dequeue();
-            _queue.Enqueue(item);
+            get { return _queue.Count; }
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -33,9 +31,11 @@ namespace MinerControl.Utility
             return GetEnumerator();
         }
 
-        public int Count
+        public void Add(T item)
         {
-            get { return _queue.Count; }
+            if (_queue.Count == _maxCount)
+                _queue.Dequeue();
+            _queue.Enqueue(item);
         }
     }
 }

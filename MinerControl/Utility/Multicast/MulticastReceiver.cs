@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 namespace MinerControl.Utility.Multicast
@@ -12,19 +9,30 @@ namespace MinerControl.Utility.Multicast
 
     public class MulticastReceiver : IDisposable
     {
+        private readonly IPEndPoint _endPoint;
+        private bool _disposed;
         private Thread _listener;
-        private IPEndPoint _endPoint;
-
-        public event MulticastDataReceivedEventHandler DataReceived;
 
         public MulticastReceiver(IPEndPoint endPoint)
         {
             _endPoint = endPoint;
         }
 
+        public void Dispose()
+        {
+            if (_disposed) return;
+            if (_listener.IsAlive)
+            {
+                Stop();
+            }
+            _disposed = true;
+        }
+
+        public event MulticastDataReceivedEventHandler DataReceived;
+
         public void Start()
         {
-            _listener = new Thread(new ThreadStart(BackgroundListener))
+            _listener = new Thread(BackgroundListener)
             {
                 IsBackground = true
             };
@@ -50,13 +58,13 @@ namespace MinerControl.Utility.Multicast
                 client.Client.Bind(bindingEndpoint);
                 client.JoinMulticastGroup(_endPoint.Address);
 
-                var keepRunning = true;
+                bool keepRunning = true;
                 while (keepRunning)
                 {
                     try
                     {
-                        IPEndPoint remote = new IPEndPoint(IPAddress.Any, _endPoint.Port);
-                        var buffer = client.Receive(ref remote);
+                        var remote = new IPEndPoint(IPAddress.Any, _endPoint.Port);
+                        byte[] buffer = client.Receive(ref remote);
                         lock (this)
                         {
                             DataReceived(this, new MulticastDataReceivedEventArgs(remote, buffer));
@@ -71,18 +79,6 @@ namespace MinerControl.Utility.Multicast
 
                 client.DropMulticastGroup(_endPoint.Address);
             }
-        }
-
-        private bool _disposed;
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-            if (_listener.IsAlive)
-            {
-                Stop();
-            }
-            _disposed = true;
         }
     }
 }

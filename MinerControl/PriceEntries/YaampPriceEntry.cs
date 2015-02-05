@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MinerControl.PriceEntries
+﻿namespace MinerControl.PriceEntries
 {
     public class YaampPriceEntry : PriceEntryBase
     {
@@ -11,7 +6,7 @@ namespace MinerControl.PriceEntries
 
         public override decimal Fees
         {
-            get { return Earn * (FeePercent / 100); }
+            get { return Earn*(FeePercent/100); }
             set { base.Fees = value; }
         }
     }

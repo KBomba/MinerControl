@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MinerControl.PriceEntries;
 using MinerControl.Utility;
 
@@ -8,8 +7,18 @@ namespace MinerControl.Services
 {
     public abstract class NiceHashServiceBase : ServiceBase<NiceHashPriceEntry>
     {
-        protected abstract string BalanceFormat { get; }
-        protected abstract string CurrentFormat { get; }
+        private readonly IDictionary<string, int> _algoTranslation = new Dictionary<string, int>
+        {
+            {"x11", 3},
+            {"x13", 4},
+            {"scrypt", 0},
+            {"scryptn", 2},
+            {"keccak", 5},
+            {"sha256", 1},
+            {"x15", 6},
+            {"nist5", 7},
+            {"neoscrypt", 8}
+        };
 
         public NiceHashServiceBase()
         {
@@ -17,15 +26,18 @@ namespace MinerControl.Services
             DonationWorker = "1";
         }
 
+        protected abstract string BalanceFormat { get; }
+        protected abstract string CurrentFormat { get; }
+
         public override void Initialize(IDictionary<string, object> data)
         {
             ExtractCommon(data);
 
             var items = data["algos"] as object[];
-            foreach (var rawitem in items)
+            foreach (object rawitem in items)
             {
                 var item = rawitem as Dictionary<string, object>;
-                var entry = CreateEntry(item);
+                NiceHashPriceEntry entry = CreateEntry(item);
                 if (string.IsNullOrWhiteSpace(entry.PriceId))
                     entry.PriceId = GetAgorithmId(entry.AlgoName).ToString();
 
@@ -48,18 +60,18 @@ namespace MinerControl.Services
 
             lock (MiningEngine)
             {
-                foreach (var stat in stats)
+                foreach (object stat in stats)
                 {
                     var item = stat as Dictionary<string, object>;
-                    var algo = item["algo"].ToString();
-                    var entry = GetEntry(algo);
+                    string algo = item["algo"].ToString();
+                    NiceHashPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
                     entry.Price = item["price"].ExtractDecimal();
                     switch (entry.AlgoName)
                     {
                         case "sha256":
-                            entry.Price = item["price"].ExtractDecimal() / 1000; // SHA256 listed in TH/s
+                            entry.Price = item["price"].ExtractDecimal()/1000; // SHA256 listed in TH/s
                             break;
                         default:
                             entry.Price = item["price"].ExtractDecimal(); // All others in GH/s
@@ -76,16 +88,16 @@ namespace MinerControl.Services
 
         private void ProcessBalances(object jsonData)
         {
-            var totalBalance = 0m;
+            decimal totalBalance = 0m;
             var data = jsonData as Dictionary<string, object>;
             var result = data["result"] as Dictionary<string, object>;
             var stats = result["stats"] as object[];
-            foreach (var stat in stats)
+            foreach (object stat in stats)
             {
                 var item = stat as Dictionary<string, object>;
                 totalBalance += item["balance"].ExtractDecimal();
-                var algo = item["algo"].ToString();
-                var entry = GetEntry(algo);
+                string algo = item["algo"].ToString();
+                NiceHashPriceEntry entry = GetEntry(algo);
                 if (entry == null) continue;
 
                 entry.Balance = item["balance"].ExtractDecimal();
@@ -96,8 +108,8 @@ namespace MinerControl.Services
                         entry.RejectSpeed = item["rejected_speed"].ExtractDecimal();
                         break;
                     default:
-                        entry.AcceptSpeed = item["accepted_speed"].ExtractDecimal() * 1000;
-                        entry.RejectSpeed = item["rejected_speed"].ExtractDecimal() * 1000;
+                        entry.AcceptSpeed = item["accepted_speed"].ExtractDecimal()*1000;
+                        entry.RejectSpeed = item["rejected_speed"].ExtractDecimal()*1000;
                         break;
                 }
             }
@@ -107,19 +119,6 @@ namespace MinerControl.Services
                 Balance = totalBalance;
             }
         }
-
-        private IDictionary<string, int> _algoTranslation = new Dictionary<string, int>
-        {
-            {"x11", 3},
-            {"x13", 4},
-            {"scrypt", 0},
-            {"scryptn", 2},
-            {"keccak", 5},
-            {"sha256", 1},
-            {"x15", 6},
-            {"nist5", 7},
-            {"neoscrypt", 8}
-        };
 
         private int GetAgorithmId(string algorithmName)
         {

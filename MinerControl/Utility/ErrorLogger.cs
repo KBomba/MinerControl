@@ -6,7 +6,7 @@ namespace MinerControl.Utility
 {
     public static class ErrorLogger
     {
-        const string logfile = "error.log";
+        private const string logfile = "error.log";
 
         public static bool LogExceptions { get; set; }
 
@@ -20,7 +20,7 @@ namespace MinerControl.Utility
             sb.AppendLine(string.Format("Message: {0}", ex.Message));
             sb.AppendLine(string.Format("Stack trace: {0}", ex.StackTrace));
 
-            using (var w = File.Exists(logfile) ? File.AppendText(logfile) : File.CreateText(logfile))
+            using (StreamWriter w = File.Exists(logfile) ? File.AppendText(logfile) : File.CreateText(logfile))
             {
                 w.Write(sb.ToString());
             }
