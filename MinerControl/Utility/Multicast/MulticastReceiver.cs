@@ -50,8 +50,8 @@ namespace MinerControl.Utility.Multicast
 
         private void BackgroundListener()
         {
-            var bindingEndpoint = new IPEndPoint(IPAddress.Any, _endPoint.Port);
-            using (var client = new UdpClient())
+            IPEndPoint bindingEndpoint = new IPEndPoint(IPAddress.Any, _endPoint.Port);
+            using (UdpClient client = new UdpClient())
             {
                 client.ExclusiveAddressUse = false;
                 client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -63,7 +63,7 @@ namespace MinerControl.Utility.Multicast
                 {
                     try
                     {
-                        var remote = new IPEndPoint(IPAddress.Any, _endPoint.Port);
+                        IPEndPoint remote = new IPEndPoint(IPAddress.Any, _endPoint.Port);
                         byte[] buffer = client.Receive(ref remote);
                         lock (this)
                         {

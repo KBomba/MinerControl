@@ -354,7 +354,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
 
         static NVAPI()
         {
-            var attribute = new DllImportAttribute(GetDllName());
+            DllImportAttribute attribute = new DllImportAttribute(GetDllName());
             attribute.CallingConvention = CallingConvention.Cdecl;
             attribute.PreserveSig = true;
             attribute.EntryPoint = "nvapi_QueryInterface";
@@ -412,7 +412,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
         public static NvStatus NvAPI_GPU_GetFullName(NvPhysicalGpuHandle gpuHandle,
             out string name)
         {
-            var builder = new StringBuilder(SHORT_STRING_MAX);
+            StringBuilder builder = new StringBuilder(SHORT_STRING_MAX);
             NvStatus status;
             if (_NvAPI_GPU_GetFullName != null)
                 status = _NvAPI_GPU_GetFullName(gpuHandle, builder);
@@ -424,7 +424,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
 
         public static NvStatus NvAPI_GetInterfaceVersionString(out string version)
         {
-            var builder = new StringBuilder(SHORT_STRING_MAX);
+            StringBuilder builder = new StringBuilder(SHORT_STRING_MAX);
             NvStatus status;
             if (_NvAPI_GetInterfaceVersionString != null)
                 status = _NvAPI_GetInterfaceVersionString(builder);

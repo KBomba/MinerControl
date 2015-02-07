@@ -11,9 +11,9 @@ namespace MinerControl.Utility
         {
             try
             {
-                using (var client = new WebClient())
+                using (WebClient client = new WebClient())
                 {
-                    var uri = new Uri(url);
+                    Uri uri = new Uri(url);
                     client.Encoding = Encoding.UTF8;
                     client.DownloadStringCompleted += DownloadJsonComplete;
                     client.DownloadStringAsync(uri, jsonProcessor);
@@ -31,8 +31,8 @@ namespace MinerControl.Utility
             {
                 string pageString = e.Result;
                 if (pageString == null) return;
-                var jsonProcessor = e.UserState as Action<object>;
-                var serializer = new JavaScriptSerializer();
+                Action<object> jsonProcessor = e.UserState as Action<object>;
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
                 object data = serializer.DeserializeObject(pageString);
 
                 jsonProcessor(data);

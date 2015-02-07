@@ -261,11 +261,11 @@ namespace MinerControl
         {
             if (_engine.MiningMode != MiningModeEnum.Stopped) return;
 
-            var senderGrid = (DataGridView) sender;
+            DataGridView senderGrid = (DataGridView) sender;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
-                var data = senderGrid.DataSource as IList<PriceEntryBase>;
+                IList<PriceEntryBase> data = senderGrid.DataSource as IList<PriceEntryBase>;
                 PriceEntryBase entry = data[e.RowIndex];
 
                 _engine.MiningMode = MiningModeEnum.Manual;
@@ -300,7 +300,7 @@ namespace MinerControl
                 _engine.PricesUpdated = false;
             }
 
-            var autoModes = new[] {MiningModeEnum.Automatic, MiningModeEnum.Donation};
+            MiningModeEnum[] autoModes = new[] {MiningModeEnum.Automatic, MiningModeEnum.Donation};
             if (!autoModes.Contains(_engine.MiningMode)) return;
 
             RunBestAlgo();

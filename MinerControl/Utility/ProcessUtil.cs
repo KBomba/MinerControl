@@ -13,7 +13,7 @@ namespace MinerControl.Utility
         /// <param name="pid">Process ID.</param>
         public static void KillProcessAndChildren(int pid)
         {
-            var searcher = new ManagementObjectSearcher
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher
                 ("Select * From Win32_Process Where ParentProcessID=" + pid);
             ManagementObjectCollection moc = searcher.Get();
             foreach (ManagementObject mo in moc)

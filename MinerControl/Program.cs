@@ -55,7 +55,7 @@ namespace MinerControl
 
         private static void LastResortDomainExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            var ex = (Exception) e.ExceptionObject;
+            Exception ex = (Exception) e.ExceptionObject;
             ErrorLogger.Log(ex);
         }
     }

@@ -32,23 +32,23 @@ namespace MinerControl
 
         public static decimal ExtractDecimal(this object raw)
         {
-            var decimalValue = raw as decimal?;
+            decimal? decimalValue = raw as decimal?;
             if (decimalValue.HasValue) return decimalValue.Value;
 
-            var doubleValue = raw as double?;
+            double? doubleValue = raw as double?;
             if (doubleValue.HasValue) return (decimal) doubleValue.Value;
 
-            var floatValue = raw as float?;
+            float? floatValue = raw as float?;
             if (floatValue.HasValue) return (decimal) floatValue.Value;
 
-            var longValue = raw as long?;
+            long? longValue = raw as long?;
             if (longValue.HasValue) return longValue.Value;
 
-            var intValue = raw as int?;
+            int? intValue = raw as int?;
             if (intValue.HasValue) return intValue.Value;
 
             decimal parseValue;
-            var style = NumberStyles.AllowDecimalPoint;
+            NumberStyles style = NumberStyles.AllowDecimalPoint;
             CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
 
             if (decimal.TryParse(raw.ToString(), style, culture, out parseValue)) return parseValue;

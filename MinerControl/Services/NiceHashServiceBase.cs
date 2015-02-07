@@ -33,10 +33,10 @@ namespace MinerControl.Services
         {
             ExtractCommon(data);
 
-            var items = data["algos"] as object[];
+            object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
-                var item = rawitem as Dictionary<string, object>;
+                Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                 NiceHashPriceEntry entry = CreateEntry(item);
                 if (string.IsNullOrWhiteSpace(entry.PriceId))
                     entry.PriceId = GetAgorithmId(entry.AlgoName).ToString();
@@ -54,15 +54,15 @@ namespace MinerControl.Services
 
         private void ProcessPrices(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
-            var result = data["result"] as Dictionary<string, object>;
-            var stats = result["stats"] as object[];
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> result = data["result"] as Dictionary<string, object>;
+            object[] stats = result["stats"] as object[];
 
             lock (MiningEngine)
             {
                 foreach (object stat in stats)
                 {
-                    var item = stat as Dictionary<string, object>;
+                    Dictionary<string, object> item = stat as Dictionary<string, object>;
                     string algo = item["algo"].ToString();
                     NiceHashPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
@@ -89,12 +89,12 @@ namespace MinerControl.Services
         private void ProcessBalances(object jsonData)
         {
             decimal totalBalance = 0m;
-            var data = jsonData as Dictionary<string, object>;
-            var result = data["result"] as Dictionary<string, object>;
-            var stats = result["stats"] as object[];
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> result = data["result"] as Dictionary<string, object>;
+            object[] stats = result["stats"] as object[];
             foreach (object stat in stats)
             {
-                var item = stat as Dictionary<string, object>;
+                Dictionary<string, object> item = stat as Dictionary<string, object>;
                 totalBalance += item["balance"].ExtractDecimal();
                 string algo = item["algo"].ToString();
                 NiceHashPriceEntry entry = GetEntry(algo);

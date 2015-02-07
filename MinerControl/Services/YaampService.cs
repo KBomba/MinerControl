@@ -38,10 +38,10 @@ namespace MinerControl.Services
             if (data.ContainsKey("balancemode"))
                 _balanceMode = int.Parse(data["balancemode"].ToString());
 
-            var items = data["algos"] as object[];
+            object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
-                var item = rawitem as Dictionary<string, object>;
+                Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                 YaampPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
@@ -57,14 +57,14 @@ namespace MinerControl.Services
 
         private void ProcessPrices(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
 
             lock (MiningEngine)
             {
                 foreach (string key in data.Keys)
                 {
                     object rawitem = data[key];
-                    var item = rawitem as Dictionary<string, object>;
+                    Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                     string algo = key.ToLower();
 
                     YaampPriceEntry entry = GetEntry(algo);
@@ -94,7 +94,7 @@ namespace MinerControl.Services
 
         private void ProcessBalances(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
 
             lock (MiningEngine)
             {
@@ -122,12 +122,12 @@ namespace MinerControl.Services
                     entry.AcceptSpeed = 0;
 
                 if (!data.ContainsKey("miners")) return;
-                var miners = data["miners"] as Dictionary<string, object>;
+                Dictionary<string, object> miners = data["miners"] as Dictionary<string, object>;
                 foreach (string key in miners.Keys)
                 {
                     YaampPriceEntry entry = GetEntry(key.ToLower());
                     if (entry == null) continue;
-                    var item = miners[key] as Dictionary<string, object>;
+                    Dictionary<string, object> item = miners[key] as Dictionary<string, object>;
                     entry.AcceptSpeed = item["hashrate"].ExtractDecimal()/1000000;
                 }
 

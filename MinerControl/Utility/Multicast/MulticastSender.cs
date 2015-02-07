@@ -30,7 +30,7 @@ namespace MinerControl.Utility.Multicast
 
         public void Start()
         {
-            var bindingEndpoint = new IPEndPoint(IPAddress.Any, _endPoint.Port);
+            IPEndPoint bindingEndpoint = new IPEndPoint(IPAddress.Any, _endPoint.Port);
 
             _udpClient = new UdpClient();
             _udpClient.ExclusiveAddressUse = false;

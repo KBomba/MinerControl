@@ -14,10 +14,10 @@ namespace MinerControl.Services
         {
             ExtractCommon(data);
 
-            var items = data["algos"] as object[];
+            object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
-                var item = rawitem as Dictionary<string, object>;
+                Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                 ManualPriceEntry entry = CreateEntry(item);
 
                 if (item.ContainsKey("price"))

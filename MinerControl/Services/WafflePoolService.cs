@@ -54,10 +54,10 @@ namespace MinerControl.Services
         {
             ExtractCommon(data);
 
-            var items = data["algos"] as object[];
+            object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
-                var item = rawitem as Dictionary<string, object>;
+                Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                 WafflePoolPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
@@ -73,19 +73,19 @@ namespace MinerControl.Services
 
         private void ProcessPrices(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
             lock (MiningEngine)
             {
                 foreach (string key in data.Keys)
                 {
                     object rawitem = data[key];
-                    var item = rawitem as Dictionary<string, object>;
+                    Dictionary<string, object> item = rawitem as Dictionary<string, object>;
 
                     WafflePoolPriceEntry entry = GetEntry(key.ToLower());
                     if (entry == null) continue;
 
-                    var earnings = item["earnings"] as object[];
-                    var earning = earnings[0] as Dictionary<string, object>;
+                    object[] earnings = item["earnings"] as object[];
+                    Dictionary<string, object> earning = earnings[0] as Dictionary<string, object>;
 
                     entry.Price = earning["permhs"].ExtractDecimal()*1000;
                 }
@@ -99,7 +99,7 @@ namespace MinerControl.Services
 
         private void ProcessBalances(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
 
             lock (MiningEngine)
             {
@@ -113,7 +113,7 @@ namespace MinerControl.Services
                 foreach (string key in data.Keys)
                 {
                     object rawitem = data[key];
-                    var item = rawitem as Dictionary<string, object>;
+                    Dictionary<string, object> item = rawitem as Dictionary<string, object>;
 
                     WafflePoolPriceEntry entry = GetEntry(key.ToLower());
                     if (entry == null) continue;
@@ -121,7 +121,7 @@ namespace MinerControl.Services
                     entry.AcceptSpeed = item["hashrate"].ExtractDecimal()/1000000;
                     entry.RejectSpeed = item["stalerate"].ExtractDecimal()/1000000;
 
-                    var balances = item["balances"] as Dictionary<string, object>;
+                    Dictionary<string, object> balances = item["balances"] as Dictionary<string, object>;
                     entry.Balance = balances["confirmed"].ExtractDecimal() + balances["unconverted"].ExtractDecimal();
                 }
 

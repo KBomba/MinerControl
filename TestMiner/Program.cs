@@ -7,7 +7,7 @@ namespace TestMiner
     {
         static void Main(string[] args)
         {
-            var x = 1;
+            int x = 1;
             Console.WriteLine("I'm pretending to mine.");
             if (args.Length > 0)
             {

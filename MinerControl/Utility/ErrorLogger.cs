@@ -12,7 +12,7 @@ namespace MinerControl.Utility
 
         public static void Log(Exception ex)
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine(DateTime.Now.ToString());
             sb.AppendLine("----------------------------------------------");

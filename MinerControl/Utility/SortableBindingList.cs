@@ -83,7 +83,7 @@ namespace MinerControl.Utility
             _sortProperty = prop;
             _sortDirection = direction;
 
-            var list = Items as List<T>;
+            List<T> list = Items as List<T>;
             if (list == null) return;
 
             list.Sort(Compare);

@@ -43,10 +43,10 @@ namespace MinerControl.Services
             ExtractCommon(data);
             _apikey = data.GetString("apikey");
 
-            var items = data["algos"] as object[];
+            object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
-                var item = rawitem as Dictionary<string, object>;
+                Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                 LtcRabbitPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
@@ -65,16 +65,16 @@ namespace MinerControl.Services
 
         private void ProcessPrices(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
-            var profitability = data["profitability"] as Dictionary<string, object>;
-            var current = profitability["current"] as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> profitability = data["profitability"] as Dictionary<string, object>;
+            Dictionary<string, object> current = profitability["current"] as Dictionary<string, object>;
 
             lock (MiningEngine)
             {
                 foreach (string key in current.Keys)
                 {
                     object rawitem = current[key];
-                    var item = rawitem as Dictionary<string, object>;
+                    Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                     string algo = key.ToLower();
 
                     LtcRabbitPriceEntry entry = GetEntry(algo);
@@ -92,11 +92,11 @@ namespace MinerControl.Services
 
         private void ProcessBalances(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
-            var getappdata = data["getappdata"] as Dictionary<string, object>;
-            var ltc_exchange_rates = getappdata["ltc_exchange_rates"] as Dictionary<string, object>;
-            var btc_exchange_rates = getappdata["btc_exchange_rates"] as Dictionary<string, object>;
-            var user = getappdata["user"] as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> getappdata = data["getappdata"] as Dictionary<string, object>;
+            Dictionary<string, object> ltc_exchange_rates = getappdata["ltc_exchange_rates"] as Dictionary<string, object>;
+            Dictionary<string, object> btc_exchange_rates = getappdata["btc_exchange_rates"] as Dictionary<string, object>;
+            Dictionary<string, object> user = getappdata["user"] as Dictionary<string, object>;
             Balance = user["balance_btc"].ExtractDecimal();
 
             LtcRabbitPriceEntry entry = GetEntry("x11");

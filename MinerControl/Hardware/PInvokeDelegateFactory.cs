@@ -39,7 +39,7 @@ namespace OpenHardwareMonitor.Hardware
             Type wrapperType;
             //Pair<DllImportAttribute, Type> key =
             //  new Pair<DllImportAttribute, Type>(dllImportAttribute, typeof(T));
-            var key =
+            Tuple<DllImportAttribute, Type> key =
                 new Tuple<DllImportAttribute, Type>(dllImportAttribute, typeof (T));
             wrapperTypes.TryGetValue(key, out wrapperType);
 
@@ -65,7 +65,7 @@ namespace OpenHardwareMonitor.Hardware
             ParameterInfo[] parameterInfos = methodInfo.GetParameters();
             int parameterCount = parameterInfos.GetLength(0);
 
-            var parameterTypes = new Type[parameterCount];
+            Type[] parameterTypes = new Type[parameterCount];
             for (int i = 0; i < parameterCount; i++)
                 parameterTypes[i] = parameterInfos[i].ParameterType;
 

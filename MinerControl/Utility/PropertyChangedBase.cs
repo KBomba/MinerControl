@@ -22,12 +22,12 @@ namespace MinerControl.Utility
         {
             if (selectorExpression == null)
                 throw new ArgumentNullException("selectorExpression");
-            var me = selectorExpression.Body as MemberExpression;
+            MemberExpression me = selectorExpression.Body as MemberExpression;
 
             // Nullable properties can be nested inside of a convert function
             if (me == null)
             {
-                var ue = selectorExpression.Body as UnaryExpression;
+                UnaryExpression ue = selectorExpression.Body as UnaryExpression;
                 if (ue != null)
                 {
                     me = ue.Operand as MemberExpression;
@@ -46,7 +46,7 @@ namespace MinerControl.Utility
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(selectorExpression);
-            foreach (var item in additonal)
+            foreach (Expression<Func<object>> item in additonal)
                 OnPropertyChanged(item);
         }
     }

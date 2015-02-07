@@ -275,7 +275,7 @@ namespace MinerControl
             try
             {
                 string pageString = File.ReadAllText(configFile);
-                var serializer = new JavaScriptSerializer();
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
                 data = serializer.DeserializeObject(pageString) as Dictionary<string, object>;
             }
             catch (ArgumentException ex)
@@ -381,8 +381,8 @@ namespace MinerControl
         {
             foreach (object rawitem in data)
             {
-                var item = rawitem as Dictionary<string, object>;
-                var entry = new AlgorithmEntry
+                Dictionary<string, object> item = rawitem as Dictionary<string, object>;
+                AlgorithmEntry entry = new AlgorithmEntry
                 {
                     Name = item["name"] as string,
                     Display =
@@ -691,9 +691,9 @@ namespace MinerControl
 
         private void ProcessExchangeRates(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
             if (!data.ContainsKey(_currencyCode)) return;
-            var item = data[_currencyCode] as Dictionary<string, object>;
+            Dictionary<string, object> item = data[_currencyCode] as Dictionary<string, object>;
             decimal exchange = item["last"].ExtractDecimal();
             string symbol = item["symbol"].ToString();
             lock (this)
@@ -717,7 +717,7 @@ namespace MinerControl
         {
             if (!_logactivity) return;
 
-            var items = new[]
+            string[] items = new[]
             {
                 DateTime.Now.ToString("s"),
                 action,

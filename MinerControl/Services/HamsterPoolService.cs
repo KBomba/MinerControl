@@ -35,10 +35,10 @@ namespace MinerControl.Services
             _apikey = data.GetString("apikey");
             _donation = data["donation"].ExtractDecimal()/100;
 
-            var items = data["algos"] as object[];
+            object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
-                var item = rawitem as Dictionary<string, object>;
+                Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                 HamsterPoolPriceEntry entry = CreateEntry(item);
                 entry.Donation = _donation;
 
@@ -60,7 +60,7 @@ namespace MinerControl.Services
 
         private void ProcessPrices(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
             lock (MiningEngine)
             {
                 foreach (string key in data.Keys)
@@ -83,7 +83,7 @@ namespace MinerControl.Services
 
         private void ProcessBalances(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
             lock (MiningEngine)
             {
                 foreach (string key in data.Keys)

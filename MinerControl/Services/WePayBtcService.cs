@@ -27,10 +27,10 @@ namespace MinerControl.Services
         {
             ExtractCommon(data);
 
-            var items = data["algos"] as object[];
+            object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
-                var item = rawitem as Dictionary<string, object>;
+                Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                 WePayBtcPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
@@ -45,14 +45,14 @@ namespace MinerControl.Services
 
         private void ProcessPrices(object jsonData)
         {
-            var data = jsonData as Dictionary<string, object>;
+            Dictionary<string, object> data = jsonData as Dictionary<string, object>;
 
             lock (MiningEngine)
             {
                 foreach (string key in data.Keys)
                 {
                     object rawitem = data[key];
-                    var item = rawitem as Dictionary<string, object>;
+                    Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                     string algo = key.ToLower();
 
                     WePayBtcPriceEntry entry = GetEntry(algo);

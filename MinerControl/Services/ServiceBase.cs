@@ -152,7 +152,7 @@ namespace MinerControl.Services
 
         protected TEntry CreateEntry(Dictionary<string, object> item)
         {
-            var entry = new TEntry();
+            TEntry entry = new TEntry();
             entry.MiningEngine = MiningEngine;
             entry.ServiceEntry = this;
 
