@@ -37,6 +37,9 @@ namespace MinerControl
         private Process _process;
         private DateTime? _startMining;
         private TimeSpan _switchTime;
+        private bool _dynamicSwitching;
+        private TimeSpan _dynamicSwitchTime;
+        private decimal _profitBestOverRunning;
 
         public MiningEngine()
         {
@@ -119,7 +122,11 @@ namespace MinerControl
                 if (_nextRun == null || _nextRunFromTime == null || _startMining == null)
                     return null;
 
-                TimeSpan? timeToSwitch = _switchTime - (DateTime.Now - _nextRunFromTime);
+                _dynamicSwitchTime =
+                    TimeSpan.FromSeconds(_switchTime.TotalSeconds/Math.Pow((double) _profitBestOverRunning, 2));
+                TimeSpan? timeToSwitch = _dynamicSwitching
+                    ? _dynamicSwitchTime - (DateTime.Now - _nextRunFromTime)
+                    : _switchTime - (DateTime.Now - _nextRunFromTime);
                 TimeSpan? timeToMin = _minTime - (DateTime.Now - _startMining);
 
                 return timeToMin > timeToSwitch ? timeToMin : timeToSwitch;
@@ -375,6 +382,8 @@ namespace MinerControl
                 _remoteSend = bool.Parse(data["remotesend"].ToString());
             if (data.ContainsKey("remotereceive"))
                 _remoteReceive = bool.Parse(data["remotereceive"].ToString());
+            if(data.ContainsKey("dynamicswitching"))
+                _dynamicSwitching = bool.Parse(data["dynamicswitching"].ToString());
         }
 
         private void LoadConfigAlgorithms(object[] data)
@@ -637,6 +646,9 @@ namespace MinerControl
                         _nextRun = null;
                         _nextRunFromTime = null;
                     }
+
+                    _profitBestOverRunning = best.NetEarn / _currentRunning.NetEarn;
+                    
                     if (NextRunTime.HasValue && NextRunTime > TimeSpan.Zero)
                         best = _priceEntries.First(o => o.Id == _currentRunning.Id);
                 }
