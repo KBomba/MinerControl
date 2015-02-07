@@ -122,8 +122,10 @@ namespace MinerControl
                 if (_nextRun == null || _nextRunFromTime == null || _startMining == null)
                     return null;
 
-                _dynamicSwitchTime =
-                    TimeSpan.FromSeconds(_switchTime.TotalSeconds/Math.Pow((double) _profitBestOverRunning, 2));
+                _dynamicSwitchTime = _profitBestOverRunning > 1 
+                    ? TimeSpan.FromSeconds(_switchTime.TotalSeconds/Math.Pow((double) _profitBestOverRunning, 2))
+                    : _minTime;
+                
                 TimeSpan? timeToSwitch = _dynamicSwitching
                     ? _dynamicSwitchTime - (DateTime.Now - _nextRunFromTime)
                     : _switchTime - (DateTime.Now - _nextRunFromTime);
