@@ -152,11 +152,13 @@ namespace MinerControl.Services
 
         protected TEntry CreateEntry(Dictionary<string, object> item)
         {
-            TEntry entry = new TEntry();
-            entry.MiningEngine = MiningEngine;
-            entry.ServiceEntry = this;
+            TEntry entry = new TEntry
+            {
+                MiningEngine = MiningEngine,
+                ServiceEntry = this,
+                AlgoName = item.GetString("algo")
+            };
 
-            entry.AlgoName = item.GetString("algo");
             AlgorithmEntry algo = MiningEngine.AlgorithmEntries.Single(o => o.Name == entry.AlgoName);
             entry.Name = algo.Display;
             entry.PriceId = item.GetString("priceid");
