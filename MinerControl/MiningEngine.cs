@@ -430,7 +430,7 @@ namespace MinerControl
 
             if (_currentRunning != null)
             {
-                PriceEntryBase entry = PriceEntries.Where(o => o.Id == _currentRunning.Id).Single();
+                PriceEntryBase entry = PriceEntries.Single(o => o.Id == _currentRunning.Id);
                 entry.UpdateStatus();
             }
 
@@ -729,7 +729,7 @@ namespace MinerControl
         {
             if (!_logactivity) return;
 
-            string[] items = new[]
+            string[] items =
             {
                 DateTime.Now.ToString("s"),
                 action,
@@ -826,9 +826,7 @@ namespace MinerControl
 
         private string GetAlgoDisplayName(string rawname)
         {
-            if (_algoNames.ContainsKey(rawname))
-                return _algoNames[rawname];
-            return rawname;
+            return _algoNames.ContainsKey(rawname) ? _algoNames[rawname] : rawname;
         }
 
         #endregion

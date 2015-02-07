@@ -48,7 +48,7 @@ namespace MinerControl
             if (intValue.HasValue) return intValue.Value;
 
             decimal parseValue;
-            NumberStyles style = NumberStyles.AllowDecimalPoint;
+            const NumberStyles style = NumberStyles.AllowDecimalPoint;
             CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
 
             if (decimal.TryParse(raw.ToString(), style, culture, out parseValue)) return parseValue;

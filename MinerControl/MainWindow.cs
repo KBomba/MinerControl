@@ -300,7 +300,7 @@ namespace MinerControl
                 _engine.PricesUpdated = false;
             }
 
-            MiningModeEnum[] autoModes = new[] {MiningModeEnum.Automatic, MiningModeEnum.Donation};
+            MiningModeEnum[] autoModes = {MiningModeEnum.Automatic, MiningModeEnum.Donation};
             if (!autoModes.Contains(_engine.MiningMode)) return;
 
             RunBestAlgo();
