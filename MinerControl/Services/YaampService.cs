@@ -21,6 +21,7 @@ namespace MinerControl.Services
         // }
 
         private int _priceMode;
+        private int _balanceMode;
 
         public YaampService()
         {
@@ -34,6 +35,8 @@ namespace MinerControl.Services
 
             if (data.ContainsKey("pricemode"))
                 _priceMode = int.Parse(data["pricemode"].ToString());
+            if (data.ContainsKey("balancemode"))
+                _balanceMode = int.Parse(data["balancemode"].ToString());
 
             var items = data["algos"] as object[];
             foreach (object rawitem in items)
@@ -95,7 +98,25 @@ namespace MinerControl.Services
 
             lock (MiningEngine)
             {
-                Balance = data["unpaid"].ExtractDecimal();
+                switch (_balanceMode)
+                {
+                    case 1:
+                        Balance = data["balance"].ExtractDecimal();
+                        break;
+                    case 2:
+                        Balance = data["unsold"].ExtractDecimal();
+                        break;
+                    case 3:
+                        Balance = data["paid"].ExtractDecimal();
+                        break;
+                    case 4:
+                        Balance = data["total"].ExtractDecimal();
+                        break;
+                    default:
+                        Balance = data["unpaid"].ExtractDecimal();
+                        break;
+                }
+                
 
                 foreach (YaampPriceEntry entry in PriceEntries)
                     entry.AcceptSpeed = 0;
