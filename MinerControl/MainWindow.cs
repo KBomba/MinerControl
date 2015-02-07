@@ -261,7 +261,7 @@ namespace MinerControl
         {
             if (_engine.MiningMode != MiningModeEnum.Stopped) return;
 
-            DataGridView senderGrid = (DataGridView) sender;
+            DataGridView senderGrid = (DataGridView)sender;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
@@ -271,6 +271,20 @@ namespace MinerControl
                 _engine.MiningMode = MiningModeEnum.Manual;
                 UpdateButtons();
                 _engine.RequestStart(entry.Id, IsMinimizedToTray);
+                UpdateGrid();
+            }
+        }
+
+        private void dgPrices_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView senderGrid = (DataGridView)sender;
+
+            if (e.RowIndex >= 0)
+            {
+                IList<PriceEntryBase> data = senderGrid.DataSource as IList<PriceEntryBase>;
+                PriceEntryBase entry = data[e.RowIndex];
+
+                _engine.SwitchBanStatus(entry.ServicePrint);
                 UpdateGrid();
             }
         }

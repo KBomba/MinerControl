@@ -14,6 +14,7 @@ namespace MinerControl.PriceEntries
         private decimal _rejectSpeed;
         private TimeSpan _timeMining;
         private decimal _weight;
+        private bool _banned;
 
         public PriceEntryBase()
         {
@@ -95,6 +96,12 @@ namespace MinerControl.PriceEntries
             set { SetField(ref _timeMining, value, () => TimeMining, () => TimeMiningPrint); }
         }
 
+        public bool Banned
+        {
+            get { return _banned; }
+            set { SetField(ref _banned, value, () => Banned, () => StatusPrint); }
+        }
+
         public DateTime DeadTime
         {
             get { return _deadTime; }
@@ -150,6 +157,8 @@ namespace MinerControl.PriceEntries
                     return "Running";
                 if (IsDead)
                     return "Dead";
+                if (Banned)
+                    return "Banned";
                 if (MiningEngine.NextRun.HasValue && MiningEngine.NextRun.Value == Id)
                     return "Pending";
                 return string.Empty;

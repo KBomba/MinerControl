@@ -348,6 +348,7 @@
             this.dgPrices.Size = new System.Drawing.Size(791, 367);
             this.dgPrices.TabIndex = 12;
             this.dgPrices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPrices_CellContentClick);
+            this.dgPrices.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPrices_CellContentDoubleClick);
             // 
             // dgServices
             // 

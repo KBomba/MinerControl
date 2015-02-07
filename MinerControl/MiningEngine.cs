@@ -623,12 +623,12 @@ namespace MinerControl
                 // Find the best, live entry
                 PriceEntryBase best = _donationMiningMode == MiningModeEnum.Donation
                     ? _priceEntries
-                        .Where(o => !o.IsDead)
+                        .Where(o => !o.IsDead && !o.Banned)
                         .Where(o => !string.IsNullOrWhiteSpace(o.DonationCommand))
                         .OrderByDescending(o => o.NetEarn)
                         .First()
                     : _priceEntries
-                        .Where(o => !o.IsDead)
+                        .Where(o => !o.IsDead && !o.Banned)
                         .Where(o => !string.IsNullOrWhiteSpace(o.Command))
                         .OrderByDescending(o => o.NetEarn)
                         .First();
@@ -679,6 +679,17 @@ namespace MinerControl
             catch (Exception ex)
             {
                 ErrorLogger.Log(ex);
+            }
+        }
+
+        public void SwitchBanStatus(string pool)
+        {
+            foreach (PriceEntryBase priceEntry in _priceEntries)
+            {
+                if (priceEntry.ServicePrint == pool)
+                {
+                    priceEntry.Banned = !priceEntry.Banned;
+                }
             }
         }
 
