@@ -274,8 +274,8 @@ namespace MinerControl
                 UpdateGrid();
             }
         }
-
-        private void dgPrices_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        
+        private void dgPrices_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             DataGridView senderGrid = (DataGridView)sender;
 
