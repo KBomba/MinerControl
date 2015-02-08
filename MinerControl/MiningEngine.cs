@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -405,6 +406,8 @@ namespace MinerControl
                             : GetAlgoDisplayName(item["name"] as string),
                     Hashrate = item["hashrate"].ExtractDecimal(),
                     Power = item["power"].ExtractDecimal(),
+                    Priority = item.GetString("priority") ?? string.Empty,
+                    Affinity = item.GetInt("affinity") ?? 0,
                     Param1 = item.GetString("aparam1") ?? string.Empty,
                     Param2 = item.GetString("aparam2") ?? string.Empty,
                     Param3 = item.GetString("aparam3") ?? string.Empty
@@ -539,6 +542,25 @@ namespace MinerControl
 
                 _process.BeginOutputReadLine();
                 _process.BeginErrorReadLine();
+            }
+
+            ProcessPriorityClass processPriority;
+            if (entry.Priority != "Normal" && entry.Priority != string.Empty
+                && Enum.TryParse(entry.Priority, out processPriority))
+            {
+                // Defaults to Normal, other possible values are Idle, BelowNormal, 
+                // AboveNormal, High & RealTime. ccminer <3 RealTime
+                // Note 1: Realtime by minercontrol is only possible when given administrator privileges to minercontrol
+                // Note 2: --cpu-priority by ccminer overrides minercontrols priority
+                // Note 3: When giving administrator privileges to minercontrol and setting the priority by minercontrol to 
+                // something DIFFERENT than what's used by --cpu-priority by ccminer, then your whole system locks up 
+                _process.PriorityClass = processPriority;
+            }
+
+            if (entry.Affinity > 0)
+            {
+                // Just like with start /affinity, you can use 1 for first core, 2 for second core, 4 for third core, etc
+                _process.ProcessorAffinity = (IntPtr) entry.Affinity;
             }
 
             _startMining = DateTime.Now;

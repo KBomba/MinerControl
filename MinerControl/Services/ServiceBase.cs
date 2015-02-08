@@ -164,6 +164,8 @@ namespace MinerControl.Services
             entry.PriceId = item.GetString("priceid");
             entry.Hashrate = algo.Hashrate;
             entry.Power = algo.Power;
+            entry.Priority = algo.Priority;
+            entry.Affinity = algo.Affinity;
             entry.Weight = _weight;
             entry.Folder = ProcessedSubstitutions(item.GetString("folder"), algo) ?? string.Empty;
             entry.Command = ProcessedSubstitutions(item.GetString("command"), algo);

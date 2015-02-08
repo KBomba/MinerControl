@@ -61,5 +61,11 @@ namespace MinerControl
             if (!data.ContainsKey(key)) return null;
             return data[key] as string;
         }
+
+        public static int? GetInt(this IDictionary<string, object> data, string key)
+        {
+            if (!data.ContainsKey(key)) return null;
+            return data[key] is int ? (int) data[key] : 0;
+        }
     }
 }

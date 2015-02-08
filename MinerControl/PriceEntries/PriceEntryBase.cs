@@ -32,6 +32,8 @@ namespace MinerControl.PriceEntries
 
         public decimal Hashrate { get; set; }
         public decimal Power { get; set; }
+        public string Priority { get; set; }
+        public int Affinity { get; set; }
         public string Folder { get; set; }
         public string Command { get; set; }
         public string Arguments { get; set; }

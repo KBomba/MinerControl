@@ -7,6 +7,9 @@
         public decimal Hashrate { get; set; }
         public decimal Power { get; set; }
 
+        public string Priority { get; set; }
+        public int Affinity { get; set; }
+
         public string Param1 { get; set; }
         public string Param2 { get; set; }
         public string Param3 { get; set; }
