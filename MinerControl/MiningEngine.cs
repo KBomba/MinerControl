@@ -38,6 +38,7 @@ namespace MinerControl
         private DateTime? _startMining;
         private TimeSpan _switchTime;
         private bool _dynamicSwitching;
+        private double _dynamicSwitchPower = 2;
         private TimeSpan _dynamicSwitchTime;
         private decimal _profitBestOverRunning;
 
@@ -123,7 +124,7 @@ namespace MinerControl
                     return null;
 
                 _dynamicSwitchTime = _profitBestOverRunning > 1 
-                    ? TimeSpan.FromSeconds(_switchTime.TotalSeconds/Math.Pow((double) _profitBestOverRunning, 2))
+                    ? TimeSpan.FromSeconds(_switchTime.TotalSeconds/Math.Pow((double) _profitBestOverRunning, _dynamicSwitchPower))
                     : _minTime;
                 
                 TimeSpan? timeToSwitch = _dynamicSwitching
@@ -386,6 +387,8 @@ namespace MinerControl
                 _remoteReceive = bool.Parse(data["remotereceive"].ToString());
             if(data.ContainsKey("dynamicswitching"))
                 _dynamicSwitching = bool.Parse(data["dynamicswitching"].ToString());
+            if (data.ContainsKey("dynamicswitchpower"))
+                _dynamicSwitchPower = double.Parse(data["dynamicswitchpower"].ToString());
         }
 
         private void LoadConfigAlgorithms(object[] data)
