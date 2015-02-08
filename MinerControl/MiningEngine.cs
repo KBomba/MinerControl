@@ -638,6 +638,13 @@ namespace MinerControl
                         .OrderByDescending(o => o.NetEarn)
                         .First();
 
+                if (_currentRunning != null && _currentRunning.Banned)
+                {
+                    StopMiner();
+                    StartMiner(best, isMinimizedToTray);
+                    return;
+                }
+
                 // Handle minimum time for better algorithm before switching
                 if (_switchTime > TimeSpan.Zero && _currentRunning != null)
                 {
