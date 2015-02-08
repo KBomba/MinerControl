@@ -40,7 +40,7 @@ namespace MinerControl
         private bool _dynamicSwitching;
         private double _dynamicSwitchPower = 2;
         private TimeSpan _dynamicSwitchTime;
-        private decimal _profitBestOverRunning;
+        private decimal _profitRunningOverBest;
 
         public MiningEngine()
         {
@@ -123,8 +123,8 @@ namespace MinerControl
                 if (_nextRun == null || _nextRunFromTime == null || _startMining == null)
                     return null;
 
-                _dynamicSwitchTime = _profitBestOverRunning > 1 
-                    ? TimeSpan.FromSeconds(_switchTime.TotalSeconds/Math.Pow((double) _profitBestOverRunning, _dynamicSwitchPower))
+                _dynamicSwitchTime = _profitRunningOverBest > 1 
+                    ? TimeSpan.FromSeconds(_switchTime.TotalSeconds/Math.Pow((double) _profitRunningOverBest, _dynamicSwitchPower))
                     : _minTime;
                 
                 TimeSpan? timeToSwitch = _dynamicSwitching
@@ -652,7 +652,7 @@ namespace MinerControl
                         _nextRunFromTime = null;
                     }
 
-                    _profitBestOverRunning = best.NetEarn / _currentRunning.NetEarn;
+                    _profitRunningOverBest =  _currentRunning.NetEarn / best.NetEarn;
                     
                     if (NextRunTime.HasValue && NextRunTime > TimeSpan.Zero)
                         best = _priceEntries.First(o => o.Id == _currentRunning.Id);
