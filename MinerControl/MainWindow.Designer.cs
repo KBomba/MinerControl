@@ -30,27 +30,27 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle54 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle55 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle46 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle47 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle48 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle49 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle50 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle51 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle52 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle53 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle56 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle62 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle63 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle57 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle58 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle59 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle60 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle61 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.tmrPriceCheck = new System.Windows.Forms.Timer(this.components);
@@ -69,21 +69,6 @@
             this.label18 = new System.Windows.Forms.Label();
             this.tmrTimeUpdate = new System.Windows.Forms.Timer(this.components);
             this.dgPrices = new System.Windows.Forms.DataGridView();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ServicePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Algo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Hashrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Earn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Fees = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PowerCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NetEarn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AcceptSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RejectSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TimeMining = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StatusPrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnNhStart = new System.Windows.Forms.DataGridViewButtonColumn();
             this.dgServices = new System.Windows.Forms.DataGridView();
             this.ServiceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ServiceLastUpdated = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -108,6 +93,21 @@
             this.textConsole = new System.Windows.Forms.TextBox();
             this.tabRemote = new System.Windows.Forms.TabPage();
             this.textRemote = new System.Windows.Forms.TextBox();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ServicePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Algo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Hashrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Earn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Fees = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PowerCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NetEarn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AcceptSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RejectSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TimeMining = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StatusPrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnNhStart = new System.Windows.Forms.DataGridViewButtonColumn();
             this.gbActions.SuspendLayout();
             this.gbTimes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgPrices)).BeginInit();
@@ -163,11 +163,11 @@
             this.linkDonate.LinkArea = new System.Windows.Forms.LinkArea(45, 34);
             this.linkDonate.Location = new System.Drawing.Point(16, 577);
             this.linkDonate.Name = "linkDonate";
-            this.linkDonate.Size = new System.Drawing.Size(517, 17);
+            this.linkDonate.Size = new System.Drawing.Size(764, 17);
             this.linkDonate.TabIndex = 9;
             this.linkDonate.TabStop = true;
             this.linkDonate.Text = "If you like this, please donate some mBTC to 1F9fsG5xLLn6uc7cdbgV1LTFWjWQSqXohX (" +
-    "KBomba)\r\n";
+    "KBomba, donation mining rounds still go to StuffOfInterest)\r\n";
             this.linkDonate.UseCompatibleTextRendering = true;
             this.linkDonate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkDonate_LinkClicked);
             // 
@@ -295,14 +295,14 @@
             this.dgPrices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle43.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle43.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle43.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle43.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle43.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle43.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPrices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle43;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPrices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgPrices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgPrices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id,
@@ -320,27 +320,27 @@
             this.TimeMining,
             this.StatusPrint,
             this.btnNhStart});
-            dataGridViewCellStyle54.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle54.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle54.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle54.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle54.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle54.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle54.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgPrices.DefaultCellStyle = dataGridViewCellStyle54;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgPrices.DefaultCellStyle = dataGridViewCellStyle12;
             this.dgPrices.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgPrices.Location = new System.Drawing.Point(6, 6);
             this.dgPrices.MultiSelect = false;
             this.dgPrices.Name = "dgPrices";
             this.dgPrices.ReadOnly = true;
-            dataGridViewCellStyle55.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle55.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle55.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle55.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle55.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle55.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle55.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPrices.RowHeadersDefaultCellStyle = dataGridViewCellStyle55;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPrices.RowHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgPrices.RowHeadersVisible = false;
             this.dgPrices.ShowCellErrors = false;
             this.dgPrices.ShowCellToolTips = false;
@@ -351,180 +351,6 @@
             this.dgPrices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPrices_CellContentClick);
             this.dgPrices.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgPrices_CellMouseDoubleClick);
             // 
-            // Id
-            // 
-            this.Id.DataPropertyName = "Id";
-            this.Id.HeaderText = "Id";
-            this.Id.Name = "Id";
-            this.Id.ReadOnly = true;
-            this.Id.Visible = false;
-            // 
-            // ServicePrint
-            // 
-            this.ServicePrint.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ServicePrint.DataPropertyName = "ServicePrint";
-            this.ServicePrint.HeaderText = "Service";
-            this.ServicePrint.Name = "ServicePrint";
-            this.ServicePrint.ReadOnly = true;
-            this.ServicePrint.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // Algo
-            // 
-            this.Algo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Algo.DataPropertyName = "Name";
-            this.Algo.HeaderText = "Algo";
-            this.Algo.Name = "Algo";
-            this.Algo.ReadOnly = true;
-            this.Algo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // Hashrate
-            // 
-            this.Hashrate.DataPropertyName = "Hashrate";
-            dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Hashrate.DefaultCellStyle = dataGridViewCellStyle44;
-            this.Hashrate.HeaderText = "Hash";
-            this.Hashrate.Name = "Hashrate";
-            this.Hashrate.ReadOnly = true;
-            this.Hashrate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Hashrate.ToolTipText = "Kh/sec";
-            this.Hashrate.Width = 60;
-            // 
-            // Price
-            // 
-            this.Price.DataPropertyName = "Price";
-            dataGridViewCellStyle45.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle45.Format = "N6";
-            dataGridViewCellStyle45.NullValue = null;
-            this.Price.DefaultCellStyle = dataGridViewCellStyle45;
-            this.Price.HeaderText = "Price";
-            this.Price.Name = "Price";
-            this.Price.ReadOnly = true;
-            this.Price.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Price.ToolTipText = "BTC/GH/day";
-            this.Price.Width = 60;
-            // 
-            // Earn
-            // 
-            this.Earn.DataPropertyName = "Earn";
-            dataGridViewCellStyle46.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle46.Format = "N6";
-            dataGridViewCellStyle46.NullValue = null;
-            this.Earn.DefaultCellStyle = dataGridViewCellStyle46;
-            this.Earn.HeaderText = "Earn";
-            this.Earn.Name = "Earn";
-            this.Earn.ReadOnly = true;
-            this.Earn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Earn.ToolTipText = "BTC/day";
-            this.Earn.Width = 60;
-            // 
-            // Fees
-            // 
-            this.Fees.DataPropertyName = "Fees";
-            dataGridViewCellStyle47.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle47.Format = "N6";
-            this.Fees.DefaultCellStyle = dataGridViewCellStyle47;
-            this.Fees.HeaderText = "Fees";
-            this.Fees.Name = "Fees";
-            this.Fees.ReadOnly = true;
-            this.Fees.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Fees.ToolTipText = "BTC/day";
-            this.Fees.Width = 60;
-            // 
-            // PowerCost
-            // 
-            this.PowerCost.DataPropertyName = "PowerCost";
-            dataGridViewCellStyle48.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle48.Format = "N6";
-            dataGridViewCellStyle48.NullValue = null;
-            this.PowerCost.DefaultCellStyle = dataGridViewCellStyle48;
-            this.PowerCost.HeaderText = "Power";
-            this.PowerCost.Name = "PowerCost";
-            this.PowerCost.ReadOnly = true;
-            this.PowerCost.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.PowerCost.ToolTipText = "BTC/day";
-            this.PowerCost.Width = 60;
-            // 
-            // NetEarn
-            // 
-            this.NetEarn.DataPropertyName = "NetEarn";
-            dataGridViewCellStyle49.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle49.Format = "N6";
-            dataGridViewCellStyle49.NullValue = null;
-            this.NetEarn.DefaultCellStyle = dataGridViewCellStyle49;
-            this.NetEarn.HeaderText = "Net";
-            this.NetEarn.Name = "NetEarn";
-            this.NetEarn.ReadOnly = true;
-            this.NetEarn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.NetEarn.ToolTipText = "BTC/day";
-            this.NetEarn.Width = 60;
-            // 
-            // Balance
-            // 
-            this.Balance.DataPropertyName = "BalancePrint";
-            dataGridViewCellStyle50.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle50.NullValue = null;
-            this.Balance.DefaultCellStyle = dataGridViewCellStyle50;
-            this.Balance.HeaderText = "Balance";
-            this.Balance.Name = "Balance";
-            this.Balance.ReadOnly = true;
-            this.Balance.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Balance.ToolTipText = "BTC";
-            this.Balance.Width = 65;
-            // 
-            // AcceptSpeed
-            // 
-            this.AcceptSpeed.DataPropertyName = "AcceptSpeedPrint";
-            dataGridViewCellStyle51.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle51.NullValue = null;
-            this.AcceptSpeed.DefaultCellStyle = dataGridViewCellStyle51;
-            this.AcceptSpeed.HeaderText = "Accept";
-            this.AcceptSpeed.Name = "AcceptSpeed";
-            this.AcceptSpeed.ReadOnly = true;
-            this.AcceptSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.AcceptSpeed.Width = 45;
-            // 
-            // RejectSpeed
-            // 
-            this.RejectSpeed.DataPropertyName = "RejectSpeedPrint";
-            dataGridViewCellStyle52.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle52.NullValue = null;
-            this.RejectSpeed.DefaultCellStyle = dataGridViewCellStyle52;
-            this.RejectSpeed.HeaderText = "Reject";
-            this.RejectSpeed.Name = "RejectSpeed";
-            this.RejectSpeed.ReadOnly = true;
-            this.RejectSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.RejectSpeed.Width = 45;
-            // 
-            // TimeMining
-            // 
-            this.TimeMining.DataPropertyName = "TimeMiningPrint";
-            dataGridViewCellStyle53.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.TimeMining.DefaultCellStyle = dataGridViewCellStyle53;
-            this.TimeMining.HeaderText = "Running";
-            this.TimeMining.Name = "TimeMining";
-            this.TimeMining.ReadOnly = true;
-            this.TimeMining.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.TimeMining.Width = 70;
-            // 
-            // StatusPrint
-            // 
-            this.StatusPrint.DataPropertyName = "StatusPrint";
-            this.StatusPrint.HeaderText = "Status";
-            this.StatusPrint.Name = "StatusPrint";
-            this.StatusPrint.ReadOnly = true;
-            this.StatusPrint.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.StatusPrint.Width = 55;
-            // 
-            // btnNhStart
-            // 
-            this.btnNhStart.HeaderText = "Action";
-            this.btnNhStart.Name = "btnNhStart";
-            this.btnNhStart.ReadOnly = true;
-            this.btnNhStart.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.btnNhStart.Text = "Start";
-            this.btnNhStart.UseColumnTextForButtonValue = true;
-            this.btnNhStart.Width = 55;
-            // 
             // dgServices
             // 
             this.dgServices.AllowUserToAddRows = false;
@@ -532,14 +358,14 @@
             this.dgServices.AllowUserToResizeColumns = false;
             this.dgServices.AllowUserToResizeRows = false;
             this.dgServices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle56.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle56.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle56.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle56.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle56.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle56.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgServices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle56;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgServices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.dgServices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgServices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ServiceName,
@@ -547,25 +373,25 @@
             this.ServiceBalance,
             this.ServiceCurrency,
             this.ServiceRunning});
-            dataGridViewCellStyle62.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle62.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle62.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle62.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle62.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle62.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle62.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgServices.DefaultCellStyle = dataGridViewCellStyle62;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgServices.DefaultCellStyle = dataGridViewCellStyle20;
             this.dgServices.Location = new System.Drawing.Point(464, 9);
             this.dgServices.Name = "dgServices";
             this.dgServices.ReadOnly = true;
-            dataGridViewCellStyle63.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle63.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle63.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle63.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle63.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle63.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle63.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgServices.RowHeadersDefaultCellStyle = dataGridViewCellStyle63;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgServices.RowHeadersDefaultCellStyle = dataGridViewCellStyle21;
             this.dgServices.RowHeadersVisible = false;
             this.dgServices.ShowCellErrors = false;
             this.dgServices.ShowCellToolTips = false;
@@ -578,8 +404,8 @@
             // 
             this.ServiceName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ServiceName.DataPropertyName = "ServicePrint";
-            dataGridViewCellStyle57.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.ServiceName.DefaultCellStyle = dataGridViewCellStyle57;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.ServiceName.DefaultCellStyle = dataGridViewCellStyle15;
             this.ServiceName.HeaderText = "Service";
             this.ServiceName.Name = "ServiceName";
             this.ServiceName.ReadOnly = true;
@@ -588,8 +414,8 @@
             // ServiceLastUpdated
             // 
             this.ServiceLastUpdated.DataPropertyName = "LastUpdatedPrint";
-            dataGridViewCellStyle58.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ServiceLastUpdated.DefaultCellStyle = dataGridViewCellStyle58;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ServiceLastUpdated.DefaultCellStyle = dataGridViewCellStyle16;
             this.ServiceLastUpdated.HeaderText = "Updated";
             this.ServiceLastUpdated.Name = "ServiceLastUpdated";
             this.ServiceLastUpdated.ReadOnly = true;
@@ -600,8 +426,8 @@
             // 
             this.ServiceBalance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ServiceBalance.DataPropertyName = "BalancePrint";
-            dataGridViewCellStyle59.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ServiceBalance.DefaultCellStyle = dataGridViewCellStyle59;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ServiceBalance.DefaultCellStyle = dataGridViewCellStyle17;
             this.ServiceBalance.HeaderText = "Balance";
             this.ServiceBalance.Name = "ServiceBalance";
             this.ServiceBalance.ReadOnly = true;
@@ -610,8 +436,8 @@
             // ServiceCurrency
             // 
             this.ServiceCurrency.DataPropertyName = "CurrencyPrint";
-            dataGridViewCellStyle60.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ServiceCurrency.DefaultCellStyle = dataGridViewCellStyle60;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ServiceCurrency.DefaultCellStyle = dataGridViewCellStyle18;
             this.ServiceCurrency.HeaderText = "Currency";
             this.ServiceCurrency.Name = "ServiceCurrency";
             this.ServiceCurrency.ReadOnly = true;
@@ -621,8 +447,8 @@
             // ServiceRunning
             // 
             this.ServiceRunning.DataPropertyName = "TimeMiningPrint";
-            dataGridViewCellStyle61.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ServiceRunning.DefaultCellStyle = dataGridViewCellStyle61;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ServiceRunning.DefaultCellStyle = dataGridViewCellStyle19;
             this.ServiceRunning.HeaderText = "Running";
             this.ServiceRunning.Name = "ServiceRunning";
             this.ServiceRunning.ReadOnly = true;
@@ -825,6 +651,183 @@
             this.textRemote.Size = new System.Drawing.Size(790, 366);
             this.textRemote.TabIndex = 1;
             // 
+            // Id
+            // 
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
+            this.Id.ReadOnly = true;
+            this.Id.Visible = false;
+            // 
+            // ServicePrint
+            // 
+            this.ServicePrint.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ServicePrint.DataPropertyName = "ServicePrint";
+            this.ServicePrint.HeaderText = "Service";
+            this.ServicePrint.MinimumWidth = 50;
+            this.ServicePrint.Name = "ServicePrint";
+            this.ServicePrint.ReadOnly = true;
+            this.ServicePrint.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // Algo
+            // 
+            this.Algo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Algo.DataPropertyName = "Name";
+            this.Algo.HeaderText = "Algo";
+            this.Algo.MinimumWidth = 50;
+            this.Algo.Name = "Algo";
+            this.Algo.ReadOnly = true;
+            this.Algo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // Hashrate
+            // 
+            this.Hashrate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Hashrate.DataPropertyName = "Hashrate";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Hashrate.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Hashrate.HeaderText = "Hash";
+            this.Hashrate.MinimumWidth = 50;
+            this.Hashrate.Name = "Hashrate";
+            this.Hashrate.ReadOnly = true;
+            this.Hashrate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Hashrate.ToolTipText = "Kh/sec";
+            // 
+            // Price
+            // 
+            this.Price.DataPropertyName = "Price";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N6";
+            dataGridViewCellStyle3.NullValue = null;
+            this.Price.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Price.HeaderText = "Price";
+            this.Price.Name = "Price";
+            this.Price.ReadOnly = true;
+            this.Price.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Price.ToolTipText = "BTC/GH/day";
+            this.Price.Width = 60;
+            // 
+            // Earn
+            // 
+            this.Earn.DataPropertyName = "Earn";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N6";
+            dataGridViewCellStyle4.NullValue = null;
+            this.Earn.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Earn.HeaderText = "Earn";
+            this.Earn.Name = "Earn";
+            this.Earn.ReadOnly = true;
+            this.Earn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Earn.ToolTipText = "BTC/day";
+            this.Earn.Width = 60;
+            // 
+            // Fees
+            // 
+            this.Fees.DataPropertyName = "Fees";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N6";
+            this.Fees.DefaultCellStyle = dataGridViewCellStyle5;
+            this.Fees.HeaderText = "Fees";
+            this.Fees.Name = "Fees";
+            this.Fees.ReadOnly = true;
+            this.Fees.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Fees.ToolTipText = "BTC/day";
+            this.Fees.Width = 60;
+            // 
+            // PowerCost
+            // 
+            this.PowerCost.DataPropertyName = "PowerCost";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N6";
+            dataGridViewCellStyle6.NullValue = null;
+            this.PowerCost.DefaultCellStyle = dataGridViewCellStyle6;
+            this.PowerCost.HeaderText = "Power";
+            this.PowerCost.Name = "PowerCost";
+            this.PowerCost.ReadOnly = true;
+            this.PowerCost.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.PowerCost.ToolTipText = "BTC/day";
+            this.PowerCost.Width = 60;
+            // 
+            // NetEarn
+            // 
+            this.NetEarn.DataPropertyName = "NetEarn";
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "N6";
+            dataGridViewCellStyle7.NullValue = null;
+            this.NetEarn.DefaultCellStyle = dataGridViewCellStyle7;
+            this.NetEarn.HeaderText = "Net";
+            this.NetEarn.Name = "NetEarn";
+            this.NetEarn.ReadOnly = true;
+            this.NetEarn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.NetEarn.ToolTipText = "BTC/day";
+            this.NetEarn.Width = 60;
+            // 
+            // Balance
+            // 
+            this.Balance.DataPropertyName = "BalancePrint";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.NullValue = null;
+            this.Balance.DefaultCellStyle = dataGridViewCellStyle8;
+            this.Balance.HeaderText = "Balance";
+            this.Balance.Name = "Balance";
+            this.Balance.ReadOnly = true;
+            this.Balance.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Balance.ToolTipText = "BTC";
+            this.Balance.Width = 65;
+            // 
+            // AcceptSpeed
+            // 
+            this.AcceptSpeed.DataPropertyName = "AcceptSpeedPrint";
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.NullValue = null;
+            this.AcceptSpeed.DefaultCellStyle = dataGridViewCellStyle9;
+            this.AcceptSpeed.HeaderText = "Accept";
+            this.AcceptSpeed.Name = "AcceptSpeed";
+            this.AcceptSpeed.ReadOnly = true;
+            this.AcceptSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.AcceptSpeed.Width = 45;
+            // 
+            // RejectSpeed
+            // 
+            this.RejectSpeed.DataPropertyName = "RejectSpeedPrint";
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle10.NullValue = null;
+            this.RejectSpeed.DefaultCellStyle = dataGridViewCellStyle10;
+            this.RejectSpeed.HeaderText = "Reject";
+            this.RejectSpeed.Name = "RejectSpeed";
+            this.RejectSpeed.ReadOnly = true;
+            this.RejectSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.RejectSpeed.Width = 45;
+            // 
+            // TimeMining
+            // 
+            this.TimeMining.DataPropertyName = "TimeMiningPrint";
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.TimeMining.DefaultCellStyle = dataGridViewCellStyle11;
+            this.TimeMining.HeaderText = "Running";
+            this.TimeMining.Name = "TimeMining";
+            this.TimeMining.ReadOnly = true;
+            this.TimeMining.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.TimeMining.Width = 70;
+            // 
+            // StatusPrint
+            // 
+            this.StatusPrint.DataPropertyName = "StatusPrint";
+            this.StatusPrint.HeaderText = "Status";
+            this.StatusPrint.Name = "StatusPrint";
+            this.StatusPrint.ReadOnly = true;
+            this.StatusPrint.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.StatusPrint.Width = 55;
+            // 
+            // btnNhStart
+            // 
+            this.btnNhStart.HeaderText = "Action";
+            this.btnNhStart.Name = "btnNhStart";
+            this.btnNhStart.ReadOnly = true;
+            this.btnNhStart.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.btnNhStart.Text = "Start";
+            this.btnNhStart.UseColumnTextForButtonValue = true;
+            this.btnNhStart.Width = 55;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -906,6 +909,11 @@
         private System.Windows.Forms.TextBox textConsole;
         private System.Windows.Forms.TabPage tabRemote;
         private System.Windows.Forms.TextBox textRemote;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceLastUpdated;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceBalance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceCurrency;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceRunning;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn ServicePrint;
         private System.Windows.Forms.DataGridViewTextBoxColumn Algo;
@@ -921,11 +929,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeMining;
         private System.Windows.Forms.DataGridViewTextBoxColumn StatusPrint;
         private System.Windows.Forms.DataGridViewButtonColumn btnNhStart;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceLastUpdated;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceBalance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceCurrency;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ServiceRunning;
     }
 }
 
