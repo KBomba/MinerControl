@@ -152,24 +152,39 @@ namespace MinerControl.Services
 
         protected TEntry CreateEntry(Dictionary<string, object> item)
         {
+            string algoName = item.GetString("algo");
+            AlgorithmEntry algo = MiningEngine.AlgorithmEntries.Single(o => o.Name == algoName);
             TEntry entry = new TEntry
             {
                 MiningEngine = MiningEngine,
                 ServiceEntry = this,
-                AlgoName = item.GetString("algo")
+                AlgoName = algoName,
+                Name = algo.Display,
+                PriceId = item.GetString("priceid"),
+                Hashrate = algo.Hashrate,
+                Power = algo.Power,
+                Priority = algo.Priority,
+                Affinity = algo.Affinity,
+                Weight = _weight,
+                Folder = ProcessedSubstitutions(item.GetString("folder"), algo) ?? string.Empty,
+                Command = ProcessedSubstitutions(item.GetString("command"), algo),
+                Arguments = ProcessedSubstitutions(item.GetString("arguments"), algo) ?? string.Empty
             };
 
-            AlgorithmEntry algo = MiningEngine.AlgorithmEntries.Single(o => o.Name == entry.AlgoName);
-            entry.Name = algo.Display;
-            entry.PriceId = item.GetString("priceid");
-            entry.Hashrate = algo.Hashrate;
-            entry.Power = algo.Power;
-            entry.Priority = algo.Priority;
-            entry.Affinity = algo.Affinity;
-            entry.Weight = _weight;
-            entry.Folder = ProcessedSubstitutions(item.GetString("folder"), algo) ?? string.Empty;
-            entry.Command = ProcessedSubstitutions(item.GetString("command"), algo);
-            entry.Arguments = ProcessedSubstitutions(item.GetString("arguments"), algo) ?? string.Empty;
+            string altItem = item.GetString("alt");
+            if (altItem != null)
+            {
+                string[] alts = altItem.Split(',');
+                if (AlgoTranslations == null) 
+                    AlgoTranslations = new Dictionary<string, string>(alts.Length);
+                
+                foreach (string alt in alts)
+                {
+                    if (!AlgoTranslations.ContainsKey(alt)) 
+                        AlgoTranslations.Add(alt, algoName);
+                }
+            }
+
             if (item.ContainsKey("usewindow"))
                 entry.UseWindow = bool.Parse(item["usewindow"].ToString());
             if (!string.IsNullOrWhiteSpace(DonationAccount))
