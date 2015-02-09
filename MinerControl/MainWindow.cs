@@ -131,7 +131,7 @@ namespace MinerControl
 
         private void linkDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://blockchain.info/address/1PMj3nrVq5CH4TXdJSnHHLPdvcXinjG72y");
+            Process.Start("https://blockchain.info/address/1F9fsG5xLLn6uc7cdbgV1LTFWjWQSqXohX");
         }
 
         private void UpdateTimes()
