@@ -38,7 +38,9 @@ namespace MinerControl
         private DateTime? _startMining;
         private TimeSpan _switchTime;
         private bool _dynamicSwitching;
-        private double _dynamicSwitchPower = 2;
+        private double _dynamicSwitchPower;
+        private double _dynamicSwitchPivot;
+        private double _dynamicSwitchOffset;
         private TimeSpan _dynamicSwitchTime;
         private decimal _profitBestOverRunning;
 
@@ -123,9 +125,10 @@ namespace MinerControl
                 if (_nextRun == null || _nextRunFromTime == null || _startMining == null)
                     return null;
 
-                _dynamicSwitchTime = _profitBestOverRunning > 1 
-                    ? TimeSpan.FromSeconds(_switchTime.TotalSeconds/Math.Pow((double) _profitBestOverRunning, _dynamicSwitchPower))
-                    : _minTime;
+                _dynamicSwitchTime =
+                    TimeSpan.FromSeconds((_switchTime.TotalSeconds/
+                                          Math.Pow((double) _profitBestOverRunning, _dynamicSwitchPower) +
+                                          _dynamicSwitchOffset));
                 
                 TimeSpan? timeToSwitch = _dynamicSwitching
                     ? _dynamicSwitchTime - (DateTime.Now - _nextRunFromTime)
@@ -385,10 +388,21 @@ namespace MinerControl
                 _remoteSend = bool.Parse(data["remotesend"].ToString());
             if (data.ContainsKey("remotereceive"))
                 _remoteReceive = bool.Parse(data["remotereceive"].ToString());
+
             if(data.ContainsKey("dynamicswitching"))
                 _dynamicSwitching = bool.Parse(data["dynamicswitching"].ToString());
-            if (data.ContainsKey("dynamicswitchpower"))
-                _dynamicSwitchPower = double.Parse(data["dynamicswitchpower"].ToString());
+            _dynamicSwitchPower = data.ContainsKey("dynamicswitchpower")
+                ? double.Parse(data["dynamicswitchpower"].ToString())
+                : 2;
+            _dynamicSwitchPivot = data.ContainsKey("dynamicswitchpivot")
+                ? double.Parse(data["dynamicswitchpivot"].ToString())
+                : 1.15;
+            _dynamicSwitchOffset = data.ContainsKey("dynamicswitchoffset")
+                ? double.Parse(data["dynamicswitchoffset"].ToString())
+                : Math.Pow(_dynamicSwitchPivot, _dynamicSwitchPower) != 0
+                    ? _switchTime.TotalMinutes -
+                      (_switchTime.TotalMinutes*Math.Pow(1/_dynamicSwitchPivot, _dynamicSwitchPower))
+                    : 0.5;
         }
 
         private void LoadConfigAlgorithms(object[] data)
