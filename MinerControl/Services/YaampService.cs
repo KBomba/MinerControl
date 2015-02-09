@@ -20,8 +20,8 @@ namespace MinerControl.Services
         //   "x15": {"name": "x15", "port": 3733, "coins": 3, "fees": 5.4, "hashrate": 5870269795, "estimate_current": 0.00126368, "estimate_last24h": 0.00025544, "actual_last24h": 0.00082305}
         // }
 
-        private int _priceMode;
         private int _balanceMode;
+        private int _priceMode;
 
         public YaampService()
         {
@@ -116,7 +116,7 @@ namespace MinerControl.Services
                         Balance = data["unpaid"].ExtractDecimal();
                         break;
                 }
-                
+
 
                 foreach (YaampPriceEntry entry in PriceEntries)
                     entry.AcceptSpeed = 0;

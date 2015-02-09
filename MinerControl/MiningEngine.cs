@@ -25,6 +25,11 @@ namespace MinerControl
         private string _currencySymbol;
         private PriceEntryBase _currentRunning;
         private TimeSpan _deadtime;
+        private double _dynamicSwitchOffset;
+        private double _dynamicSwitchPivot;
+        private double _dynamicSwitchPower;
+        private TimeSpan _dynamicSwitchTime;
+        private bool _dynamicSwitching;
         private decimal _exchange;
         private volatile bool _hasPrices;
         private bool _logactivity;
@@ -35,14 +40,9 @@ namespace MinerControl
         private decimal _powerCost;
         private volatile bool _pricesUpdated;
         private Process _process;
+        private decimal _profitBestOverRunning;
         private DateTime? _startMining;
         private TimeSpan _switchTime;
-        private bool _dynamicSwitching;
-        private double _dynamicSwitchPower;
-        private double _dynamicSwitchPivot;
-        private double _dynamicSwitchOffset;
-        private TimeSpan _dynamicSwitchTime;
-        private decimal _profitBestOverRunning;
 
         public MiningEngine()
         {
@@ -129,7 +129,7 @@ namespace MinerControl
                     TimeSpan.FromSeconds((_switchTime.TotalSeconds/
                                           Math.Pow((double) _profitBestOverRunning, _dynamicSwitchPower) +
                                           _dynamicSwitchOffset));
-                
+
                 TimeSpan? timeToSwitch = _dynamicSwitching
                     ? _dynamicSwitchTime - (DateTime.Now - _nextRunFromTime)
                     : _switchTime - (DateTime.Now - _nextRunFromTime);
@@ -389,7 +389,7 @@ namespace MinerControl
             if (data.ContainsKey("remotereceive"))
                 _remoteReceive = bool.Parse(data["remotereceive"].ToString());
 
-            if(data.ContainsKey("dynamicswitching"))
+            if (data.ContainsKey("dynamicswitching"))
                 _dynamicSwitching = bool.Parse(data["dynamicswitching"].ToString());
             _dynamicSwitchPower = data.ContainsKey("dynamicswitchpower")
                 ? double.Parse(data["dynamicswitchpower"].ToString())
@@ -694,8 +694,8 @@ namespace MinerControl
                         _nextRunFromTime = null;
                     }
 
-                    _profitBestOverRunning = best.NetEarn / _currentRunning.NetEarn;
-                    
+                    _profitBestOverRunning = best.NetEarn/_currentRunning.NetEarn;
+
                     if (NextRunTime.HasValue && NextRunTime > TimeSpan.Zero)
                         best = _priceEntries.First(o => o.Id == _currentRunning.Id);
                 }

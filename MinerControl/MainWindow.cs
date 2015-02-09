@@ -111,9 +111,9 @@ namespace MinerControl
             btnStart.Enabled = _engine.MiningMode == MiningModeEnum.Stopped;
             btnStop.Enabled = _engine.MiningMode != MiningModeEnum.Stopped;
             dgPrices.Columns[dgPrices.Columns.Count - 2].Visible = _engine.MiningMode != MiningModeEnum.Stopped;
-                // Status column
+            // Status column
             dgPrices.Columns[dgPrices.Columns.Count - 1].Visible = _engine.MiningMode == MiningModeEnum.Stopped;
-                // Action column
+            // Action column
         }
 
         private void UpdateGrid(bool forceReorder = false)
@@ -261,7 +261,7 @@ namespace MinerControl
         {
             if (_engine.MiningMode != MiningModeEnum.Stopped) return;
 
-            DataGridView senderGrid = (DataGridView)sender;
+            DataGridView senderGrid = (DataGridView) sender;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
@@ -274,10 +274,10 @@ namespace MinerControl
                 UpdateGrid();
             }
         }
-        
+
         private void dgPrices_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            DataGridView senderGrid = (DataGridView)sender;
+            DataGridView senderGrid = (DataGridView) sender;
 
             if (e.RowIndex >= 0)
             {

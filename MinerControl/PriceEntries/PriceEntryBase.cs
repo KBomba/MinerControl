@@ -8,13 +8,13 @@ namespace MinerControl.PriceEntries
     {
         private decimal _acceptSpeed;
         private decimal _balance;
+        private bool _banned;
         private DateTime _deadTime;
         private decimal _fees;
         private decimal _price;
         private decimal _rejectSpeed;
         private TimeSpan _timeMining;
         private decimal _weight;
-        private bool _banned;
 
         public PriceEntryBase()
         {
