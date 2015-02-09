@@ -11,6 +11,9 @@ namespace MinerControl
             if (timeSpan == TimeSpan.Zero && zeroAsEmpty)
                 return string.Empty;
 
+            if (timeSpan < TimeSpan.Zero && !zeroAsEmpty)
+                return "00:00:00";
+
             return timeSpan.TotalDays > 1
                 ? timeSpan.ToString(@"dd\.hh\:mm\:ss")
                 : timeSpan.ToString(@"hh\:mm\:ss");

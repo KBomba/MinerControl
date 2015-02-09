@@ -18,31 +18,32 @@ namespace MinerControl
     {
         private const int RemotePortNumber = 12814;
 
-        private readonly IList<AlgorithmEntry> _algorithmEntries = new List<AlgorithmEntry>();
-        private readonly IList<PriceEntryBase> _priceEntries = new List<PriceEntryBase>();
-        private readonly IList<IService> _services = new List<IService>();
+        private Process _process;
+        private IList<AlgorithmEntry> _algorithmEntries = new List<AlgorithmEntry>();
+        private IList<PriceEntryBase> _priceEntries = new List<PriceEntryBase>();
+        private IList<IService> _services = new List<IService>();
+        private decimal _powerCost;
+        private decimal _exchange;
         private string _currencyCode;
         private string _currencySymbol;
+        private bool _logactivity;
         private PriceEntryBase _currentRunning;
+        private DateTime? _startMining;
+        private TimeSpan _minTime;
+        private TimeSpan _maxTime;
+        private TimeSpan _switchTime;
         private TimeSpan _deadtime;
+        private int? _nextRun; // Next algo to run
+        private DateTime? _nextRunFromTime; // When the next run algo became best
+        private volatile bool _hasPrices;
+        private volatile bool _pricesUpdated;
         private double _dynamicSwitchOffset;
         private double _dynamicSwitchPivot;
         private double _dynamicSwitchPower;
         private TimeSpan _dynamicSwitchTime;
         private bool _dynamicSwitching;
-        private decimal _exchange;
-        private volatile bool _hasPrices;
-        private bool _logactivity;
-        private TimeSpan _maxTime;
-        private TimeSpan _minTime;
-        private int? _nextRun; // Next algo to run
-        private DateTime? _nextRunFromTime; // When the next run algo became best
-        private decimal _powerCost;
-        private volatile bool _pricesUpdated;
-        private Process _process;
-        private decimal _profitBestOverRunning;
-        private DateTime? _startMining;
-        private TimeSpan _switchTime;
+        private double _profitBestOverRunning;
+        private double _minProfit;
 
         public MiningEngine()
         {
@@ -403,6 +404,10 @@ namespace MinerControl
                     ? _switchTime.TotalMinutes -
                       (_switchTime.TotalMinutes*Math.Pow(1/_dynamicSwitchPivot, _dynamicSwitchPower))
                     : 0.5;
+
+            _minProfit = data.ContainsKey("minprofit")
+                ? double.Parse(data["minprofit"].ToString())
+                : 1;
         }
 
         private void LoadConfigAlgorithms(object[] data)
@@ -694,7 +699,7 @@ namespace MinerControl
                         _nextRunFromTime = null;
                     }
 
-                    _profitBestOverRunning = best.NetEarn/_currentRunning.NetEarn;
+                    _profitBestOverRunning = (double) (best.NetEarn/_currentRunning.NetEarn);
 
                     if (NextRunTime.HasValue && NextRunTime > TimeSpan.Zero)
                         best = _priceEntries.First(o => o.Id == _currentRunning.Id);
@@ -705,6 +710,12 @@ namespace MinerControl
                     PriceEntries.Where(o => !o.IsDead && o.DeadTime != DateTime.MinValue);
                 foreach (PriceEntryBase entry in entries)
                     entry.DeadTime = DateTime.MinValue;
+
+                if (_currentRunning != null && _profitBestOverRunning < _minProfit)
+                {
+                    _currentRunning.UpdateStatus();
+                    return;
+                }
 
                 // Just update time if we are already running the right entry
                 if (_currentRunning != null && _currentRunning.Id == best.Id)
