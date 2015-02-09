@@ -396,7 +396,7 @@ namespace MinerControl
                 : 2;
             _dynamicSwitchPivot = data.ContainsKey("dynamicswitchpivot")
                 ? double.Parse(data["dynamicswitchpivot"].ToString())
-                : 1.15;
+                : 1.1;
             _dynamicSwitchOffset = data.ContainsKey("dynamicswitchoffset")
                 ? double.Parse(data["dynamicswitchoffset"].ToString())
                 : Math.Pow(_dynamicSwitchPivot, _dynamicSwitchPower) != 0
