@@ -84,9 +84,9 @@ namespace MinerControl.Services
                     }
 
 
-                    entry.FeePercent = item["fees"].ExtractDecimal();
+                    decimal feePercent = item["fees"].ExtractDecimal();
+                    entry.FeePercent = _account.Trim()[0] == '1' ? feePercent + 1.5M : feePercent;
                     // If conversion to BTC is needed (as most do), fee is +1.5%
-                    if (_account.Trim()[0] == '1') entry.FeePercent += 1.5M;
                 }
 
                 MiningEngine.PricesUpdated = true;
