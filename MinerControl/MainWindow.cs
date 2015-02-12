@@ -16,7 +16,7 @@ namespace MinerControl
     {
         private readonly DateTime AppStartTime = DateTime.Now;
         private readonly SlidingBuffer<string> _consoleBuffer = new SlidingBuffer<string>(200);
-        private readonly MiningEngine _engine = new MiningEngine();
+        private MiningEngine _engine = new MiningEngine();
         private readonly SlidingBuffer<string> _remoteBuffer = new SlidingBuffer<string>(200);
 
         public MainWindow()
@@ -254,6 +254,41 @@ namespace MinerControl
 
             UpdateButtons();
             _engine.RequestStop();
+            UpdateGrid();
+        }
+
+        private void btnReloadConfig_Click(object sender, EventArgs e)
+        {
+            MiningModeEnum originalMode = _engine.MiningMode;
+            ServiceEnum service = ServiceEnum.Manual;
+            string algo = "x11";
+            if (_engine.CurrentPriceEntry != null)
+            {
+                service = _engine.CurrentPriceEntry.ServiceEntry.ServiceEnum;
+                algo = _engine.CurrentPriceEntry.AlgoName;
+            }
+            
+            _engine.RequestStop();
+            _engine = new MiningEngine();
+
+            if (!_engine.LoadConfig())
+                MessageBox.Show("Something went wrong with reloading your configuration file. Check for errors.",
+                    "Error loading conf", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            dgServices.DataSource = new SortableBindingList<IService>(_engine.Services);
+            dgPrices.DataSource = new SortableBindingList<PriceEntryBase>(_engine.PriceEntries);
+
+            _engine.WriteConsoleAction = WriteConsole;
+            _engine.WriteRemoteAction = WriteRemote;
+
+            _engine.MiningMode = originalMode;
+            if (originalMode == MiningModeEnum.Manual)
+            {
+                _engine.RequestStart(service, algo);
+            }
+
+            RunCycle();
+            UpdateButtons();
             UpdateGrid();
         }
 

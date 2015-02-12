@@ -63,6 +63,11 @@ namespace MinerControl
             get { return _currentRunning == null ? (int?) null : _currentRunning.Id; }
         }
 
+        public PriceEntryBase CurrentPriceEntry
+        {
+            get { return _currentRunning; }
+        }
+
         public int? NextRun
         {
             get { return _nextRun; }
@@ -607,6 +612,24 @@ namespace MinerControl
         public void RequestStart(int id, bool isMinimizedToTray = false)
         {
             PriceEntryBase entry = _priceEntries.Single(o => o.Id == id);
+            StartMiner(entry, isMinimizedToTray);
+        }
+
+        public void RequestStart(ServiceEnum service, string algo, bool isMinimizedToTray = false)
+        {
+            PriceEntryBase entry = _priceEntries.FirstOrDefault();
+            foreach (PriceEntryBase priceEntry in _priceEntries)
+            {
+                if (priceEntry.AlgoName == algo)
+                {
+                    entry = priceEntry;
+                    if (priceEntry.ServiceEntry.ServiceEnum == service)
+                    {
+                        break;
+                    }
+                }
+            }
+
             StartMiner(entry, isMinimizedToTray);
         }
 
