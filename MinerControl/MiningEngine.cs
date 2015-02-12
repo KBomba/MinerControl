@@ -133,7 +133,7 @@ namespace MinerControl
 
                 _dynamicSwitchTime =
                     TimeSpan.FromSeconds((_switchTime.TotalSeconds/
-                                          Math.Pow((double) _profitBestOverRunning, _dynamicSwitchPower) +
+                                          Math.Pow(_profitBestOverRunning, _dynamicSwitchPower) +
                                           _dynamicSwitchOffset));
 
                 TimeSpan? timeToSwitch = _dynamicSwitching
@@ -615,9 +615,9 @@ namespace MinerControl
             StartMiner(entry, isMinimizedToTray);
         }
 
-        public void RequestStart(ServiceEnum service, string algo, bool isMinimizedToTray = false)
+        public void RequestStart(ServiceEnum service, string algo, bool isMinimizedToTray)
         {
-            PriceEntryBase entry = _priceEntries.FirstOrDefault();
+            PriceEntryBase entry = null;
             foreach (PriceEntryBase priceEntry in _priceEntries)
             {
                 if (priceEntry.AlgoName == algo)
@@ -630,7 +630,14 @@ namespace MinerControl
                 }
             }
 
-            StartMiner(entry, isMinimizedToTray);
+            if (entry == null)
+            {
+                RunBestAlgo(isMinimizedToTray);
+            }
+            else
+            {
+                StartMiner(entry, isMinimizedToTray);
+            }
         }
 
         public void CheckPrices()

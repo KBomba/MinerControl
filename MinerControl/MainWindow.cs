@@ -284,7 +284,7 @@ namespace MinerControl
             _engine.MiningMode = originalMode;
             if (originalMode == MiningModeEnum.Manual)
             {
-                _engine.RequestStart(service, algo);
+                _engine.RequestStart(service, algo, IsMinimizedToTray);
             }
 
             RunCycle();
