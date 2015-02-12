@@ -261,7 +261,7 @@ namespace MinerControl
         {
             MiningModeEnum originalMode = _engine.MiningMode;
             ServiceEnum service = ServiceEnum.Manual;
-            string algo = "x11";
+            string algo = string.Empty;
             if (_engine.CurrentPriceEntry != null)
             {
                 service = _engine.CurrentPriceEntry.ServiceEntry.ServiceEnum;
@@ -282,14 +282,15 @@ namespace MinerControl
             _engine.WriteRemoteAction = WriteRemote;
 
             _engine.MiningMode = originalMode;
-            if (originalMode == MiningModeEnum.Manual)
-            {
-                _engine.RequestStart(service, algo, IsMinimizedToTray);
-            }
 
             RunCycle();
             UpdateButtons();
             UpdateGrid();
+
+            if (originalMode == MiningModeEnum.Manual)
+            {
+                _engine.RequestStart(service, algo, IsMinimizedToTray);
+            }
         }
 
         private void dgPrices_CellContentClick(object sender, DataGridViewCellEventArgs e)
