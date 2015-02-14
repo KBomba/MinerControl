@@ -17,6 +17,7 @@ namespace MinerControl.Services
         protected string _param3;
         private ServiceEnum _serviceEnum;
         protected decimal _weight = 1.0m;
+        protected decimal _minProfit = 1.0m;
         protected string _worker;
 
         public ServiceBase()
@@ -113,6 +114,8 @@ namespace MinerControl.Services
             _worker = data.GetString("worker") ?? string.Empty;
             if (data.ContainsKey("weight"))
                 _weight = data["weight"].ExtractDecimal();
+            if (data.ContainsKey("minprofit"))
+                _minProfit = data["minprofit"].ExtractDecimal();
             _param1 = data.GetString("sparam1") ?? data.GetString("param1") ?? string.Empty;
             _param2 = data.GetString("sparam2") ?? data.GetString("param2") ?? string.Empty;
             _param3 = data.GetString("sparam3") ?? data.GetString("param3") ?? string.Empty;
@@ -162,6 +165,7 @@ namespace MinerControl.Services
             AlgorithmEntry algo = MiningEngine.AlgorithmEntries.Single(o => o.Name == entry.AlgoName);
             entry.Name = algo.Display;
             entry.PriceId = item.GetString("priceid");
+            entry.MinProfit = _minProfit;
             entry.Hashrate = algo.Hashrate;
             entry.Power = algo.Power;
             entry.Priority = algo.Priority;

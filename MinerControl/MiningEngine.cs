@@ -42,8 +42,8 @@ namespace MinerControl
         private double _dynamicSwitchPower;
         private TimeSpan _dynamicSwitchTime;
         private bool _dynamicSwitching;
-        private double _profitBestOverRunning;
-        private double _minProfit;
+        private decimal _profitBestOverRunning;
+        private decimal _minProfit;
 
         public MiningEngine()
         {
@@ -133,7 +133,7 @@ namespace MinerControl
 
                 _dynamicSwitchTime =
                     TimeSpan.FromSeconds((_switchTime.TotalSeconds/
-                                          Math.Pow(_profitBestOverRunning, _dynamicSwitchPower) +
+                                          Math.Pow((double) _profitBestOverRunning, _dynamicSwitchPower) +
                                           _dynamicSwitchOffset));
 
                 TimeSpan? timeToSwitch = _dynamicSwitching
@@ -411,8 +411,8 @@ namespace MinerControl
                     : 0.5;
 
             _minProfit = data.ContainsKey("minprofit")
-                ? double.Parse(data["minprofit"].ToString())
-                : 1;
+                ? data["minprofit"].ExtractDecimal()
+                : 1M;
         }
 
         private void LoadConfigAlgorithms(object[] data)
@@ -708,12 +708,15 @@ namespace MinerControl
                         .OrderByDescending(o => o.NetEarn)
                         .First();
 
-                if (_currentRunning != null && _currentRunning.Banned)
+                if (_currentRunning != null && _currentRunning.Banned 
+                    && best.Id != _currentRunning.Id)
                 {
                     StopMiner();
                     StartMiner(best, isMinimizedToTray);
                     return;
                 }
+
+                decimal highestMinProfit = 1M;
 
                 // Handle minimum time for better algorithm before switching
                 if (_switchTime > TimeSpan.Zero && _currentRunning != null)
@@ -729,7 +732,11 @@ namespace MinerControl
                         _nextRunFromTime = null;
                     }
 
-                    _profitBestOverRunning = (double) (best.NetEarn/_currentRunning.NetEarn);
+                    _profitBestOverRunning = best.NetEarn/_currentRunning.NetEarn;
+                    highestMinProfit = best.ServiceEntry.ServiceEnum != _currentRunning.ServiceEntry.ServiceEnum
+                        ? Math.Max(best.MinProfit, _minProfit)
+                        : _minProfit;
+
 
                     if (NextRunTime.HasValue && NextRunTime > TimeSpan.Zero)
                         best = _priceEntries.First(o => o.Id == _currentRunning.Id);
@@ -741,7 +748,7 @@ namespace MinerControl
                 foreach (PriceEntryBase entry in entries)
                     entry.DeadTime = DateTime.MinValue;
 
-                if (_currentRunning != null && _profitBestOverRunning < _minProfit)
+                if (_currentRunning != null && _profitBestOverRunning < highestMinProfit)
                 {
                     _currentRunning.UpdateStatus();
                     return;

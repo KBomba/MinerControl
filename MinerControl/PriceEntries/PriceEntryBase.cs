@@ -29,7 +29,8 @@ namespace MinerControl.PriceEntries
         public string AlgoName { get; set; }
         public string Name { get; set; }
         public bool UseWindow { get; set; }
-
+        public decimal MinProfit { get; set; }
+        
         public decimal Hashrate { get; set; }
         public decimal Power { get; set; }
         public string Priority { get; set; }
