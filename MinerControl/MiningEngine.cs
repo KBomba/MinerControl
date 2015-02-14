@@ -281,7 +281,7 @@ namespace MinerControl
 
         public bool LoadConfig()
         {
-            const string configFile = "MinerControl.conf";
+            string configFile = GetConfigPath();
             if (!File.Exists(configFile))
             {
                 MessageBox.Show(string.Format("Config file, '{0}', not found.", configFile),
@@ -353,6 +353,16 @@ namespace MinerControl
             }
 
             return true;
+        }
+
+        private string GetConfigPath()
+        {
+            string config = "MinerControl";
+
+            Process[] processList = Process.GetProcessesByName(config);
+            if (processList.Length > 1) config += processList.Length;
+
+            return config + ".conf";
         }
 
         private void LoadService(IService service, IDictionary<string, object> data, string name)
