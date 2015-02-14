@@ -361,8 +361,9 @@ namespace MinerControl
 
             Process[] processList = Process.GetProcessesByName(config);
             if (processList.Length > 1) config += processList.Length;
+            config += ".conf";
 
-            return config + ".conf";
+            return File.Exists(config)? config : "MinerControl.conf";
         }
 
         private void LoadService(IService service, IDictionary<string, object> data, string name)
