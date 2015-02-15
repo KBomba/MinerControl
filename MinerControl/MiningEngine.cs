@@ -44,6 +44,7 @@ namespace MinerControl
         private bool _dynamicSwitching;
         private decimal _profitBestOverRunning;
         private decimal _minProfit;
+        private decimal? _minPrice;
 
         public MiningEngine()
         {
@@ -424,6 +425,17 @@ namespace MinerControl
             _minProfit = data.ContainsKey("minprofit")
                 ? data["minprofit"].ExtractDecimal()
                 : 1M;
+
+            string minPrice = data.ContainsKey("minprice") ? data["minprice"].ToString() : "0";
+            if (minPrice.EndsWith("BTC"))
+            {
+                string trimmed = minPrice.Remove(minPrice.Length - 3);
+                _minPrice = trimmed.ExtractDecimal();
+            }
+            else
+            {
+                _minPrice = minPrice.ExtractDecimal() / _exchange;
+            }
         }
 
         private void LoadConfigAlgorithms(object[] data)
@@ -675,7 +687,7 @@ namespace MinerControl
                 }
 
                 // Clear information if process not running
-                if (_process == null || _process.HasExited)
+                if (!_process.IsRunning())
                 {
                     _currentRunning = null;
                     _startMining = null;
@@ -706,19 +718,33 @@ namespace MinerControl
                 if (RestartTime.HasValue && RestartTime.Value <= TimeSpan.Zero)
                     StopMiner();
 
+                foreach (PriceEntryBase entry in _priceEntries)
+                {
+                    entry.BelowMinPrice = entry.NetEarn < _minPrice;
+                }
+
                 // Find the best, live entry
                 PriceEntryBase best = _donationMiningMode == MiningModeEnum.Donation
                     ? _priceEntries
-                        .Where(o => !o.IsDead && !o.Banned)
+                        .Where(o => !o.IsDead && !o.Banned && !o.BelowMinPrice)
                         .Where(o => !string.IsNullOrWhiteSpace(o.DonationCommand))
                         .OrderByDescending(o => o.NetEarn)
-                        .First()
+                        .FirstOrDefault()
                     : _priceEntries
-                        .Where(o => !o.IsDead && !o.Banned)
+                        .Where(o => !o.IsDead && !o.Banned && !o.BelowMinPrice)
                         .Where(o => !string.IsNullOrWhiteSpace(o.Command))
                         .OrderByDescending(o => o.NetEarn)
-                        .First();
+                        .FirstOrDefault();
 
+                // If none is found, because they're all banned, dead, below minprice
+                // All should quit
+                if (best == null && _currentRunning != null)
+                {
+                    StopMiner();
+                    return;
+                }
+
+                // If the current pool is banned, it should directly start the best one
                 if (_currentRunning != null && _currentRunning.Banned 
                     && best.Id != _currentRunning.Id)
                 {

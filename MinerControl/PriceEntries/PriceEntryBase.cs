@@ -9,6 +9,7 @@ namespace MinerControl.PriceEntries
         private decimal _acceptSpeed;
         private decimal _balance;
         private bool _banned;
+        private bool _belowMinPrice;
         private DateTime _deadTime;
         private decimal _fees;
         private decimal _price;
@@ -105,6 +106,12 @@ namespace MinerControl.PriceEntries
             set { SetField(ref _banned, value, () => Banned, () => StatusPrint); }
         }
 
+        public bool BelowMinPrice
+        {
+            get { return _belowMinPrice; }
+            set { SetField(ref _belowMinPrice, value, () => Banned, () => StatusPrint); }
+        }
+
         public DateTime DeadTime
         {
             get { return _deadTime; }
@@ -162,6 +169,8 @@ namespace MinerControl.PriceEntries
                     return "Dead";
                 if (Banned)
                     return "Banned";
+                if (BelowMinPrice)
+                    return "Too low";
                 if (MiningEngine.NextRun.HasValue && MiningEngine.NextRun.Value == Id)
                     return "Pending";
                 return string.Empty;
