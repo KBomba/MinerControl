@@ -342,6 +342,8 @@ namespace MinerControl
 
         private void tmrTimeUpdate_Tick(object sender, EventArgs e)
         {
+            if (_engine.ExitTime.HasValue && DateTime.Now >= _engine.ExitTime) Application.Exit();
+
             UpdateTimes();
 
             if (_engine.PricesUpdated)

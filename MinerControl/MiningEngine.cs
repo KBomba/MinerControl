@@ -28,11 +28,13 @@ namespace MinerControl
         private string _currencySymbol;
         private bool _logactivity;
         private PriceEntryBase _currentRunning;
+        private DateTime _engineCreation;
         private DateTime? _startMining;
         private TimeSpan _minTime;
         private TimeSpan _maxTime;
         private TimeSpan _switchTime;
         private TimeSpan _delay;
+        private TimeSpan _autoExitTime;
         private DateTime? _stoppedMining;
         private TimeSpan _deadtime;
         private int? _nextRun; // Next algo to run
@@ -50,6 +52,7 @@ namespace MinerControl
 
         public MiningEngine()
         {
+            _engineCreation = DateTime.Now;
             MinerKillMode = 1;
             GridSortMode = 1;
             MiningMode = MiningModeEnum.Stopped;
@@ -145,6 +148,15 @@ namespace MinerControl
                 TimeSpan? timeToMin = _minTime - (DateTime.Now - _startMining);
 
                 return timeToMin > timeToSwitch ? timeToMin : timeToSwitch;
+            }
+        }
+
+        public DateTime? ExitTime
+        {
+            get
+            {
+                if (_autoExitTime < new TimeSpan(0, 1, 0)) return null;
+                return _engineCreation + _autoExitTime;
             }
         }
 
@@ -390,6 +402,9 @@ namespace MinerControl
 
             double delay = data.ContainsKey("delay") ? (double) data["delay"].ExtractDecimal() : 0;
             _delay = TimeSpan.FromSeconds(delay);
+
+            double autoExitTime = data.ContainsKey("exittime") ? (double)data["exittime"].ExtractDecimal() : 0;
+            _autoExitTime = TimeSpan.FromMinutes(autoExitTime);
 
             if (data.ContainsKey("logerrors"))
                 ErrorLogger.LogExceptions = bool.Parse(data["logerrors"].ToString());
