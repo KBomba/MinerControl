@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
@@ -384,9 +385,18 @@ namespace MinerControl
         private void LoadService(IService service, IDictionary<string, object> data, string name)
         {
             if (!data.ContainsKey(name)) return;
+
+            Dictionary<string, object> serviceData = data[name] as Dictionary<string, object>;
+            if (serviceData != null && (name == "nicehash" || name == "westhash") &&
+                (!serviceData.ContainsKey("detectstratum") || (bool) serviceData["detectstratum"]))
+            {
+                service = GetBestNiceWestHashService();
+                if (_services.Any(o => o.ServiceEnum == service.ServiceEnum)) return;
+            }
+            
             service.MiningEngine = this;
             _services.Add(service);
-            service.Initialize(data[name] as Dictionary<string, object>);
+            service.Initialize(serviceData);
         }
 
         private void LoadConfigGeneral(IDictionary<string, object> data)
@@ -481,6 +491,59 @@ namespace MinerControl
 
                 _algorithmEntries.Add(entry);
             }
+        }
+
+        private IService GetBestNiceWestHashService()
+        {
+            const int tries = 4;
+            Ping pinger = new Ping();
+            PingReply replyWestHash = null;
+            long[] westRtt = new long[tries];
+            PingReply replyNiceHash = null;
+            long[] niceRtt = new long[tries];
+
+            try
+            {
+                for (int i = 0; i < tries; i++)
+                {
+                    replyWestHash = pinger.Send("speedtest.sea01.softlayer.com", 1000);
+                    if (replyWestHash != null)
+                    {
+                        westRtt[i] = replyWestHash.RoundtripTime;
+                    }
+                    else
+                    {
+                        westRtt[i] = 500;
+                    }
+                }
+            }
+            catch { }
+            if (replyWestHash == null || replyWestHash.Status != IPStatus.Success) return new NiceHashService();
+
+            try
+            {
+                for (int i = 0; i < tries; i++)
+                {
+                    replyNiceHash = pinger.Send("speedtest.ams01.softlayer.com", 1000);
+                    if (replyNiceHash != null)
+                    {
+                        niceRtt[i] = replyNiceHash.RoundtripTime;
+                    }
+                    else
+                    {
+                        niceRtt[i] = 500;
+                    }
+                }
+            }
+            catch { }
+            if (replyNiceHash == null || replyNiceHash.Status != IPStatus.Success) return new WestHashService();
+
+            if (niceRtt.Average() > westRtt.Average())
+            {
+                return new WestHashService();
+            }
+
+            return new NiceHashService();
         }
 
         public void StopMiner()
