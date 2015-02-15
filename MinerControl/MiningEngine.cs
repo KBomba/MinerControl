@@ -32,6 +32,8 @@ namespace MinerControl
         private TimeSpan _minTime;
         private TimeSpan _maxTime;
         private TimeSpan _switchTime;
+        private TimeSpan _delay;
+        private DateTime? _stoppedMining;
         private TimeSpan _deadtime;
         private int? _nextRun; // Next algo to run
         private DateTime? _nextRunFromTime; // When the next run algo became best
@@ -386,6 +388,9 @@ namespace MinerControl
             _switchTime = TimeSpan.FromMinutes((double) data["switchtime"].ExtractDecimal());
             _deadtime = TimeSpan.FromMinutes((double) data["deadtime"].ExtractDecimal());
 
+            double delay = data.ContainsKey("delay") ? (double) data["delay"].ExtractDecimal() : 0;
+            _delay = TimeSpan.FromSeconds(delay);
+
             if (data.ContainsKey("logerrors"))
                 ErrorLogger.LogExceptions = bool.Parse(data["logerrors"].ToString());
             if (data.ContainsKey("logactivity"))
@@ -488,6 +493,7 @@ namespace MinerControl
                 entry.UpdateStatus();
             }
 
+            if(_stoppedMining == null) _stoppedMining = DateTime.Now;
             _currentRunning = null;
         }
 
@@ -510,6 +516,7 @@ namespace MinerControl
             _nextRunFromTime = null;
             _currentRunning = entry;
             _startMining = DateTime.Now;
+            _stoppedMining = null;
 
             _process = new Process();
             if (_donationMiningMode == MiningModeEnum.Donation)
@@ -806,7 +813,7 @@ namespace MinerControl
                 }
 
                 StopMiner();
-                StartMiner(best, isMinimizedToTray);
+                if (_stoppedMining == null || _stoppedMining + _delay <= DateTime.Now) StartMiner(best, isMinimizedToTray);
             }
             catch (Exception ex)
             {
