@@ -283,6 +283,7 @@ namespace MinerControl
 
             _engine.MiningMode = originalMode;
 
+            _engine.LoadExchangeRates();
             RunCycle();
             UpdateButtons();
             UpdateGrid();
