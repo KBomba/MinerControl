@@ -33,9 +33,11 @@ namespace MinerControl.Services
         {
             ExtractCommon(data);
 
-            if ((!data.ContainsKey("detectstratum") || (bool)data["detectstratum"]) && _param1.StartsWith("-o stratum"))
+            if ((!data.ContainsKey("detectstratum") || (bool) data["detectstratum"]) && _param1.StartsWith("-o stratum"))
             {
-                _param1 = ServiceEnum == ServiceEnum.NiceHash ? "-o stratum+tcp://stratum.nicehash.com" : "-o stratum+tcp://stratum.westhash.com";
+                _param1 = ServiceEnum == ServiceEnum.NiceHash
+                    ? "-o stratum+tcp://stratum.nicehash.com"
+                    : "-o stratum+tcp://stratum.westhash.com";
             }
 
             object[] items = data["algos"] as object[];
