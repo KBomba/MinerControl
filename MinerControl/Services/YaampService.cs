@@ -70,19 +70,20 @@ namespace MinerControl.Services
                     YaampPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
+                    decimal price = 0;
                     switch (_priceMode)
                     {
                         case 1:
-                            entry.Price = item["estimate_last24h"].ExtractDecimal()*1000;
+                            price = item["estimate_last24h"].ExtractDecimal();
                             break;
                         case 2:
-                            entry.Price = item["actual_last24h"].ExtractDecimal()*1000;
+                            price = item["actual_last24h"].ExtractDecimal();
                             break;
                         default:
-                            entry.Price = item["estimate_current"].ExtractDecimal()*1000;
+                            price = item["estimate_current"].ExtractDecimal();
                             break;
                     }
-
+                    entry.Price = algo != "sha256" ? price*1000 : price;
 
                     decimal feePercent = item["fees"].ExtractDecimal();
                     entry.FeePercent = _account.Trim()[0] == '1' ? feePercent + 1.5M : feePercent;
