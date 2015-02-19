@@ -53,6 +53,7 @@ namespace MinerControl.Services
             ClearStalePrices();
             WebUtil.DownloadJson("http://yaamp.com/api/status", ProcessPrices);
             WebUtil.DownloadJson(string.Format("http://yaamp.com/api/wallet?address={0}", _account), ProcessBalances);
+            UpdateHistory();
         }
 
         private void ProcessPrices(object jsonData)

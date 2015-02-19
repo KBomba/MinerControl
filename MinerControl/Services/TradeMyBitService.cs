@@ -48,6 +48,7 @@ namespace MinerControl.Services
                 ProcessPrices);
             WebUtil.DownloadJson(string.Format("https://pool.trademybit.com/api/balance?key={0}", _apikey),
                 ProcessBalances);
+            UpdateHistory();
         }
 
         private void ProcessPrices(object jsonData)

@@ -23,6 +23,7 @@ namespace MinerControl
         private IList<AlgorithmEntry> _algorithmEntries = new List<AlgorithmEntry>();
         private IList<PriceEntryBase> _priceEntries = new List<PriceEntryBase>();
         private IList<IService> _services = new List<IService>();
+        private IList<ServiceHistory> _priceHistories = new List<ServiceHistory>(); 
         private decimal _powerCost;
         private decimal _exchange;
         private string _currencyCode;
@@ -36,6 +37,9 @@ namespace MinerControl
         private TimeSpan _switchTime;
         private TimeSpan _delay;
         private TimeSpan _autoExitTime;
+        private TimeSpan _statWindow;
+        private double _outlierPercentage;
+        private bool _ignoreOutliers;
         private DateTime? _stoppedMining;
         private TimeSpan _deadtime;
         private int? _nextRun; // Next algo to run
@@ -174,6 +178,11 @@ namespace MinerControl
         public IList<AlgorithmEntry> AlgorithmEntries
         {
             get { return _algorithmEntries; }
+        }
+
+        public IList<ServiceHistory> PriceHistories
+        {
+            get { return _priceHistories; }
         }
 
         public TimeSpan TotalTime
@@ -397,6 +406,8 @@ namespace MinerControl
             service.MiningEngine = this;
             _services.Add(service);
             service.Initialize(serviceData);
+
+            _priceHistories.Add(new ServiceHistory(service.ServiceEnum, _statWindow, _outlierPercentage));
         }
 
         private void LoadConfigGeneral(IDictionary<string, object> data)
@@ -415,6 +426,13 @@ namespace MinerControl
 
             double autoExitTime = data.ContainsKey("exittime") ? (double)data["exittime"].ExtractDecimal() : 0;
             _autoExitTime = TimeSpan.FromMinutes(autoExitTime);
+
+            _ignoreOutliers = !data.ContainsKey("ignoreoutliers") || bool.Parse(data["ignoreoutliers"].ToString());
+            double statWindow = data.ContainsKey("statwindow") ? (double)data["statwindow"].ExtractDecimal() : 60;
+            _statWindow = TimeSpan.FromMinutes(statWindow);
+            _outlierPercentage = data.ContainsKey("outlierpercentage")
+                ? (double) data["outlierpercentage"].ExtractDecimal()
+                : 0.95;
 
             if (data.ContainsKey("logerrors"))
                 ErrorLogger.LogExceptions = bool.Parse(data["logerrors"].ToString());
@@ -811,12 +829,12 @@ namespace MinerControl
                 // Find the best, live entry
                 PriceEntryBase best = _donationMiningMode == MiningModeEnum.Donation
                     ? _priceEntries
-                        .Where(o => !o.IsDead && !o.Banned && !o.BelowMinPrice)
+                        .Where(o => !IsBadEntry(o))
                         .Where(o => !string.IsNullOrWhiteSpace(o.DonationCommand))
                         .OrderByDescending(o => o.NetEarn)
                         .FirstOrDefault()
                     : _priceEntries
-                        .Where(o => !o.IsDead && !o.Banned && !o.BelowMinPrice)
+                        .Where(o => !IsBadEntry(o))
                         .Where(o => !string.IsNullOrWhiteSpace(o.Command))
                         .OrderByDescending(o => o.NetEarn)
                         .FirstOrDefault();
@@ -870,6 +888,7 @@ namespace MinerControl
                 foreach (PriceEntryBase entry in entries)
                     entry.DeadTime = DateTime.MinValue;
 
+                // Guarantees a minimum profit before switching
                 if (_currentRunning != null && _profitBestOverRunning < highestMinProfit)
                 {
                     _currentRunning.UpdateStatus();
@@ -897,6 +916,12 @@ namespace MinerControl
             {
                 ErrorLogger.Log(ex);
             }
+        }
+
+        public bool IsBadEntry(PriceEntryBase priceEntry)
+        {
+            return (priceEntry.BelowMinPrice || priceEntry.Banned || priceEntry.IsDead ||
+                    (_ignoreOutliers && priceEntry.Outlier));
         }
 
         public void SwitchBanStatus(string pool)

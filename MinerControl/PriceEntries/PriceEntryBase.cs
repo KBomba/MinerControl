@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MinerControl.Services;
 using MinerControl.Utility;
 
@@ -10,6 +11,7 @@ namespace MinerControl.PriceEntries
         private decimal _balance;
         private bool _banned;
         private bool _belowMinPrice;
+        private bool _outlier;
         private DateTime _deadTime;
         private decimal _fees;
         private decimal _price;
@@ -109,7 +111,13 @@ namespace MinerControl.PriceEntries
         public bool BelowMinPrice
         {
             get { return _belowMinPrice; }
-            set { SetField(ref _belowMinPrice, value, () => Banned, () => StatusPrint); }
+            set { SetField(ref _belowMinPrice, value, () => BelowMinPrice, () => StatusPrint); }
+        }
+
+        public bool Outlier
+        {
+            get { return _outlier; }
+            set { SetField(ref _outlier, value, () => Outlier, () => StatusPrint); }
         }
 
         public DateTime DeadTime
@@ -171,6 +179,8 @@ namespace MinerControl.PriceEntries
                     return "Banned";
                 if (BelowMinPrice)
                     return "Too low";
+                if (Outlier)
+                    return "Outlier";
                 if (MiningEngine.NextRun.HasValue && MiningEngine.NextRun.Value == Id)
                     return "Pending";
                 return string.Empty;
@@ -188,6 +198,51 @@ namespace MinerControl.PriceEntries
         {
             OnPropertyChanged(() => PowerCost);
             OnPropertyChanged(() => NetEarn);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((PriceEntryBase) obj);
+        }
+
+        protected bool Equals(PriceEntryBase other)
+        {
+            return Id == other.Id && Equals(ServiceEntry, other.ServiceEntry) && string.Equals(PriceId, other.PriceId) &&
+                   string.Equals(AlgoName, other.AlgoName) && string.Equals(Name, other.Name) &&
+                   UseWindow.Equals(other.UseWindow) && MinProfit == other.MinProfit && Hashrate == other.Hashrate &&
+                   Power == other.Power && string.Equals(Priority, other.Priority) && Affinity == other.Affinity &&
+                   string.Equals(Folder, other.Folder) && string.Equals(Command, other.Command) &&
+                   string.Equals(Arguments, other.Arguments) && string.Equals(DonationFolder, other.DonationFolder) &&
+                   string.Equals(DonationCommand, other.DonationCommand) &&
+                   string.Equals(DonationArguments, other.DonationArguments);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = Id;
+                hashCode = (hashCode * 397) ^ (ServiceEntry != null ? ServiceEntry.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (PriceId != null ? PriceId.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (AlgoName != null ? AlgoName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ UseWindow.GetHashCode();
+                hashCode = (hashCode * 397) ^ MinProfit.GetHashCode();
+                hashCode = (hashCode * 397) ^ Hashrate.GetHashCode();
+                hashCode = (hashCode * 397) ^ Power.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Priority != null ? Priority.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Affinity;
+                hashCode = (hashCode * 397) ^ (Folder != null ? Folder.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Command != null ? Command.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Arguments != null ? Arguments.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (DonationFolder != null ? DonationFolder.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (DonationCommand != null ? DonationCommand.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (DonationArguments != null ? DonationArguments.GetHashCode() : 0);
+                return hashCode;
+            }
         }
     }
 }

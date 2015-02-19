@@ -37,6 +37,11 @@ namespace MinerControl.Services
             }
         }
 
+        protected ServiceHistory ServiceHistory
+        {
+            get { return MiningEngine.PriceHistories.SingleOrDefault(o => o.Service == ServiceEnum); }
+        } 
+
         protected string DonationAccount { get; set; }
         protected string DonationWorker { get; set; }
         protected IDictionary<string, string> AlgoTranslations { get; set; }
@@ -213,6 +218,14 @@ namespace MinerControl.Services
 
             foreach (TEntry entry in PriceEntries)
                 entry.Price = 0;
+        }
+
+        protected void UpdateHistory()
+        {
+            if(ServiceHistory == null) return;
+
+            foreach (TEntry entry in PriceEntries)
+                ServiceHistory.UpdatePrice(entry);
         }
     }
 }

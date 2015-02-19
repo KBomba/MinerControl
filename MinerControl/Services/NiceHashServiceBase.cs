@@ -57,6 +57,7 @@ namespace MinerControl.Services
             ClearStalePrices();
             WebUtil.DownloadJson(CurrentFormat, ProcessPrices);
             WebUtil.DownloadJson(string.Format(BalanceFormat, _account), ProcessBalances);
+            UpdateHistory();
         }
 
         private void ProcessPrices(object jsonData)
