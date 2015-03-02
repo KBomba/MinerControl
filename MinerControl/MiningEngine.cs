@@ -414,7 +414,7 @@ namespace MinerControl
 
             Dictionary<string, object> serviceData = data[name] as Dictionary<string, object>;
             if (serviceData != null && (name == "nicehash" || name == "westhash") &&
-                (!serviceData.ContainsKey("detectstratum") || (bool) serviceData["detectstratum"]))
+                (serviceData.ContainsKey("detectstratum") && (bool) serviceData["detectstratum"]))
             {
                 service = GetBestNiceWestHashService();
                 if (_services.Any(o => o.ServiceEnum == service.ServiceEnum)) return;
