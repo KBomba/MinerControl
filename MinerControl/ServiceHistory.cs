@@ -62,15 +62,15 @@ namespace MinerControl
                 }
             }
 
-            if (windowedCount >= 10)
+            if (windowedCount >= 10) // Makes sure at least ten entries are in there
             {
                 window.Sort();
-                int outlierIndex = (int) Math.Truncate(window.Count*_outlierPercentage);
+                int outlierIndex = (int) Math.Truncate(window.Count*_outlierPercentage); 
+                // Outliers are at the Xth percentile and beyond
                 decimal[] outliers = {window[outlierIndex], window[window.Count - outlierIndex]};
-                if (/*price <= outliers.Min() ||*/ price > outliers.Max())
-                {
-                    outlier = true;
-                }
+                // 
+
+                outlier = price > outliers.Max();
             }
 
             PriceStat priceStat = new PriceStat

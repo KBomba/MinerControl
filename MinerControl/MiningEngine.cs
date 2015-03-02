@@ -432,7 +432,7 @@ namespace MinerControl
             _statWindow = TimeSpan.FromMinutes(statWindow);
             _outlierPercentage = data.ContainsKey("outlierpercentage")
                 ? (double) data["outlierpercentage"].ExtractDecimal()
-                : 0.95;
+                : 0.99;
 
             if (data.ContainsKey("logerrors"))
                 ErrorLogger.LogExceptions = bool.Parse(data["logerrors"].ToString());
@@ -827,15 +827,13 @@ namespace MinerControl
                 }
 
                 // Find the best, live entry
-                PriceEntryBase best = _donationMiningMode == MiningModeEnum.Donation
-                    ? _priceEntries
+                PriceEntryBase best =
+                    _priceEntries
                         .Where(o => !IsBadEntry(o))
-                        .Where(o => !string.IsNullOrWhiteSpace(o.DonationCommand))
-                        .OrderByDescending(o => o.NetEarn)
-                        .FirstOrDefault()
-                    : _priceEntries
-                        .Where(o => !IsBadEntry(o))
-                        .Where(o => !string.IsNullOrWhiteSpace(o.Command))
+                        .Where(o =>
+                                !string.IsNullOrWhiteSpace(_donationMiningMode == MiningModeEnum.Donation
+                                    ? o.DonationCommand
+                                    : o.Command))
                         .OrderByDescending(o => o.NetEarn)
                         .FirstOrDefault();
 
@@ -888,22 +886,16 @@ namespace MinerControl
                 foreach (PriceEntryBase entry in entries)
                     entry.DeadTime = DateTime.MinValue;
 
-                // Guarantees a minimum profit before switching
-                if (_currentRunning != null && _profitBestOverRunning < highestMinProfit)
-                {
-                    _currentRunning.UpdateStatus();
-                    return;
-                }
-
-                // Just update time if we are already running the right entry
-                if (_currentRunning != null && _currentRunning.Id == best.Id)
-                {
-                    _currentRunning.UpdateStatus();
-                    return;
-                }
-
-                // Honor minimum time to run in auto mode
-                if (MiningTime.HasValue && MiningTime.Value < _minTime)
+                
+                if (_currentRunning != null
+                    // Guarantees a minimum profit before switching
+                    && (_profitBestOverRunning < highestMinProfit
+                    // Keeps outliers pending/ignores them if requested
+                    || (_ignoreOutliers && best.Outlier)
+                    // Just update time if we are already running the right entry
+                    || _currentRunning.Id == best.Id
+                    // Honor minimum time to run in auto mode
+                    || (MiningTime.HasValue && MiningTime.Value < _minTime)))
                 {
                     _currentRunning.UpdateStatus();
                     return;
@@ -920,8 +912,7 @@ namespace MinerControl
 
         public bool IsBadEntry(PriceEntryBase priceEntry)
         {
-            return (priceEntry.BelowMinPrice || priceEntry.Banned || priceEntry.IsDead ||
-                    (_ignoreOutliers && priceEntry.Outlier));
+            return (priceEntry.BelowMinPrice || priceEntry.Banned || priceEntry.IsDead);
         }
 
         public void SwitchBanStatus(string pool)
