@@ -61,7 +61,6 @@ namespace MinerControl.Services
                 string.Format(
                     "https://www.ltcrabbit.com/index.php?page=api&action=getappdata&appname=MinerControl&appversion=1&api_key={0}",
                     _apikey), ProcessBalances);
-            UpdateHistory();
         }
 
         private void ProcessPrices(object jsonData)

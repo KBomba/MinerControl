@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MinerControl.PriceEntries;
 
 namespace MinerControl
@@ -45,7 +44,7 @@ namespace MinerControl
             int windowedCount = 0;
             bool outlier = false;
 
-            if (!PriceList.ContainsKey(priceEntryBase)) 
+            if (!PriceList.ContainsKey(priceEntryBase))
                 PriceList.Add(priceEntryBase, new List<PriceStat>());
 
             foreach (PriceStat stat in PriceList[priceEntryBase])
@@ -73,16 +72,20 @@ namespace MinerControl
                 outlier = price > outliers.Max();
             }
 
+
+            decimal totalAveragePrice = totalPrice/(totalCount+1);
+            decimal windowedAveragePrice = windowedPrice/(windowedCount+1);
             PriceStat priceStat = new PriceStat
             {
                 Time = now,
                 CurrentPrice = price,
-                TotalAveragePrice = totalPrice/(totalCount+1),
-                WindowedAveragePrice = windowedPrice/(windowedCount+1),
+                TotalAveragePrice = totalAveragePrice,
+                WindowedAveragePrice = windowedAveragePrice,
                 Outlier = outlier
             };
 
             priceEntryBase.Outlier = outlier;
+            priceEntryBase.NetAverage = windowedAveragePrice;
 
             PriceList[priceEntryBase].Add(priceStat);
         }

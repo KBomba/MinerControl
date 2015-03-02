@@ -45,6 +45,8 @@ namespace MinerControl.PriceEntries
         public string DonationCommand { get; set; }
         public string DonationArguments { get; set; }
 
+        public decimal NetAverage { get; set; }
+
         public decimal Price
         {
             get { return _price; }

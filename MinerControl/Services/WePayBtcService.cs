@@ -41,7 +41,6 @@ namespace MinerControl.Services
         {
             ClearStalePrices();
             WebUtil.DownloadJson("http://wepaybtc.com/payouts.json", ProcessPrices);
-            UpdateHistory();
         }
 
         private void ProcessPrices(object jsonData)
@@ -66,6 +65,8 @@ namespace MinerControl.Services
                 MiningEngine.HasPrices = true;
 
                 LastUpdated = DateTime.Now;
+
+                UpdateHistory();
             }
         }
     }

@@ -53,7 +53,6 @@ namespace MinerControl.Services
             ClearStalePrices();
             WebUtil.DownloadJson("http://yaamp.com/api/status", ProcessPrices);
             WebUtil.DownloadJson(string.Format("http://yaamp.com/api/wallet?address={0}", _account), ProcessBalances);
-            UpdateHistory();
         }
 
         private void ProcessPrices(object jsonData)
@@ -71,7 +70,7 @@ namespace MinerControl.Services
                     YaampPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
-                    decimal price = 0;
+                    decimal price;
                     switch (_priceMode)
                     {
                         case 1:
@@ -95,6 +94,8 @@ namespace MinerControl.Services
                 MiningEngine.HasPrices = true;
 
                 LastUpdated = DateTime.Now;
+
+                UpdateHistory();
             }
         }
 

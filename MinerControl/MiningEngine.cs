@@ -20,37 +20,49 @@ namespace MinerControl
         private const int RemotePortNumber = 12814;
 
         private Process _process;
-        private IList<AlgorithmEntry> _algorithmEntries = new List<AlgorithmEntry>();
-        private IList<PriceEntryBase> _priceEntries = new List<PriceEntryBase>();
-        private IList<IService> _services = new List<IService>();
-        private IList<ServiceHistory> _priceHistories = new List<ServiceHistory>(); 
+        private readonly IList<AlgorithmEntry> _algorithmEntries = new List<AlgorithmEntry>();
+        private readonly IList<PriceEntryBase> _priceEntries = new List<PriceEntryBase>();
+        private readonly IList<IService> _services = new List<IService>();
+        private readonly IList<ServiceHistory> _priceHistories = new List<ServiceHistory>(); 
+
         private decimal _powerCost;
         private decimal _exchange;
         private string _currencyCode;
         private string _currencySymbol;
+
         private bool _logactivity;
-        private PriceEntryBase _currentRunning;
-        private DateTime _engineCreation;
+        private bool _mineByAverage;
+
+        private readonly DateTime _engineCreation;
         private DateTime? _startMining;
+
         private TimeSpan _minTime;
         private TimeSpan _maxTime;
         private TimeSpan _switchTime;
         private TimeSpan _delay;
         private TimeSpan _autoExitTime;
         private TimeSpan _statWindow;
+
         private double _outlierPercentage;
         private bool _ignoreOutliers;
+
         private DateTime? _stoppedMining;
         private TimeSpan _deadtime;
+
+        private PriceEntryBase _currentRunning;
+
         private int? _nextRun; // Next algo to run
         private DateTime? _nextRunFromTime; // When the next run algo became best
+
         private volatile bool _hasPrices;
         private volatile bool _pricesUpdated;
+
         private double _dynamicSwitchOffset;
         private double _dynamicSwitchPivot;
         private double _dynamicSwitchPower;
         private TimeSpan _dynamicSwitchTime;
         private bool _dynamicSwitching;
+
         private decimal _profitBestOverRunning;
         private decimal _minProfit;
         private decimal? _minPrice;
@@ -107,6 +119,11 @@ namespace MinerControl
         public string CurrencySymbol
         {
             get { return _currencySymbol; }
+        }
+
+        public bool MineByAverage
+        {
+            get { return _mineByAverage; }
         }
 
         public TimeSpan DeadTime
@@ -438,6 +455,8 @@ namespace MinerControl
                 ErrorLogger.LogExceptions = bool.Parse(data["logerrors"].ToString());
             if (data.ContainsKey("logactivity"))
                 _logactivity = bool.Parse(data["logactivity"].ToString());
+            if (data.ContainsKey("minebyaverage"))
+                _mineByAverage = bool.Parse(data["minebyaverage"].ToString());
             if (data.ContainsKey("minerkillmode"))
                 MinerKillMode = int.Parse(data["minerkillmode"].ToString());
             if (data.ContainsKey("gridsortmode"))
@@ -834,7 +853,7 @@ namespace MinerControl
                                 !string.IsNullOrWhiteSpace(_donationMiningMode == MiningModeEnum.Donation
                                     ? o.DonationCommand
                                     : o.Command))
-                        .OrderByDescending(o => o.NetEarn)
+                                    .OrderByDescending(o => _mineByAverage? o.NetAverage: o.NetEarn)
                         .FirstOrDefault();
 
                 // If none is found, because they're all banned, dead, below minprice

@@ -56,7 +56,6 @@ namespace MinerControl.Services
                 string.Format(
                     "https://hamsterpool.com/index.php?page=api&action=user_algorithm_balance_btc&api_key={0}", _apikey),
                 ProcessBalances);
-            UpdateHistory();
         }
 
         private void ProcessPrices(object jsonData)
@@ -79,6 +78,8 @@ namespace MinerControl.Services
                 MiningEngine.HasPrices = true;
 
                 LastUpdated = DateTime.Now;
+
+                UpdateHistory();
             }
         }
 

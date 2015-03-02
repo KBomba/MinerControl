@@ -124,7 +124,8 @@ namespace MinerControl
                 if (_engine.GridSortMode == 2 ||
                     (_engine.GridSortMode == 1 && (forceReorder || _engine.MiningMode == MiningModeEnum.Automatic)))
                 {
-                    dgPrices.Sort(dgPrices.Columns["NetEarn"], ListSortDirection.Descending);
+                    string column = _engine.MineByAverage ? "NetAverage" : "NetEarn";
+                    dgPrices.Sort(dgPrices.Columns[column], ListSortDirection.Descending);
                 }
             }
         }

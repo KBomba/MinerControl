@@ -104,7 +104,7 @@
             this.Fees = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PowerCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NetEarn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AverageNet = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NetAverage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AcceptSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RejectSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -328,7 +328,7 @@
             this.Fees,
             this.PowerCost,
             this.NetEarn,
-            this.AverageNet,
+            this.NetAverage,
             this.Balance,
             this.AcceptSpeed,
             this.RejectSpeed,
@@ -769,16 +769,17 @@
             this.NetEarn.ToolTipText = "BTC/day";
             this.NetEarn.Width = 60;
             // 
-            // AverageNet
+            // NetAverage
             // 
-            this.AverageNet.DataPropertyName = "AverageNet";
+            this.NetAverage.DataPropertyName = "NetAverage";
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             dataGridViewCellStyle8.Format = "N6";
-            this.AverageNet.DefaultCellStyle = dataGridViewCellStyle8;
-            this.AverageNet.HeaderText = "Average";
-            this.AverageNet.Name = "AverageNet";
-            this.AverageNet.ReadOnly = true;
-            this.AverageNet.ToolTipText = "BTC/day";
+            this.NetAverage.DefaultCellStyle = dataGridViewCellStyle8;
+            this.NetAverage.HeaderText = "Average";
+            this.NetAverage.Name = "NetAverage";
+            this.NetAverage.ReadOnly = true;
+            this.NetAverage.ToolTipText = "BTC/day";
+            this.NetAverage.Width = 60;
             // 
             // Balance
             // 
@@ -939,7 +940,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Fees;
         private System.Windows.Forms.DataGridViewTextBoxColumn PowerCost;
         private System.Windows.Forms.DataGridViewTextBoxColumn NetEarn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AverageNet;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NetAverage;
         private System.Windows.Forms.DataGridViewTextBoxColumn Balance;
         private System.Windows.Forms.DataGridViewTextBoxColumn AcceptSpeed;
         private System.Windows.Forms.DataGridViewTextBoxColumn RejectSpeed;
