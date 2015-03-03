@@ -43,6 +43,7 @@ namespace MinerControl
         private TimeSpan _autoExitTime;
         private TimeSpan _statWindow;
 
+        private decimal _iqrMultiplier;
         private double _outlierPercentage;
         private bool _ignoreOutliers;
 
@@ -424,7 +425,7 @@ namespace MinerControl
             _services.Add(service);
             service.Initialize(serviceData);
 
-            _priceHistories.Add(new ServiceHistory(service.ServiceEnum, _statWindow, _outlierPercentage));
+            _priceHistories.Add(new ServiceHistory(service.ServiceEnum, _statWindow, _outlierPercentage, _iqrMultiplier));
         }
 
         private void LoadConfigGeneral(IDictionary<string, object> data)
@@ -444,9 +445,12 @@ namespace MinerControl
             double autoExitTime = data.ContainsKey("exittime") ? (double)data["exittime"].ExtractDecimal() : 0;
             _autoExitTime = TimeSpan.FromMinutes(autoExitTime);
 
-            _ignoreOutliers = !data.ContainsKey("ignoreoutliers") || bool.Parse(data["ignoreoutliers"].ToString());
+            _ignoreOutliers = (data.ContainsKey("ignoreoutliers") && bool.Parse(data["ignoreoutliers"].ToString()));
             double statWindow = data.ContainsKey("statwindow") ? (double)data["statwindow"].ExtractDecimal() : 60;
             _statWindow = TimeSpan.FromMinutes(statWindow);
+            _iqrMultiplier = data.ContainsKey("iqrmultiplier")
+                ? data["iqrmultiplier"].ExtractDecimal()
+                : 2.2M;
             _outlierPercentage = data.ContainsKey("outlierpercentage")
                 ? (double) data["outlierpercentage"].ExtractDecimal()
                 : 0.99;
@@ -889,7 +893,7 @@ namespace MinerControl
                         _nextRunFromTime = null;
                     }
 
-                    _profitBestOverRunning = best.NetEarn/_currentRunning.NetEarn;
+                    _profitBestOverRunning = _mineByAverage? best.NetAverage/_currentRunning.NetAverage : best.NetEarn/_currentRunning.NetEarn;
                     highestMinProfit = best.ServiceEntry.ServiceEnum != _currentRunning.ServiceEntry.ServiceEnum
                         ? Math.Max(best.MinProfit, _minProfit)
                         : _minProfit;

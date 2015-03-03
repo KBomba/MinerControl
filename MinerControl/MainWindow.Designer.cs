@@ -345,7 +345,6 @@
             this.dgPrices.DefaultCellStyle = dataGridViewCellStyle13;
             this.dgPrices.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgPrices.Location = new System.Drawing.Point(6, 6);
-            this.dgPrices.MultiSelect = false;
             this.dgPrices.Name = "dgPrices";
             this.dgPrices.ReadOnly = true;
             dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -357,6 +356,7 @@
             dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgPrices.RowHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.dgPrices.RowHeadersVisible = false;
+            this.dgPrices.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgPrices.ShowCellErrors = false;
             this.dgPrices.ShowCellToolTips = false;
             this.dgPrices.ShowEditingIcon = false;

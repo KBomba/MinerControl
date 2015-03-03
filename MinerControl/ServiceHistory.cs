@@ -10,7 +10,8 @@ namespace MinerControl
         public ServiceEnum Service { get; set; }
 
         private readonly TimeSpan _statWindow;
-        private readonly double _outlierPercentage;
+        private readonly double _percentile;
+        private readonly decimal _iqrMultiplier;
 
         public Dictionary<PriceEntryBase, List<PriceStat>> PriceList { get; set; } // PriceEntry:list of stats
         public class PriceStat
@@ -23,11 +24,12 @@ namespace MinerControl
             public bool Outlier { get; set; }
         }
 
-        public ServiceHistory(ServiceEnum service, TimeSpan window, double outlierPercentage)
+        public ServiceHistory(ServiceEnum service, TimeSpan window, double percentile, decimal iqrMultiplier)
         {
             Service = service;
             _statWindow = window;
-            _outlierPercentage = outlierPercentage;
+            _percentile = percentile;
+            _iqrMultiplier = iqrMultiplier;
             PriceList = new Dictionary<PriceEntryBase, List<PriceStat>>();
         }
 
@@ -61,20 +63,30 @@ namespace MinerControl
                 }
             }
 
+            decimal totalAveragePrice = totalPrice/(totalCount+1);
+            decimal windowedAveragePrice = windowedPrice/(windowedCount+1);
+
             if (windowedCount >= 10) // Makes sure at least ten entries are in there
             {
                 window.Sort();
-                int outlierIndex = (int) Math.Truncate(window.Count*_outlierPercentage); 
-                // Outliers are at the Xth percentile and beyond
-                decimal[] outliers = {window[outlierIndex], window[window.Count - outlierIndex]};
-                // 
-
-                outlier = price > outliers.Max();
+                if (_iqrMultiplier > 0)
+                {
+                    int iqrIndex = (int) Math.Truncate(window.Count*0.75);
+                    decimal iqr = window[iqrIndex] - window[window.Count - iqrIndex];
+                    outlier = price > windowedAveragePrice + (_iqrMultiplier*iqr);
+                }
+                else
+                {
+                    // If the IQR multiplier is negative or zero, 
+                    // it'll try to use percentiles for outlierdetection
+                    // Not advised! Will kill off trending profits, iqr-multiplying is preferable 
+                    int outlierIndex = (int) Math.Truncate(window.Count*_percentile);
+                    decimal[] outliers = {window[outlierIndex], window[window.Count - outlierIndex]};
+                    outlier = price > outliers.Max();
+                }
             }
 
 
-            decimal totalAveragePrice = totalPrice/(totalCount+1);
-            decimal windowedAveragePrice = windowedPrice/(windowedCount+1);
             PriceStat priceStat = new PriceStat
             {
                 Time = now,
