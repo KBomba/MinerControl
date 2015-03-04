@@ -3,10 +3,10 @@ Miner Control
 
 KBomba 
 
-  I tried out NiceHash-control when it was first released, but I was too busy hunting real coins myself. Now that mining profits are lower than they used to be, I became "lazy" and got hooked by Miner Control (again).
-  But the not-lazy part in me wanted more. StuffOfInterest already provided a great tool, and an even greater codebase for me to play with. 
-  Most of my additions hook seamlessly into his code. One can keep on using their old .conf files without any problems, but they'll miss out on a few handy features.
-  The following text is made originally by StuffOfInterest in the original BitcoinTalk ANN thread. I just edited a few things here and there.
+    I tried out NiceHash-control when it was first released, but I was too busy hunting real coins myself. Now that mining profits are lower than they used to be, I became "lazy" and got hooked by Miner Control (again).
+    But the not-lazy part in me wanted more. StuffOfInterest already provided a great tool, and an even greater codebase for me to play with. 
+    Most of my additions hook seamlessly into his code. One can keep on using their old .conf files without any problems, but they'll miss out on a few handy features.
+    The following text is made originally by StuffOfInterest in the original BitcoinTalk ANN thread. I just edited a few things here and there.
 
   Original ANN thread can be found here: https://bitcointalk.org/index.php?topic=769239.0
   
@@ -212,6 +212,7 @@ Q & A:
 	A: Donation mining will mine to the MinerControl author's address or account for a percentage of time.  Default setting is for 2% of the time over four hours which works out to just under five minutes spent donation mining every four hours.  If the percentage is set to 0 then no donation mining will occur.
 
 Release history by KBomba: https://github.com/KBomba/MinerControl-KBomba/releases
+
 Release history:
     29-December-2014: Version 1.6.1 - Option to selection price type for YAAMP (current est, 24hr est, or 24hr actual).
     15-December-2014: Version 1.6.0 - Configure new algorithms, including API identifiers, via the conf file.
