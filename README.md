@@ -2,12 +2,14 @@ Miner Control
 =============
 
 KBomba 
+
   I tried out NiceHash-control when it was first released, but I was too busy hunting real coins myself. Now that mining profits are lower than they used to be, I became "lazy" and got hooked by Miner Control (again).
   But the not-lazy part in me wanted more. StuffOfInterest already provided a great tool, and an even greater codebase for me to play with. 
   Most of my additions hook seamlessly into his code. One can keep on using their old .conf files without any problems, but they'll miss out on a few handy features.
   The following text is made originally by StuffOfInterest in the original BitcoinTalk ANN thread. I just edited a few things here and there.
 
   Original ANN thread can be found here: https://bitcointalk.org/index.php?topic=769239.0
+  
 /KBomba
 
 Here is a quick list of features:
@@ -148,6 +150,8 @@ Legend:
 - yaamp - Config section for YAAMP, omit to not use this service
   - (settings are the same as nicehash, except for detectstratum)
   - pricemode - 0 = current estimate, 1 = 24hr estimate, 2 = 24hr actual
+  - <i>KBomba-Mod</i>
+  - balancemode - 0 = all unpaid, 1= sold on markets but unpaid, 2 = all unsolds, 3 = all paid ever, 4 = all paid, sold and unconfirmed.
 - ltcrabbit - Config section for LTCRabbit, omit to not use this service
   - (settings are the same as nicehash, except for detectstratum)
   - apikey - your API key to use in gathering prices
@@ -164,6 +168,7 @@ Legend:
 
 
 Substitution identifiers for command, folder, and argument parameters:
+
     _ADDRESS_ - Substitutes the above address if specified
     _WORKER_ - Substitutes the above worker if specified
     _APARAM1_ - Substitutes the above aparam1 if specified
@@ -175,6 +180,7 @@ Substitution identifiers for command, folder, and argument parameters:
 
 
 Instructions:
+
     Download into a folder on your Windows computer
     Make sure .NET Framework  4.0 is installed
     Modify MinerControl.conf with the settings for your own mining applications
@@ -185,12 +191,14 @@ Instructions:
 
 
 Command line arguments:
+
     -a | --auto-start Start mining in automatic mode as soon as the application starts.
     -m | --minimize Minimize application on startup.
     -t | --minimize-to-tray Minimize to the tool tray and hide miner when minimize icon is clicked.  This option is obsolete and the config setting "traymode" should be used instead.  If "traymode" is set to "0" then this option will switch it to "2".
 
 
 Q & A:
+
     Q: How can I start mining automatically when MinerControl starts? 
 	A: Launch with "MinerControl.exe --auto-start".
 	
