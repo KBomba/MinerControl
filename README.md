@@ -2,12 +2,12 @@ Miner Control
 =============
 
 KBomba 
-I tried out NiceHash-control when it was first released, but I was too busy hunting real coins myself. Now that mining profits are lower than they used to be, I became "lazy" and got hooked by Miner Control (again).
-But the not-lazy part in me wanted more. StuffOfInterest already provided a great tool, and an even greater codebase for me to play with. 
-Most of my additions hook seamlessly into his code. One can keep on using their old .conf files without any problems, but they'll miss out on a few handy features.
-The following text is made originally by StuffOfInterest in the original BitcoinTalk ANN thread. I just edited a few things here and there.
+  I tried out NiceHash-control when it was first released, but I was too busy hunting real coins myself. Now that mining profits are lower than they used to be, I became "lazy" and got hooked by Miner Control (again).
+  But the not-lazy part in me wanted more. StuffOfInterest already provided a great tool, and an even greater codebase for me to play with. 
+  Most of my additions hook seamlessly into his code. One can keep on using their old .conf files without any problems, but they'll miss out on a few handy features.
+  The following text is made originally by StuffOfInterest in the original BitcoinTalk ANN thread. I just edited a few things here and there.
 
-Original ANN thread can be found here: https://bitcointalk.org/index.php?topic=769239.0
+  Original ANN thread can be found here: https://bitcointalk.org/index.php?topic=769239.0
 /KBomba
 
 Here is a quick list of features:
@@ -36,6 +36,7 @@ Here is a quick list of features:
 - Forced restart of miner after maximum amount of time to avoid stuck miners.
 - Config parameter substitution for common values in miner configs.
 - View output from multiple mining computers on one system with 'remote console'.
+- Loads MinerControl2.conf if it's the 2nd MinerControl instance (if it exists at all), MinerControl3.conf for 3th instance, etc...
 
 Legal disclaimer: This program is not created, supported, or endorsed by any of the mining pools or miner software makers.  It is my own creation and you use it at your own risk.
 
@@ -43,6 +44,7 @@ Display details:
 - Actions
   - Auto - Put miner in automatic mode for switching between algorithms.
   - Stop - Stop running miner.
+  - <i>KBomba-Mod</i>
   - Reload - Reloads the .conf if changes have been made. Will resume the tasks it was doing.
 - Times
   - Running - How much total mining time has happened since the application started.
@@ -76,12 +78,14 @@ Display details:
   - Status - Current status of the entry (only shows when miner is running).
     - Running - Currently running entry.
 	- Pending - Entry that will start once switch time has been met.
+    - Dead - Miner exited abnormally and hasn't reached its dead time threshold yet.
+	- <i>KBomba-Mod</i>
 	- Too low - Entry is below the minimum price.
 	- Banned - Pool is manually banned.
-    - Outlier - Entry has a spike in profitability, mostly not worth it to switch to because of its temporary nature.
-    - Dead - Miner exited abnormally and hasn't reached its dead time threshold yet.
+    - Outlier - Entry has a spike in profitability, mostly not worth it to switch to because of its temporary nature. Can be ignored.
   - Action - Start an individual miner for testing (only shows when miner is stopped).
 
+  
 An up to date configuration file can be found here: https://raw.githubusercontent.com/KBomba/MinerControl-KBomba/master/MinerControl/MinerControl.conf
 
 Legend:
@@ -102,13 +106,30 @@ Legend:
   - donationfrequency - How often, in minutes, to do donation mining (default 240, or 4 hours)
   - remotesend - Send console output to remote receiver (default false)
   - remotereceive - Receive console output from remote senders (default false)
+  - <i>KBomba-Mod</i>
+  - dynamicswitching - True or false, when set to true, it will decrease "switchtime" the higher the best price over the current price gets (default false)
+  - dynamicswitchpower, dynamicswitchpivot, dynamicswitchoffset - Variables for the dynamic switching formula (default 2, 1.05, none):
+  Dynamic switchtime = ("switchtime" / ((best entry price / currently running price) ^ "dynamicswitchpower")) + "dynamicswitchingoffset"
+  Where "dynamicswitchoffset" defaults to:  "switchtime" - ("switchtime" * (1/"dynamicswitchpivot") ^ "dynamicswitchpower)).
+  - statwindow - Time in minutes to run statistics on, range now-statwindow -> now (default 60).
+  - minebyaverage - True or false, will use the average price, calculated from the statwindow, to determine the best entry (default false)
+  - ignoreoutliers - True or false, will ignore prices that are deemed outliers according to data from the statwindow and certain variables, is ignored when mining by average (default false)
+  - iqrmultiplier - Will determine if an entry is an outlier if the price is more than average+(interquartile range * iqrmultiplier), is the preferred method (default 2.2)
+  - outlierpercentage - Will determine if an entry is an outlier if the price is at the Xth index when all prices are sorted from low to high, is an old, popular but inefficient method, set iqrmultiplier to -1 if you really want to use this (default 0.99)
+  - minprofit - The price of the best entry will be kept pending if its profit divided by the currently running profit, is less than the ratio set here. Can also be set per pool, highest value wins. Does nothing if not set.
+  - minprice - Absolute price in BTC or your own fiat before it actually starts mining. Append with "BTC" if you want to use a BTC price, append nothing for your currency. Defaults to 0, if power usage and price are set correctly, it won't mine when profits are negative. 
+  - delay - Time in seconds between a stop and a start of the miner. Rapid switching makes some miners crash, set a 5 (second) delay to fix this, does nothing if not set.
+  - exittime - Time in minutes after which Miner Control will shut down completely. Anything lower than 1 minute is ignored, does nothing if not set.
 - algorithms - List of supported algorithms
   - name - Name of supported algorithm (only listed names are currently supported)
   - display - What to display in the 'Algo' column in the prices grid
   - hashrate - Your hashrate in kHash/sec
   - power - Watts your GPU pulls when mining an algorithm
   - aparam1, aparam2, aparam3 - algorithm based substitution value for use in folder, command, and arguments
-- nicehash - Config section for NiceHash, ommit to not use this service
+  - <i>KBomba-Mod</i>
+  - priority - CPU priority to give to your miners, defaults to "Normal", other possible values are "Idle", "BelowNormal", "AboveNormal", "High" & "RealTime".
+  - affinity - Hex mask (like in start /affinity) to set the process affinity, you can use 1 for first core, 2 for second core, 4 for third core, etc
+- nicehash - Config section for NiceHash, omit to not use this service
   - account - Bitcoin address to mine against
   - worker - worker ID
   - weight - multiplier to adjust price if you don't fully trust the reported numbers
@@ -119,28 +140,30 @@ Legend:
   - command - Command to execute
   - arguments - Arguments to include with the command
   - usewindow - Run miner in separate window from controller (default false)
-- westhash - Config section for WestHash, ommit to not use this service
+  - <i>KBomba-Mod</i>
+  - minprofit - The price of the best entry will be kept pending if its profit divided by the currently running profit, is less than the ratio set here. Will use the value at general settings if it's higher or the current running and best pool are the same. Does nothing if not set.
+  - detectstratum - Nicehash/Westhash exclusive! True or false, will ping to the endpoints of Nicehash/Westhash datacenters to determine which one is preferable. Doesn't switch while mining, only picks the best at startup, which simplifies a config (default false)
+- westhash - Config section for WestHash, omit to not use this service
   - (settings are the same as nicehash)
-- yaamp - Config section for YAAMP, ommit to not use this service
-  - (settings are the same as nicehash)
+- yaamp - Config section for YAAMP, omit to not use this service
+  - (settings are the same as nicehash, except for detectstratum)
   - pricemode - 0 = current estimate, 1 = 24hr estimate, 2 = 24hr actual
-- ltcrabbit - Config section for LTCRabbit, ommit to not use this service
-  - (settings are the same as nicehash)
+- ltcrabbit - Config section for LTCRabbit, omit to not use this service
+  - (settings are the same as nicehash, except for detectstratum)
   - apikey - your API key to use in gathering prices
-- wepaybtc - Config section for WePayBTC, ommit to not use this service
-  - settings are the same as nicehash)
-- hamsterpool - Config section for HamsterPool, ommit to not use this service
-  - (settings are the same as nicehash)
+- wepaybtc - Config section for WePayBTC, omit to not use this service
+  - settings are the same as nicehash, except for detectstratum)
+- hamsterpool - Config section for HamsterPool, omit to not use this service
+  - (settings are the same as nicehash, except for detectstratum)
   - apikey - your API key to use in gathering prices
   - donation - percentage to donate back to HamsterPool
-- manual - Config section for manual miners, ommit to not use this service
-  - (settings are the same as nicehash)
+- manual - Config section for manual miners, omit to not use this service
+  - (settings are the same as nicehash, except for detectstratum)
   - price - price to use for calculating earnings
   - fee - percentage fee to deduct from price
 
 
 Substitution identifiers for command, folder, and argument parameters:
-
     _ADDRESS_ - Substitutes the above address if specified
     _WORKER_ - Substitutes the above worker if specified
     _APARAM1_ - Substitutes the above aparam1 if specified
@@ -152,7 +175,6 @@ Substitution identifiers for command, folder, and argument parameters:
 
 
 Instructions:
-
     Download into a folder on your Windows computer
     Make sure .NET Framework  4.0 is installed
     Modify MinerControl.conf with the settings for your own mining applications
@@ -163,22 +185,26 @@ Instructions:
 
 
 Command line arguments:
-
     -a | --auto-start Start mining in automatic mode as soon as the application starts.
     -m | --minimize Minimize application on startup.
     -t | --minimize-to-tray Minimize to the tool tray and hide miner when minimize icon is clicked.  This option is obsolete and the config setting "traymode" should be used instead.  If "traymode" is set to "0" then this option will switch it to "2".
 
 
 Q & A:
+    Q: How can I start mining automatically when MinerControl starts? 
+	A: Launch with "MinerControl.exe --auto-start".
+	
+    Q: Miner Control starts to display, freezes for a second, and then crashes.  What is happening? 
+	A: Most likely there is an error in the config file. Miner Control is sensitive to the formatting of this file and will crash badly if there is an error.  Make sure your "key":"value" pairs are all correctly named and that any path backslashes are created as double-backslash ("\\").  Consider using a validator just as JSON Lint to verify your config file structure.
+    
+	Q: Will Miner Control work on Windows XP? 
+	A: Yes, just make sure you have .NET Framework 4.0 installed.
+	
+    Q: What does donation mining do? 
+	A: Donation mining will mine to the MinerControl author's address or account for a percentage of time.  Default setting is for 2% of the time over four hours which works out to just under five minutes spent donation mining every four hours.  If the percentage is set to 0 then no donation mining will occur.
 
-    Q: How can I start mining automatically when MinerControl starts? A: Launch with "MinerControl.exe --auto-start".
-    Q: Miner Control starts to display, freezes for a second, and then crashes.  What is happening? A: Most likely there is an error in the config file.  Miner Control is sensitive to the formatting of this file and will crash badly if there is an error.  Make sure your "key":"value" pairs are all correctly named and that any path backslashes are created as double-backslash ("\\").  Consider using a validator just as JSON Lint to verify your config file structure.
-    Q: Will Miner Control work on Windows XP? A: Yes, just make sure you have .NET Framework 4.0 installed.
-    Q: What does donation mining do? A: Donation mining will mine to the MinerControl author's address or account for a percentage of time.  Default setting is for 2% of the time over four hours which works out to just under five minutes spent donation mining every four hours.  If the percentage is set to 0 then no donation mining will occur.
-
-
+Release history by KBomba: https://github.com/KBomba/MinerControl-KBomba/releases
 Release history:
-
     29-December-2014: Version 1.6.1 - Option to selection price type for YAAMP (current est, 24hr est, or 24hr actual).
     15-December-2014: Version 1.6.0 - Configure new algorithms, including API identifiers, via the conf file.
     9-December-2014: Version 1.5.6 - Add support for HamsterPool.

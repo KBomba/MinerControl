@@ -913,8 +913,8 @@ namespace MinerControl
                 if (_currentRunning != null
                     // Guarantees a minimum profit before switching
                     && (_profitBestOverRunning < highestMinProfit
-                    // Keeps outliers pending/ignores them if requested
-                    || (_ignoreOutliers && best.Outlier)
+                    // Keeps outliers pending/ignores them if requested and not mining by average
+                    || (!_mineByAverage && _ignoreOutliers && best.Outlier)
                     // Just update time if we are already running the right entry
                     || _currentRunning.Id == best.Id
                     // Honor minimum time to run in auto mode
