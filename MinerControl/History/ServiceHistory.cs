@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MinerControl.PriceEntries;
 
-namespace MinerControl
+namespace MinerControl.History
 {
     public class ServiceHistory
     {

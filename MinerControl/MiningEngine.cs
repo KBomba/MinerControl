@@ -8,6 +8,7 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using MinerControl.History;
 using MinerControl.PriceEntries;
 using MinerControl.Services;
 using MinerControl.Utility;
@@ -125,6 +126,11 @@ namespace MinerControl
         public bool MineByAverage
         {
             get { return _mineByAverage; }
+        }
+
+        public TimeSpan StatWindow
+        {
+            get { return _statWindow; }
         }
 
         public TimeSpan DeadTime
@@ -308,6 +314,7 @@ namespace MinerControl
         public void Cleanup()
         {
             WriteConsoleAction = null;
+            WriteRemoteAction = null;
 
             if (_currentRunning != null && _currentRunning.UseWindow == false)
                 StopMiner();
@@ -1028,7 +1035,7 @@ namespace MinerControl
 
         public Action<string> WriteConsoleAction { get; set; }
         public Action<IPAddress, string> WriteRemoteAction { get; set; }
-
+        
         private void WriteConsole(string text, bool prefixTime = false)
         {
             if (WriteConsoleAction == null) return;

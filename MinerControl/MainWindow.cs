@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
+using MinerControl.History;
 using MinerControl.PriceEntries;
 using MinerControl.Services;
 using MinerControl.Utility;
@@ -14,10 +15,11 @@ namespace MinerControl
 {
     public partial class MainWindow : Form
     {
-        private readonly DateTime AppStartTime = DateTime.Now;
+        private readonly DateTime _appStartTime = DateTime.Now;
         private readonly SlidingBuffer<string> _consoleBuffer = new SlidingBuffer<string>(200);
         private MiningEngine _engine = new MiningEngine();
         private readonly SlidingBuffer<string> _remoteBuffer = new SlidingBuffer<string>(200);
+        private TotalHistoryForm _totalHistoryForm;
 
         public MainWindow()
         {
@@ -83,6 +85,35 @@ namespace MinerControl
                 UpdateButtons();
                 RunBestAlgo();
             }
+
+            HistoryChart historyChart = tabHistory.Controls["historyChart"] as HistoryChart;
+            if (historyChart != null)
+            {
+                historyChart.History = _engine.PriceHistories;
+                historyChart.FlipLegend();
+                historyChart.UpdateChart(_engine.StatWindow);
+                historyChart.Chart.DoubleClick += ChartOnDoubleClick;
+            }
+        }
+
+        private void ChartOnDoubleClick(object sender, EventArgs eventArgs)
+        {
+            if (_totalHistoryForm != null)
+            {
+                _totalHistoryForm.Focus();
+            }
+            else
+            {
+
+                _totalHistoryForm = new TotalHistoryForm(_engine.PriceHistories);
+                _totalHistoryForm.FormClosing += _totalHistoryForm_FormClosing;
+                _totalHistoryForm.Show();
+            }
+        }
+
+        void _totalHistoryForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _totalHistoryForm = null;
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -97,7 +128,7 @@ namespace MinerControl
 
         private void RunBestAlgo()
         {
-            if (!_engine.HasPrices || (Program.HasAutoStart && (DateTime.Now - AppStartTime).TotalSeconds < 3)) return;
+            if (!_engine.HasPrices || (Program.HasAutoStart && (DateTime.Now - _appStartTime).TotalSeconds < 3)) return;
 
             int? oldCurrent = _engine.CurrentRunning;
             int? oldNext = _engine.NextRun;
@@ -173,8 +204,7 @@ namespace MinerControl
                     textConsole.SelectionLength = 0;
                     textConsole.ScrollToCaret();
                     textConsole.Refresh();
-                }
-                ));
+                }));
         }
 
         private void WriteRemote(IPAddress source, string text)
@@ -269,8 +299,12 @@ namespace MinerControl
                 algo = _engine.CurrentPriceEntry.AlgoName;
             }
             
-            _engine.RequestStop();
-            _engine = new MiningEngine();
+            _engine.Cleanup();
+            _engine = new MiningEngine
+            {
+                WriteConsoleAction = WriteConsole, 
+                WriteRemoteAction = WriteRemote
+            };
 
             if (!_engine.LoadConfig())
                 MessageBox.Show("Something went wrong with reloading your configuration file. Check for errors.",
@@ -279,15 +313,15 @@ namespace MinerControl
             dgServices.DataSource = new SortableBindingList<IService>(_engine.Services);
             dgPrices.DataSource = new SortableBindingList<PriceEntryBase>(_engine.PriceEntries);
 
-            _engine.WriteConsoleAction = WriteConsole;
-            _engine.WriteRemoteAction = WriteRemote;
-
             _engine.MiningMode = originalMode;
-
+            
             _engine.LoadExchangeRates();
             RunCycle();
             UpdateButtons();
             UpdateGrid();
+
+            HistoryChart historyChart = tabHistory.Controls["historyChart"] as HistoryChart;
+            if (historyChart != null) historyChart.UpdateChart();
 
             if (originalMode == MiningModeEnum.Manual)
             {
@@ -351,6 +385,11 @@ namespace MinerControl
             if (_engine.PricesUpdated)
             {
                 UpdateGrid();
+
+                HistoryChart historyChart = tabHistory.Controls["historyChart"] as HistoryChart;
+                if (historyChart != null) historyChart.UpdateChart(TimeSpan.FromMinutes(20), 3);
+                if (_totalHistoryForm != null) _totalHistoryForm.UpdateChart();
+
                 _engine.PricesUpdated = false;
             }
 

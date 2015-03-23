@@ -10,6 +10,7 @@
         LTCRabbit,
         WePayBTC,
         HamsterPool,
+        MiningPoolHub,
         Manual
     }
 }

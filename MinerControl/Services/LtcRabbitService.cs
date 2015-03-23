@@ -87,6 +87,8 @@ namespace MinerControl.Services
                 MiningEngine.HasPrices = true;
 
                 LastUpdated = DateTime.Now;
+
+                UpdateHistory();
             }
         }
 
