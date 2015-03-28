@@ -15,7 +15,7 @@ namespace MinerControl
 {
     public partial class MainWindow : Form
     {
-        private readonly DateTime _appStartTime = DateTime.Now;
+        private DateTime _appStartTime = DateTime.Now;
         private readonly SlidingBuffer<string> _consoleBuffer = new SlidingBuffer<string>(200);
         private MiningEngine _engine = new MiningEngine();
         private readonly SlidingBuffer<string> _remoteBuffer = new SlidingBuffer<string>(200);
@@ -305,6 +305,7 @@ namespace MinerControl
                 WriteConsoleAction = WriteConsole, 
                 WriteRemoteAction = WriteRemote
             };
+            _appStartTime = DateTime.Now;
 
             if (!_engine.LoadConfig())
                 MessageBox.Show("Something went wrong with reloading your configuration file. Check for errors.",

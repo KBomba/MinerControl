@@ -37,10 +37,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TotalHistoryForm));
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.dgPrices = new System.Windows.Forms.DataGridView();
-            this.historyChart = new MinerControl.History.HistoryChart();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NetEarn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NetAverage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.historyChart = new MinerControl.History.HistoryChart();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -62,7 +62,7 @@
             // 
             this.splitContainer.Panel2.Controls.Add(this.dgPrices);
             this.splitContainer.Size = new System.Drawing.Size(947, 603);
-            this.splitContainer.SplitterDistance = 769;
+            this.splitContainer.SplitterDistance = 753;
             this.splitContainer.TabIndex = 0;
             // 
             // dgPrices
@@ -111,19 +111,8 @@
             this.dgPrices.ShowCellToolTips = false;
             this.dgPrices.ShowEditingIcon = false;
             this.dgPrices.ShowRowErrors = false;
-            this.dgPrices.Size = new System.Drawing.Size(174, 603);
+            this.dgPrices.Size = new System.Drawing.Size(190, 603);
             this.dgPrices.TabIndex = 13;
-            // 
-            // historyChart
-            // 
-            this.historyChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.historyChart.FocussedSeries = new System.Windows.Forms.DataVisualization.Charting.Series[] {
-        null,
-        null};
-            this.historyChart.Location = new System.Drawing.Point(0, 0);
-            this.historyChart.Name = "historyChart";
-            this.historyChart.Size = new System.Drawing.Size(769, 603);
-            this.historyChart.TabIndex = 0;
             // 
             // Time
             // 
@@ -163,6 +152,17 @@
             this.NetAverage.ReadOnly = true;
             this.NetAverage.ToolTipText = "BTC/day";
             this.NetAverage.Width = 60;
+            // 
+            // historyChart
+            // 
+            this.historyChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.historyChart.FocussedSeries = new System.Windows.Forms.DataVisualization.Charting.Series[] {
+        null,
+        null};
+            this.historyChart.Location = new System.Drawing.Point(0, 0);
+            this.historyChart.Name = "historyChart";
+            this.historyChart.Size = new System.Drawing.Size(753, 603);
+            this.historyChart.TabIndex = 0;
             // 
             // TotalHistoryForm
             // 

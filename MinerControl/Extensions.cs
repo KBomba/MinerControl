@@ -77,22 +77,19 @@ namespace MinerControl
         private static double[] GetDecimalRepresentation(this string s)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(s);
-            SHA256Managed sha256 = new SHA256Managed();
-            // We all love SHA256, don't we *cough*
-            byte[] hash = sha256.ComputeHash(bytes);
-            int average = 0;
+            HashAlgorithm hashAlgo = new SHA1Managed();
+            byte[] hash = hashAlgo.ComputeHash(bytes);
             byte xor1 = 170;
             byte xor2 = 85;
             byte xor3 = 127;
             foreach (byte b in hash)
             {
-                average += b;
                 xor1 ^= b;
                 xor2 ^= b;
                 xor3 ^= b;
             }
 
-            return new []{(xor1^(average/32)) / 255.0, xor2/1275.0, xor3/1275.0 };
+            return new []{ xor1/ 255.0, xor2/765.0, xor3/765.0 };
         }
 
         private static Color GetColorRepresentation(this double[] d)
@@ -100,8 +97,8 @@ namespace MinerControl
             // Decimal number to Color by using HSL, HSL to RGB taken from: 
             // http://www.codeproject.com/Articles/19045/Manipulating-colors-in-NET-Part
             double hk = d[0];
-            double l = 0.4 + d[1];
-            double s = 0.8 + d[2];
+            double l = (1.0/3.0) + d[1];
+            double s = (2.0/3.0) + d[2];
 
             double q = (l < 0.5) ? (l * (1.0 + s)) : (l + s - (l * s));
             double p = (2.0 * l) - q;
@@ -142,6 +139,11 @@ namespace MinerControl
         public static string Remove(this string s, string removal)
         {
             return s.Replace(removal, String.Empty).Trim();
+        }
+
+        public static string Remove(this string s, char removal)
+        {
+            return s.Replace(removal, String.Empty[0]).Trim();
         }
     }
 }

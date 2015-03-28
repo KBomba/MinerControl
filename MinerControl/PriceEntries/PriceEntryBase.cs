@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using MinerControl.Services;
 using MinerControl.Utility;
 
@@ -17,6 +18,7 @@ namespace MinerControl.PriceEntries
         private decimal _rejectSpeed;
         private TimeSpan _timeMining;
         private decimal _weight;
+        private Color? _color;
 
         public PriceEntryBase()
         {
@@ -77,6 +79,14 @@ namespace MinerControl.PriceEntries
         public decimal NetEarn
         {
             get { return ((Earn - Fees)*Weight) - PowerCost; }
+        }
+
+        public Color? Color
+        {
+            get
+            {
+                return _color ?? (_color = (ServiceEntry.ServiceEnum + AlgoName).GetColorRepresentation());
+            }
         }
 
         public decimal Balance

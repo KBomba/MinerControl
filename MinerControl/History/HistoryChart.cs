@@ -48,18 +48,8 @@ namespace MinerControl.History
         public IList<ChartHistory> ChartHistories;
         public class ChartHistory
         {
-            private string _entry;
-            public string Entry
-            {
-                get { return _entry; }
-                set
-                {
-                    Colour = value.GetColorRepresentation();
-                    _entry = value;
-                }
-            }
-            public Color Colour { get; set; }
-
+            public string Entry { get; set; }
+            public Color Color { get; set; }
             public List<ServiceHistory.PriceStat> PriceHistories { get; set; }
         }
 
@@ -87,7 +77,7 @@ namespace MinerControl.History
             {
                 Series currentSeries = new Series(chartHistory.Entry)
                 {
-                    Color = chartHistory.Colour,
+                    Color = chartHistory.Color,
                     ChartType = SeriesChartType.Line,
                     ChartArea = "ChartArea",
                     XValueType = ChartValueType.DateTime,
@@ -96,7 +86,7 @@ namespace MinerControl.History
                     Legend = "Legend",
                     IsVisibleInLegend = false,
                     MarkerStyle = MarkerStyle.Circle,
-                    MarkerColor = chartHistory.Colour,
+                    MarkerColor = chartHistory.Color,
                     MarkerSize = 5,
                     MarkerBorderColor = Color.Black,
                     BorderWidth = 3
@@ -104,7 +94,7 @@ namespace MinerControl.History
 
                 Series averageSeries = new Series(chartHistory.Entry + " Average")
                 {
-                    Color = Color.FromArgb(192, chartHistory.Colour),
+                    Color = Color.FromArgb(192, chartHistory.Color),
                     ChartType = SeriesChartType.Spline,
                     ChartArea = "ChartArea",
                     XValueType = ChartValueType.DateTime,
@@ -215,14 +205,16 @@ namespace MinerControl.History
             }
         }
 
-        private IList<ChartHistory> FilterHistory(IEnumerable<ServiceHistory> history, TimeSpan timeRange, int topRange)
+        private static IList<ChartHistory> FilterHistory(
+            IEnumerable<ServiceHistory> history, TimeSpan timeRange, int topRange)
         {
             DateTime now = DateTime.Now;
-            IList<ChartHistory> chartHistories = 
+            IList<ChartHistory> chartHistories =
                 (history.SelectMany(serviceHistory => serviceHistory.PriceList,
                     (serviceHistory, prices) => new ChartHistory
                     {
                         Entry = serviceHistory.Service + " " + prices.Key.Name,
+                        Color = prices.Key.Color ?? Color.Black,
                         PriceHistories = timeRange >= new TimeSpan(0, 1, 0)
                             ? prices.Value.Where(p => p.Time > now - timeRange).ToList()
                             : prices.Value
@@ -262,11 +254,11 @@ namespace MinerControl.History
                     }
                 }
 
-                chartHistories = 
+                chartHistories =
                     (from chartHistory in chartHistories
-                    from topPerformer in topPerformers
-                    where chartHistory.Entry == topPerformer
-                    select chartHistory).ToList();
+                     from topPerformer in topPerformers
+                     where chartHistory.Entry == topPerformer
+                     select chartHistory).ToList();
             }
 
             return chartHistories;
