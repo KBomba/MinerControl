@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using MinerControl.PriceEntries;
 
 namespace MinerControl.History
@@ -72,18 +71,16 @@ namespace MinerControl.History
                 window.Sort();
                 if (_iqrMultiplier > 0)
                 {
-                    decimal sumOfSquareOfDifferences =
-                        PriceList[priceEntryBase].Where(stat => stat.Time >= now - _statWindow)
-                            .Select(
-                                stat =>
-                                    (stat.CurrentPrice - windowedAveragePrice)*
-                                    (stat.CurrentPrice - windowedAveragePrice))
-                            .Sum();
-                    decimal standardDeviation = sumOfSquareOfDifferences/windowedCount;
+                    double sumOfSquareOfDifferences =
+                        (double) PriceList[priceEntryBase].Where(stat => stat.Time >= now - _statWindow)
+                            .Sum(stat =>
+                                (stat.CurrentPrice - windowedAveragePrice) *
+                                (stat.CurrentPrice - windowedAveragePrice));
+                    decimal standardDeviation = (decimal) Math.Sqrt(sumOfSquareOfDifferences/windowedCount);
                     decimal top = windowedAveragePrice + standardDeviation;
                     decimal bottom = windowedAveragePrice - standardDeviation;
                     decimal iqr = top - bottom;
-                    decimal max = windowedAveragePrice + (iqr*2.2M);
+                    decimal max = windowedAveragePrice + (iqr * _iqrMultiplier);
                     outlier = price > max;
                 }
                 else

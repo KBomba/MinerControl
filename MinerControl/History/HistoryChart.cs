@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -65,14 +64,15 @@ namespace MinerControl.History
 
             _updating = true;
 
+            List<Series> series = new List<Series>();
             HashSet<string> disabled =
                 new HashSet<string>(chart.Series.Where(serie => !serie.Enabled).Select(s => s.Name));
-            
             ChartHistories = FilterHistory(History, timeRange, topRange);
+
             chart.Series.Clear();
             chart.Legends[0].CustomItems.Clear();
             // Everything goes out, let's start from scratch
-            List<Series> series = new List<Series>();
+
             foreach (ChartHistory chartHistory in ChartHistories)
             {
                 Series currentSeries = new Series(chartHistory.Entry)
@@ -138,6 +138,14 @@ namespace MinerControl.History
                     {
                         averageSeries.Points.AddXY(priceStat.Time, priceStat.WindowedAveragePrice);
                         averageSeries.Points.Last().ToolTip = chartHistory.Entry;
+                    }
+
+                    DataPoint newlyAdded = currentSeries.Points.Last();
+                    if (priceStat.Outlier)
+                    {
+                        newlyAdded.MarkerStyle = MarkerStyle.Cross;
+                        newlyAdded.MarkerColor = Color.Red;
+                        newlyAdded.MarkerSize = 6;
                     }
                 }
 
