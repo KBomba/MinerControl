@@ -118,6 +118,7 @@ namespace MinerControl
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            _engine.RequestStop();
             _engine.Cleanup();
         }
 
@@ -299,6 +300,7 @@ namespace MinerControl
                 algo = _engine.CurrentPriceEntry.AlgoName;
             }
             
+            _engine.RequestStop();
             _engine.Cleanup();
             _engine = new MiningEngine
             {
