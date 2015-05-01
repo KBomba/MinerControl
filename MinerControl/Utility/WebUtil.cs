@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.ServiceProcess;
 using System.Text;
 using System.Web.Script.Serialization;
+using MinerControl.Services;
 
 namespace MinerControl.Utility
 {
@@ -21,6 +23,9 @@ namespace MinerControl.Utility
             }
             catch (Exception ex)
             {
+                IService service = jsonProcessor.Target as IService;
+                if (service != null) service.UpdateHistory();
+                // Makes sure the service us updated if price retrieval errors out
                 ErrorLogger.Log(ex);
             }
         }

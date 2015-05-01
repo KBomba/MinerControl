@@ -95,6 +95,7 @@
     <Compile Include="Services\NiceHashServiceBase.cs" />
     <Compile Include="PriceEntries\PriceEntryBase.cs" />
     <Compile Include="Services\WafflePoolService.cs" />
+    <Compile Include="Utility\IconHelper.cs" />
     <Compile Include="Utility\Multicast\MulticastDataReceivedEventArgs.cs" />
     <Compile Include="Utility\Multicast\MulticastReceiver.cs" />
     <Compile Include="Utility\Multicast\MulticastSender.cs" />

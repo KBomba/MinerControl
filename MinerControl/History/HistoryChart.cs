@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using MinerControl.Utility;
 
 namespace MinerControl.History
 {
@@ -16,7 +17,9 @@ namespace MinerControl.History
         {
             get { return chart; }
         }
-        
+
+        private Series _rightClickedSeries;
+
         private Series _focussedCurrentSeries;
         private Series _focussedAverageSeries;
         public Series[] FocussedSeries
@@ -40,11 +43,18 @@ namespace MinerControl.History
 
                 if (chart.Series.Remove(_focussedAverageSeries)) 
                     chart.Series.Insert(1, _focussedAverageSeries);
+
+                if (!_focussedCurrentSeries.Enabled) _focussedCurrentSeries.Enabled = true;
+                if (!_focussedAverageSeries.Enabled) _focussedAverageSeries.Enabled = true;
             }
         }
 
         public IList<ServiceHistory> History;
         public IList<ChartHistory> ChartHistories;
+
+        private bool _poolDisabled;
+        private bool _algoDisabled;
+
         public class ChartHistory
         {
             public string Entry { get; set; }
@@ -229,7 +239,7 @@ namespace MinerControl.History
                     }).OrderByDescending(ch => ch.PriceHistories.Last().CurrentPrice)).ToList();
             // Copies the list into something the chart will easily understand, removing items out of timerange
 
-            if (topRange > 0)
+            if (topRange > 0 && chartHistories.Count > 0)
             {
                 HashSet<string> topPerformers = new HashSet<string>();
                 for (int i = 0; i < chartHistories[0].PriceHistories.Count; i++)
@@ -346,7 +356,7 @@ namespace MinerControl.History
             {
                 if (e.Button == MouseButtons.Right)
                 {
-                    chart.Series[legend.SeriesName].Enabled = !chart.Series[legend.SeriesName].Enabled;
+                    ShowContextMenu(chart.Series[legend.SeriesName]);
                 }
                 else
                 {
@@ -360,11 +370,18 @@ namespace MinerControl.History
                 {
                     if (e.Button == MouseButtons.Right)
                     {
-                        chart.Series[dataPoint.ToolTip].Enabled = !chart.Series[dataPoint.ToolTip].Enabled;
+                        ShowContextMenu(chart.Series[dataPoint.ToolTip]);
                     }
                     else
                     {
                         focussedSeries = chart.Series[dataPoint.ToolTip];
+                    }
+                }
+                else
+                {
+                    if (e.Button == MouseButtons.Right)
+                    {
+                        ShowContextMenu();
                     }
                 }
             }
@@ -383,6 +400,115 @@ namespace MinerControl.History
                 }
             }
 
+            SetLegendImageStyles();
+        }
+
+        private void ShowContextMenu(Series series = null)
+        {
+            cmsRightClick.Items.Clear();
+            _rightClickedSeries = series;
+
+            if (series != null)
+            {
+                ToolStripItem tsiOne = new ToolStripMenuItem();
+                tsiOne.Image = series.Enabled ? IconHelper.DisableOne() : IconHelper.EnableOne();
+                tsiOne.Text = series.Enabled ? "Disable " + series.Name : "Enable " + series.Name;
+                tsiOne.Click += TsiOneOnClick;
+                cmsRightClick.Items.Add(tsiOne);
+
+                cmsRightClick.Items.Add(new ToolStripSeparator());
+
+                string[] split = series.Name.Split(' ');
+                _poolDisabled = true;
+                _algoDisabled = true;
+
+                foreach (Series serie in chart.Series)
+                {
+                    if (_poolDisabled && serie.Name.Split(' ')[0] == split[0] && serie.Enabled) _poolDisabled = false;
+                    if (_algoDisabled && serie.Name.Split(' ')[1] == split[1] && serie.Enabled) _algoDisabled = false;
+                }
+
+                ToolStripItem tsiPool = new ToolStripMenuItem();
+                tsiPool.Image = IconHelper.Pool();
+                tsiPool.Text = _poolDisabled ? "Enable all " + split[0] : "Disable all " + split[0];
+                tsiPool.Click += TsiPoolOnClick;
+                cmsRightClick.Items.Add(tsiPool);
+
+                ToolStripItem tsiAlgo = new ToolStripMenuItem();
+                tsiAlgo.Image = IconHelper.HashingAlgo();
+                tsiAlgo.Text = _algoDisabled ? "Enable all " + split[1] : "Disable all " + split[1];
+                tsiAlgo.Click += TsiAlgoOnClick;
+                cmsRightClick.Items.Add(tsiAlgo);
+
+                cmsRightClick.Items.Add(new ToolStripSeparator());
+            }
+
+            if (chart.Series.Any(s => !s.Enabled))
+            {
+                ToolStripItem tsiEnableAll = new ToolStripMenuItem();
+                tsiEnableAll.Image = IconHelper.EnableAll();
+                tsiEnableAll.Text = "Enable all series";
+                tsiEnableAll.Click += TsiEnableAllOnClick;
+                cmsRightClick.Items.Add(tsiEnableAll);
+            }
+
+            if (chart.Series.Any(s => s.Enabled))
+            {
+                ToolStripItem tsiDisableAll = new ToolStripMenuItem();
+                tsiDisableAll.Image = IconHelper.DisableAll();
+                tsiDisableAll.Text = "Disable all series";
+                tsiDisableAll.Click += TsiDisableAllOnClick;
+                cmsRightClick.Items.Add(tsiDisableAll);
+            }
+
+            cmsRightClick.Show(MousePosition);
+        }
+
+        private void TsiPoolOnClick(object sender, EventArgs e)
+        {
+            foreach (Series series in chart.Series)
+            {
+                if (series.Name.Split(' ')[0] == _rightClickedSeries.Name.Split(' ')[0])
+                {
+                    series.Enabled = _poolDisabled;
+                }
+            }
+            SetLegendImageStyles();
+        }
+
+        private void TsiAlgoOnClick(object sender, EventArgs e)
+        {
+            foreach (Series series in chart.Series)
+            {
+                if (series.Name.Split(' ')[1] == _rightClickedSeries.Name.Split(' ')[1])
+                {
+                    series.Enabled = _algoDisabled;
+                }
+            }
+            SetLegendImageStyles();
+        }
+
+        private void TsiEnableAllOnClick(object sender, EventArgs eventArgs)
+        {
+            foreach (Series series in chart.Series)
+            {
+                series.Enabled = true;
+            }
+            SetLegendImageStyles();
+        }
+
+        private void TsiDisableAllOnClick(object sender, EventArgs eventArgs)
+        {
+            foreach (Series series in chart.Series)
+            {
+                series.Enabled = false;
+            }
+            SetLegendImageStyles();
+        }
+
+        private void TsiOneOnClick(object sender, EventArgs eventArgs)
+        {
+            _rightClickedSeries.Enabled = !_rightClickedSeries.Enabled;
             SetLegendImageStyles();
         }
     }

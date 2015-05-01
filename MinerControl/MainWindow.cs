@@ -86,13 +86,25 @@ namespace MinerControl
                 RunBestAlgo();
             }
 
-            HistoryChart historyChart = tabHistory.Controls["historyChart"] as HistoryChart;
-            if (historyChart != null)
+            InitHistoryChart();
+        }
+
+        private void InitHistoryChart()
+        {
+            HistoryChart preChart = tabHistory.Controls["historyChart"] as HistoryChart;
+            if (preChart != null)
             {
-                historyChart.History = _engine.PriceHistories;
+                HistoryChart historyChart = new HistoryChart
+                {
+                    Dock = DockStyle.Fill, 
+                    History = _engine.PriceHistories
+                };
+
                 historyChart.FlipLegend();
-                historyChart.UpdateChart(_engine.StatWindow);
+                historyChart.UpdateChart(_engine.StatWindow, 3);
                 historyChart.Chart.DoubleClick += ChartOnDoubleClick;
+                tabHistory.Controls.Remove(preChart);
+                tabHistory.Controls.Add(historyChart);
             }
         }
 
@@ -323,8 +335,7 @@ namespace MinerControl
             UpdateButtons();
             UpdateGrid();
 
-            HistoryChart historyChart = tabHistory.Controls["historyChart"] as HistoryChart;
-            if (historyChart != null) historyChart.UpdateChart();
+            InitHistoryChart();
 
             if (originalMode == MiningModeEnum.Manual)
             {
@@ -390,7 +401,7 @@ namespace MinerControl
                 UpdateGrid();
 
                 HistoryChart historyChart = tabHistory.Controls["historyChart"] as HistoryChart;
-                if (historyChart != null) historyChart.UpdateChart(TimeSpan.FromMinutes(20), 3);
+                if (historyChart != null) historyChart.UpdateChart(_engine.StatWindow, 3);
                 if (_totalHistoryForm != null) _totalHistoryForm.UpdateChart();
 
                 _engine.PricesUpdated = false;

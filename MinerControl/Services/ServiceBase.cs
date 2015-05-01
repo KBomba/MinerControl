@@ -224,7 +224,7 @@ namespace MinerControl.Services
                 entry.Price = 0;
         }
 
-        protected void UpdateHistory()
+        public void UpdateHistory()
         {
             ServiceHistory serviceHistory = ServiceHistory;
             if(serviceHistory == null) return;
