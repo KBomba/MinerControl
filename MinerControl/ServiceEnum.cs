@@ -4,12 +4,11 @@
     {
         NiceHash,
         WestHash,
-        TradeMyBit,
         YAAMP,
-        WafflePool,
+        FFPool,
+        Hashpower,
         LTCRabbit,
         WePayBTC,
-        HamsterPool,
         MiningPoolHub,
         Manual
     }

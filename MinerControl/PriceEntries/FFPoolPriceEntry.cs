@@ -1,10 +1,12 @@
 ﻿namespace MinerControl.PriceEntries
 {
-    public class TradeMyBitPriceEntry : PriceEntryBase
+    public class FFPoolPriceEntry : PriceEntryBase
     {
+        public decimal FeePercent { get; set; }
+
         public override decimal Fees
         {
-            get { return Earn*0.025m; }
+            get { return Earn*(FeePercent/100); }
             set { base.Fees = value; }
         }
     }
