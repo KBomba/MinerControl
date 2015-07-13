@@ -5,6 +5,8 @@
         NiceHash,
         WestHash,
         YAAMP,
+        FFPool,
+        Hashpower,
         LTCRabbit,
         WePayBTC,
         MiningPoolHub,
