@@ -68,10 +68,12 @@
     <Compile Include="History\TotalHistoryForm.Designer.cs">
       <DependentUpon>TotalHistoryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PriceEntries\HamsterPoolPriceEntry.cs" />
+    <Compile Include="PriceEntries\FFPoolPriceEntry.cs" />
+    <Compile Include="PriceEntries\HashpowerPriceEntry.cs" />
     <Compile Include="PriceEntries\LtcRabbitPriceEntry.cs" />
     <Compile Include="PriceEntries\WePayBtcPriceEntry.cs" />
-    <Compile Include="Services\HamsterPoolService.cs" />
+    <Compile Include="Services\FFPoolService.cs" />
+    <Compile Include="Services\HashpowerService.cs" />
     <Compile Include="Services\LtcRabbitService.cs" />
     <Compile Include="Services\WePayBtcService.cs" />
     <Compile Include="Utility\ErrorLogger.cs" />
@@ -86,7 +88,6 @@
     </Compile>
     <Compile Include="Hardware\NVAPI.cs" />
     <Compile Include="PriceEntries\ManualPriceEntry.cs" />
-    <Compile Include="PriceEntries\WafflePoolPriceEntry.cs" />
     <Compile Include="Services\ManualService.cs" />
     <Compile Include="MiningEngine.cs" />
     <Compile Include="MiningModeEnum.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Services\NiceHashService.cs" />
     <Compile Include="Services\NiceHashServiceBase.cs" />
     <Compile Include="PriceEntries\PriceEntryBase.cs" />
-    <Compile Include="Services\WafflePoolService.cs" />
     <Compile Include="Utility\IconHelper.cs" />
     <Compile Include="Utility\Multicast\MulticastDataReceivedEventArgs.cs" />
     <Compile Include="Utility\Multicast\MulticastReceiver.cs" />
@@ -105,8 +105,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="ServiceEnum.cs" />
-    <Compile Include="PriceEntries\TradeMyBitPriceEntry.cs" />
-    <Compile Include="Services\TradeMyBitService.cs" />
     <Compile Include="Services\WestHashService.cs" />
     <Compile Include="PriceEntries\YaampPriceEntry.cs" />
     <Compile Include="Services\YaampService.cs" />
