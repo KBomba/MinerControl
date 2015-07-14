@@ -104,7 +104,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ServiceBase.cs" />
-    <Compile Include="ServiceEnum.cs" />
     <Compile Include="Services\WestHashService.cs" />
     <Compile Include="Utility\SlidingBuffer.cs" />
     <Compile Include="Utility\SortableBindingList.cs" />
