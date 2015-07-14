@@ -423,14 +423,14 @@ namespace MinerControl
                 (serviceData.ContainsKey("detectstratum") && (bool) serviceData["detectstratum"]))
             {
                 service = GetBestNiceWestHashService();
-                if (_services.Any(o => o.ServiceEnum == service.ServiceEnum)) return;
+                if (_services.Any(o => o.ServiceName == service.ServiceName)) return;
             }
             
             service.MiningEngine = this;
             _services.Add(service);
             service.Initialize(serviceData);
 
-            _priceHistories.Add(new ServiceHistory(service.ServiceEnum, _statWindow, _outlierPercentage, _iqrMultiplier));
+            _priceHistories.Add(new ServiceHistory(service.ServiceName, _statWindow, _outlierPercentage, _iqrMultiplier));
         }
 
         private void LoadConfigGeneral(IDictionary<string, object> data)
@@ -769,7 +769,7 @@ namespace MinerControl
             StartMiner(entry, isMinimizedToTray);
         }
 
-        public void RequestStart(ServiceEnum service, string algo, bool isMinimizedToTray)
+        public void RequestStart(string service, string algo, bool isMinimizedToTray)
         {
             PriceEntryBase entry = null;
             foreach (PriceEntryBase priceEntry in _priceEntries)
@@ -777,7 +777,7 @@ namespace MinerControl
                 if (priceEntry.AlgoName == algo)
                 {
                     entry = priceEntry;
-                    if (priceEntry.ServiceEntry.ServiceEnum == service)
+                    if (priceEntry.ServiceEntry.ServiceName == service)
                     {
                         break;
                     }
@@ -899,7 +899,7 @@ namespace MinerControl
                     }
 
                     _profitBestOverRunning = _mineByAverage? best.NetAverage/_currentRunning.NetAverage : best.NetEarn/_currentRunning.NetEarn;
-                    highestMinProfit = best.ServiceEntry.ServiceEnum != _currentRunning.ServiceEntry.ServiceEnum
+                    highestMinProfit = best.ServiceEntry.ServiceName != _currentRunning.ServiceEntry.ServiceName
                         ? Math.Max(best.MinProfit, _minProfit)
                         : _minProfit;
 

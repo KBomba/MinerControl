@@ -7,7 +7,7 @@ namespace MinerControl.Services
     {
         public ManualService()
         {
-            ServiceEnum = ServiceEnum.Manual;
+            ServiceName = "Manual";
         }
 
         public override void Initialize(IDictionary<string, object> data)

@@ -7,7 +7,7 @@ namespace MinerControl.Services
     public interface IService : INotifyPropertyChanged
     {
         MiningEngine MiningEngine { get; set; }
-        ServiceEnum ServiceEnum { get; }
+        string ServiceName { get; }
         DateTime? LastUpdated { get; }
         decimal Balance { get; }
         decimal Currency { get; }

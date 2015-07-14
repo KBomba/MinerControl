@@ -25,7 +25,7 @@ namespace MinerControl.Services
 
         public FFPoolService()
         {
-            ServiceEnum = ServiceEnum.FFPool;
+            ServiceName = "FFPool";
             DonationAccount = "1PMj3nrVq5CH4TXdJSnHHLPdvcXinjG72y";
         }
 

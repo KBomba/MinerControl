@@ -304,11 +304,11 @@ namespace MinerControl
         private void btnReloadConfig_Click(object sender, EventArgs e)
         {
             MiningModeEnum originalMode = _engine.MiningMode;
-            ServiceEnum service = ServiceEnum.Manual;
+            string service = "Manual";
             string algo = string.Empty;
             if (_engine.CurrentPriceEntry != null)
             {
-                service = _engine.CurrentPriceEntry.ServiceEntry.ServiceEnum;
+                service = _engine.CurrentPriceEntry.ServiceEntry.ServiceName;
                 algo = _engine.CurrentPriceEntry.AlgoName;
             }
             
@@ -373,6 +373,11 @@ namespace MinerControl
                 _engine.SwitchBanStatus(entry.ServicePrint);
                 UpdateGrid();
             }
+        }
+
+        private void dgPrices_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+
         }
 
         #endregion

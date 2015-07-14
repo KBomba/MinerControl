@@ -25,7 +25,7 @@ namespace MinerControl.Services
 
         public HashpowerService()
         {
-            ServiceEnum = ServiceEnum.Hashpower;
+            ServiceName = "Hashpower";
             DonationAccount = "1PMj3nrVq5CH4TXdJSnHHLPdvcXinjG72y";
         }
 

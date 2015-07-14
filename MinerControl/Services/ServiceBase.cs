@@ -16,7 +16,7 @@ namespace MinerControl.Services
         protected string _param1;
         protected string _param2;
         protected string _param3;
-        private ServiceEnum _serviceEnum;
+        private string _serviceName;
         protected decimal _weight = 1.0m;
         protected decimal _minProfit = 1.0m;
         protected string _worker;
@@ -32,7 +32,7 @@ namespace MinerControl.Services
             get
             {
                 return
-                    MiningEngine.PriceEntries.Where(o => o.ServiceEntry.ServiceEnum == ServiceEnum)
+                    MiningEngine.PriceEntries.Where(o => o.ServiceEntry.ServiceName == ServiceName)
                         .Select(o => (TEntry) o)
                         .ToList();
             }
@@ -40,7 +40,7 @@ namespace MinerControl.Services
 
         protected ServiceHistory ServiceHistory
         {
-            get { return MiningEngine.PriceHistories.SingleOrDefault(o => o.Service == ServiceEnum); }
+            get { return MiningEngine.PriceHistories.SingleOrDefault(o => o.Service == ServiceName); }
         } 
 
         protected string DonationAccount { get; set; }
@@ -49,10 +49,10 @@ namespace MinerControl.Services
 
         public MiningEngine MiningEngine { get; set; }
 
-        public ServiceEnum ServiceEnum
+        public string ServiceName
         {
-            get { return _serviceEnum; }
-            protected set { SetField(ref _serviceEnum, value, () => ServiceEnum, () => ServicePrint); }
+            get { return _serviceName; }
+            protected set { SetField(ref _serviceName, value, () => ServiceName, () => ServicePrint); }
         }
 
         public DateTime? LastUpdated
@@ -74,7 +74,7 @@ namespace MinerControl.Services
 
         public virtual string ServicePrint
         {
-            get { return ServiceEnum.ToString(); }
+            get { return ServiceName; }
         }
 
         public string LastUpdatedPrint

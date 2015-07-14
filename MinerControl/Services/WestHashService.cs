@@ -4,7 +4,7 @@
     {
         public WestHashService()
         {
-            ServiceEnum = ServiceEnum.WestHash;
+            ServiceName = "WestHash";
         }
 
         protected override string BalanceFormat

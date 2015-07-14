@@ -7,7 +7,7 @@ namespace MinerControl.History
 {
     public class ServiceHistory
     {
-        public ServiceEnum Service { get; set; }
+        public string Service { get; set; }
 
         private readonly TimeSpan _statWindow;
         private readonly double _percentile;
@@ -24,7 +24,7 @@ namespace MinerControl.History
             public bool Outlier { get; set; }
         }
 
-        public ServiceHistory(ServiceEnum service, TimeSpan window, double percentile, decimal iqrMultiplier)
+        public ServiceHistory(string service, TimeSpan window, double percentile, decimal iqrMultiplier)
         {
             Service = service;
             _statWindow = window;

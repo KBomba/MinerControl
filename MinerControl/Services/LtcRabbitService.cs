@@ -33,7 +33,7 @@ namespace MinerControl.Services
 
         public LtcRabbitService()
         {
-            ServiceEnum = ServiceEnum.LTCRabbit;
+            ServiceName = "LTCRabbit";
             DonationAccount = "MinerControl";
             DonationWorker = "1";
         }

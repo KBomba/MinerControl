@@ -4,7 +4,7 @@
     {
         public NiceHashService()
         {
-            ServiceEnum = ServiceEnum.NiceHash;
+            ServiceName = "NiceHash";
         }
 
         protected override string BalanceFormat

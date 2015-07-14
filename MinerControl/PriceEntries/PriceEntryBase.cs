@@ -85,7 +85,7 @@ namespace MinerControl.PriceEntries
         {
             get
             {
-                return _color ?? (_color = (ServiceEntry.ServiceEnum + AlgoName).GetColorRepresentation());
+                return _color ?? (_color = (ServiceEntry.ServiceName + AlgoName).GetColorRepresentation());
             }
         }
 
@@ -155,7 +155,7 @@ namespace MinerControl.PriceEntries
 
         public string ServicePrint
         {
-            get { return ServiceEntry.ServiceEnum.ToString(); }
+            get { return ServiceEntry.ServiceName; }
         }
 
         public string BalancePrint

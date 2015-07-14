@@ -113,6 +113,7 @@
             this.tabRemote = new System.Windows.Forms.TabPage();
             this.textRemote = new System.Windows.Forms.TextBox();
             this.tabHistory = new System.Windows.Forms.TabPage();
+            this.cmsDataGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             historyChart = new MinerControl.History.HistoryChart();
             this.gbActions.SuspendLayout();
             this.gbTimes.SuspendLayout();
@@ -131,6 +132,7 @@
             // 
             historyChart.Dock = System.Windows.Forms.DockStyle.Fill;
             historyChart.FocussedSeries = new System.Windows.Forms.DataVisualization.Charting.Series[] {
+        null,
         null};
             historyChart.Location = new System.Drawing.Point(3, 3);
             historyChart.Name = "historyChart";
@@ -376,6 +378,7 @@
             this.dgPrices.Size = new System.Drawing.Size(909, 373);
             this.dgPrices.TabIndex = 12;
             this.dgPrices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPrices_CellContentClick);
+            this.dgPrices.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgPrices_CellMouseClick);
             this.dgPrices.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgPrices_CellMouseDoubleClick);
             // 
             // Id
@@ -865,6 +868,11 @@
             this.tabHistory.Text = "History";
             this.tabHistory.UseVisualStyleBackColor = true;
             // 
+            // cmsDataGrid
+            // 
+            this.cmsDataGrid.Name = "cmsDataGrid";
+            this.cmsDataGrid.Size = new System.Drawing.Size(61, 4);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -969,6 +977,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StatusPrint;
         private System.Windows.Forms.DataGridViewButtonColumn btnNhStart;
         private System.Windows.Forms.TabPage tabHistory;
+        private System.Windows.Forms.ContextMenuStrip cmsDataGrid;
     }
 }
 

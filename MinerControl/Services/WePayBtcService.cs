@@ -19,7 +19,7 @@ namespace MinerControl.Services
 
         public WePayBtcService()
         {
-            ServiceEnum = ServiceEnum.WePayBTC;
+            ServiceName = "WePayBTC";
             DonationAccount = "1PMj3nrVq5CH4TXdJSnHHLPdvcXinjG72y";
         }
 
