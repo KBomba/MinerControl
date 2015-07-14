@@ -370,7 +370,6 @@ namespace MinerControl
             {
                 LoadService(new NiceHashService(), data, "nicehash");
                 LoadService(new WestHashService(), data, "westhash");
-                LoadService(new YaampService(), data, "yaamp");
                 LoadService(new FFPoolService(), data, "ffpool");
                 LoadService(new HashpowerService(), data, "hashpower");
                 LoadService(new LtcRabbitService(), data, "ltcrabbit");
