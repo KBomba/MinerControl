@@ -368,11 +368,27 @@ namespace MinerControl
             try
             {
                 LoadService(new NiceHashService(), data, "nicehash");
-                LoadService(new FFPoolService(), data, "ffpool");
-                LoadService(new HashpowerService(), data, "hashpower");
+                //LoadService(new FFPoolService(), data, "ffpool");
+                //LoadService(new HashpowerService(), data, "hashpower");
                 LoadService(new LtcRabbitService(), data, "ltcrabbit");
                 LoadService(new WePayBtcService(), data, "wepaybtc");
                 LoadService(new ManualService(), data, "manual");
+
+                foreach (string service in data.Keys)
+                {
+                    switch (service)
+                    {
+                        case "general": break;
+                        case "algorithms": break;
+                        case "nicehash": break;
+                        case "ltcrabbit": break;
+                        case "wepaybtc": break;
+                        case "manual": break;
+                        default :
+                            LoadService(new YaampCloneService(service), data, service);
+                            break;
+                    }
+                }
 
                 // Set Id for each entry
                 for (int x = 0; x < _priceEntries.Count; x++)

@@ -5,7 +5,7 @@ using MinerControl.Utility;
 
 namespace MinerControl.Services
 {
-    public class YaampCloneService: ServiceBase<HashpowerPriceEntry>
+    public class YaampCloneService: ServiceBase<YaampPriceEntry>
     {
         // {
         //   "scrypt": {"name": "scrypt", "port": 3433, "coins": 21, "fees": 0.5, "hashrate": 1585708947, "estimate_current": 0.00017441, "estimate_last24h": 0.00018214, "actual_last24h": 0.00019935}, 
@@ -21,11 +21,12 @@ namespace MinerControl.Services
 
         private int _balanceMode;
         private int _priceMode;
+        private string _url;
+        private decimal _btcFee; // Fee added when auto-exchanging to BTC, 2% for ffpool, 1% for hashpower
 
-        private string _stratum;
-
-        public YaampCloneService()
+        public YaampCloneService(string pool)
         {
+            ServiceName = pool;
             DonationAccount = "1PMj3nrVq5CH4TXdJSnHHLPdvcXinjG72y";
         }
 
@@ -38,11 +39,23 @@ namespace MinerControl.Services
             if (data.ContainsKey("balancemode"))
                 _balanceMode = int.Parse(data["balancemode"].ToString());
 
+            if (data.ContainsKey("btcfee"))
+                _btcFee = decimal.Parse(data["btcfee"].ToString());
+
+            if (data.ContainsKey("url"))
+            {
+                _url = data.GetString("url");
+            }
+            else
+            {
+                _url = "http://" + ServiceName;
+            }
+
             object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
                 Dictionary<string, object> item = rawitem as Dictionary<string, object>;
-                HashpowerPriceEntry entry = CreateEntry(item);
+                YaampPriceEntry entry = CreateEntry(item);
 
                 Add(entry);
             }
@@ -51,8 +64,9 @@ namespace MinerControl.Services
         public override void CheckPrices()
         {
             ClearStalePrices();
-            WebUtil.DownloadJson("http://hashpower.co/api/status", ProcessPrices);
-            WebUtil.DownloadJson(string.Format("http://hashpower.co/api/wallet?address={0}", _account), ProcessBalances);
+
+            WebUtil.DownloadJson(_url + "/api/status", ProcessPrices);
+            WebUtil.DownloadJson(_url + "/api/wallet?address=" + _account, ProcessBalances);
         }
 
         private void ProcessPrices(object jsonData)
@@ -67,7 +81,7 @@ namespace MinerControl.Services
                     Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                     string algo = key.ToLower();
 
-                    HashpowerPriceEntry entry = GetEntry(algo);
+                    YaampPriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
                     decimal price;
@@ -86,8 +100,7 @@ namespace MinerControl.Services
                     entry.Price = algo != "sha256" ? price*1000 : price;
 
                     decimal feePercent = item["fees"].ExtractDecimal();
-                    entry.FeePercent = _account.Trim()[0] == '1' ? feePercent + 1.5M : feePercent;
-                    // If conversion to BTC is needed (as most do), fee is +1.5%
+                    entry.FeePercent = _account.Trim()[0] == '1' ? feePercent + _btcFee : feePercent;
                 }
 
                 MiningEngine.PricesUpdated = true;
@@ -125,14 +138,14 @@ namespace MinerControl.Services
                 }
 
 
-                foreach (HashpowerPriceEntry entry in PriceEntries)
+                foreach (YaampPriceEntry entry in PriceEntries)
                     entry.AcceptSpeed = 0;
 
                 if (!data.ContainsKey("miners")) return;
                 Dictionary<string, object> miners = data["miners"] as Dictionary<string, object>;
                 foreach (string key in miners.Keys)
                 {
-                    HashpowerPriceEntry entry = GetEntry(key.ToLower());
+                    YaampPriceEntry entry = GetEntry(key.ToLower());
                     if (entry == null) continue;
                     Dictionary<string, object> item = miners[key] as Dictionary<string, object>;
                     entry.AcceptSpeed = item["hashrate"].ExtractDecimal()/1000000;
