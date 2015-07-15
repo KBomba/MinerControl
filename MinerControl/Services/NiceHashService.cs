@@ -27,6 +27,7 @@ namespace MinerControl.Services
         };
 
         private Dictionary<string, double> _pingTimes;
+        private bool _useWestHash; // When .usa, .hk, or .jp is used, balance calls should be done to westhash 
         public bool DetectStratum; 
 
         public NiceHashService()
@@ -49,6 +50,7 @@ namespace MinerControl.Services
             else
             {
                 DetectStratum = false;
+                if (!_param1.Contains(".eu.")) _useWestHash = true;
             }
 
             object[] items = data["algos"] as object[];
@@ -67,8 +69,12 @@ namespace MinerControl.Services
         {
             ClearStalePrices();
             WebUtil.DownloadJson("https://www.nicehash.com/api?method=stats.global.current", ProcessPrices);
+
+            string apiUrl = _useWestHash
+                ? "https://www.westhash.com/api?method=stats.provider&addr={0}"
+                : "https://www.nicehash.com/api?method=stats.provider&addr={0}";
             WebUtil.DownloadJson(
-                string.Format("https://www.nicehash.com/api?method=stats.provider&addr={0}", _account), ProcessBalances);
+                string.Format(apiUrl, _account), ProcessBalances);
         }
 
         private void ProcessPrices(object jsonData)
@@ -170,25 +176,7 @@ namespace MinerControl.Services
                     try
                     {
                         PingReply reply = pinger.Send("speedtest" + url, 500);
-                        if (reply != null && reply.Status == IPStatus.Success)
-                        {
-                            switch (url)
-                            {
-                                case ".hk.nicehash.com":
-                                    roundTripTime += 150 + reply.RoundtripTime;
-                                    break;
-                                case ".jp.nicehash.com":
-                                    roundTripTime += 100 + reply.RoundtripTime;
-                                    break;
-                                default:
-                                    roundTripTime += reply.RoundtripTime;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            roundTripTime += 1000;
-                        }
+                        roundTripTime = CheckRoundTripTime(reply, url, roundTripTime);
                     }
                     catch
                     {
@@ -200,6 +188,7 @@ namespace MinerControl.Services
             }
 
             _pingTimes = clone;
+            DetermineWestHashUsage();
         }
 
         public async void CheckPingTimes()
@@ -216,25 +205,7 @@ namespace MinerControl.Services
                     try
                     {
                         PingReply reply = await pinger.SendPingAsync("speedtest" + url, 1000);
-                        if (reply != null && reply.Status == IPStatus.Success)
-                        {
-                            switch (url)
-                            {
-                                case ".hk.nicehash.com":
-                                    roundTripTime += 150 + reply.RoundtripTime;
-                                    break;
-                                case ".jp.nicehash.com":
-                                    roundTripTime += 100 + reply.RoundtripTime;
-                                    break;
-                                default:
-                                    roundTripTime += reply.RoundtripTime;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            roundTripTime += 1000;
-                        }
+                        roundTripTime = CheckRoundTripTime(reply, url, roundTripTime);
                     }
                     catch
                     {
@@ -246,6 +217,38 @@ namespace MinerControl.Services
             }
 
             _pingTimes = clone;
+            DetermineWestHashUsage();
+        }
+
+        private static double CheckRoundTripTime(PingReply reply, string url, double roundTripTime)
+        {
+            if (reply != null && reply.Status == IPStatus.Success)
+            {
+                switch (url)
+                {
+                    case ".hk.nicehash.com":
+                        roundTripTime += 150 + reply.RoundtripTime;
+                        break;
+                    case ".jp.nicehash.com":
+                        roundTripTime += 100 + reply.RoundtripTime;
+                        break;
+                    default:
+                        roundTripTime += reply.RoundtripTime;
+                        break;
+                }
+            }
+            else
+            {
+                roundTripTime += 1000;
+            }
+
+            return roundTripTime;
+        }
+
+        private void DetermineWestHashUsage()
+        {
+            _useWestHash = _pingTimes.OrderBy(ping => ping.Value).First().Key != ".eu.nicehash.com";
+            ServiceName = _useWestHash ? "WestHash" : "NiceHash";
         }
 
         public string GetBestStratum(string algorithmName)
@@ -263,7 +266,10 @@ namespace MinerControl.Services
                     substituteAlgo = algorithmName;
                     break;
             }
-            return substituteAlgo + _pingTimes.OrderBy(ping => ping.Value).First().Key + ":" + (3333 + _algoTranslation[algorithmName]);
+
+            int port = 3333 + _algoTranslation[algorithmName]; // 3333 + priceid = port
+            return substituteAlgo + _pingTimes.OrderBy(ping => ping.Value).First().Key
+                   + ":" + port;
         }
     }
 }
