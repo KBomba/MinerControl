@@ -12,6 +12,8 @@ namespace MinerControl.Utility
 
         public static void Log(Exception ex)
         {
+            if (!LogExceptions) return;
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine(DateTime.Now.ToString());
