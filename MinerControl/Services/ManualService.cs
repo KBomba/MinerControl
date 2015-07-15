@@ -10,6 +10,11 @@ namespace MinerControl.Services
             ServiceName = "Manual";
         }
 
+        public ManualService(string name)
+        {
+            ServiceName = name;
+        }
+
         public override void Initialize(IDictionary<string, object> data)
         {
             ExtractCommon(data);

@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Threading;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using System.Windows.Ink;
 using MinerControl.History;
 using MinerControl.PriceEntries;
 using MinerControl.Services;
@@ -372,7 +374,7 @@ namespace MinerControl
                 //LoadService(new HashpowerService(), data, "hashpower");
                 LoadService(new LtcRabbitService(), data, "ltcrabbit");
                 LoadService(new WePayBtcService(), data, "wepaybtc");
-                LoadService(new ManualService(), data, "manual");
+                //LoadService(new ManualService(), data, "manual");
 
                 foreach (string service in data.Keys)
                 {
@@ -383,9 +385,25 @@ namespace MinerControl
                         case "nicehash": break;
                         case "ltcrabbit": break;
                         case "wepaybtc": break;
-                        case "manual": break;
+                        //case "manual": break;
                         default :
-                            LoadService(new YaampCloneService(service), data, service);
+                            if (service.StartsWith("manual"))
+                            {
+                                Dictionary<string, object> serviceData = data[service] as Dictionary<string, object>;
+                                if (serviceData != null && serviceData.ContainsKey("name"))
+                                {
+                                    LoadService(new ManualService(serviceData.GetString("name")), data, service);
+                                }
+                                else
+                                {
+                                    LoadService(new ManualService(service), data, service);
+                                }
+                            }
+                            else
+                            {
+                                //All others are treated as YaampClones
+                                LoadService(new YaampCloneService(service), data, service);
+                            }
                             break;
                     }
                 }
