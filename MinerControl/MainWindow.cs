@@ -418,6 +418,13 @@ namespace MinerControl
             RunBestAlgo();
         }
 
+        private void tmrPingNiceHash_Tick(object sender, EventArgs e)
+        {
+            IService service = _engine.Services.FirstOrDefault(s => s.ServiceName == "NiceHash");
+            NiceHashService niceHash = service as NiceHashService;
+            if(niceHash != null) niceHash.CheckPingTimes();
+        }
+
         #endregion
     }
 }

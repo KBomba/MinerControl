@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
@@ -369,7 +368,6 @@ namespace MinerControl
             try
             {
                 LoadService(new NiceHashService(), data, "nicehash");
-                LoadService(new WestHashService(), data, "westhash");
                 LoadService(new FFPoolService(), data, "ffpool");
                 LoadService(new HashpowerService(), data, "hashpower");
                 LoadService(new LtcRabbitService(), data, "ltcrabbit");
@@ -419,12 +417,6 @@ namespace MinerControl
             if (!data.ContainsKey(name)) return;
 
             Dictionary<string, object> serviceData = data[name] as Dictionary<string, object>;
-            if (serviceData != null && (name == "nicehash" || name == "westhash") &&
-                (serviceData.ContainsKey("detectstratum") && (bool) serviceData["detectstratum"]))
-            {
-                service = GetBestNiceWestHashService();
-                if (_services.Any(o => o.ServiceName == service.ServiceName)) return;
-            }
             
             service.MiningEngine = this;
             _services.Add(service);
@@ -539,59 +531,6 @@ namespace MinerControl
             }
         }
 
-        private IService GetBestNiceWestHashService()
-        {
-            const int tries = 4;
-            Ping pinger = new Ping();
-            PingReply replyWestHash = null;
-            long[] westRtt = new long[tries];
-            PingReply replyNiceHash = null;
-            long[] niceRtt = new long[tries];
-
-            try
-            {
-                for (int i = 0; i < tries; i++)
-                {
-                    replyWestHash = pinger.Send("speedtest.sea01.softlayer.com", 1000);
-                    if (replyWestHash != null)
-                    {
-                        westRtt[i] = replyWestHash.RoundtripTime;
-                    }
-                    else
-                    {
-                        westRtt[i] = 500;
-                    }
-                }
-            }
-            catch { }
-            if (replyWestHash == null || replyWestHash.Status != IPStatus.Success) return new NiceHashService();
-
-            try
-            {
-                for (int i = 0; i < tries; i++)
-                {
-                    replyNiceHash = pinger.Send("speedtest.ams01.softlayer.com", 1000);
-                    if (replyNiceHash != null)
-                    {
-                        niceRtt[i] = replyNiceHash.RoundtripTime;
-                    }
-                    else
-                    {
-                        niceRtt[i] = 500;
-                    }
-                }
-            }
-            catch { }
-            if (replyNiceHash == null || replyNiceHash.Status != IPStatus.Success) return new WestHashService();
-
-            if (niceRtt.Average() > westRtt.Average())
-            {
-                return new WestHashService();
-            }
-
-            return new NiceHashService();
-        }
-
         public void StopMiner()
         {
             if (!_process.IsRunning())
@@ -650,7 +589,7 @@ namespace MinerControl
                 _process.StartInfo.FileName = string.IsNullOrWhiteSpace(entry.DonationFolder)
                     ? entry.DonationCommand
                     : string.Format(@"{0}\{1}", entry.DonationFolder, entry.DonationCommand);
-                _process.StartInfo.Arguments = entry.DonationArguments;
+                _process.StartInfo.Arguments = DetectNiceHashStratum(entry) + entry.DonationArguments;
             }
             else
             {
@@ -659,7 +598,7 @@ namespace MinerControl
                 _process.StartInfo.FileName = string.IsNullOrWhiteSpace(entry.Folder)
                     ? entry.Command
                     : string.Format(@"{0}\{1}", entry.Folder, entry.Command);
-                _process.StartInfo.Arguments = entry.Arguments;
+                _process.StartInfo.Arguments = DetectNiceHashStratum(entry) + entry.Arguments;
             }
 
             WriteConsole(
@@ -746,6 +685,15 @@ namespace MinerControl
             entry.UpdateStatus();
 
             LogActivity(_donationMiningMode == MiningModeEnum.Donation ? "DonationStart" : "Start");
+        }
+
+        private string DetectNiceHashStratum(PriceEntryBase entry)
+        {
+            if (entry.ServiceEntry.ServiceName != "NiceHash") return string.Empty;
+            NiceHashService niceHash = entry.ServiceEntry as NiceHashService;
+            if (niceHash == null || niceHash.DetectStratum == false) return string.Empty;
+
+            return "-o stratum+tcp://" + niceHash.GetBestStratum(entry.AlgoName) + " ";
         }
 
         private void ClearDeadTimes()
