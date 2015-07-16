@@ -370,11 +370,8 @@ namespace MinerControl
             try
             {
                 LoadService(new NiceHashService(), data, "nicehash");
-                //LoadService(new FFPoolService(), data, "ffpool");
-                //LoadService(new HashpowerService(), data, "hashpower");
                 LoadService(new LtcRabbitService(), data, "ltcrabbit");
                 LoadService(new WePayBtcService(), data, "wepaybtc");
-                //LoadService(new ManualService(), data, "manual");
 
                 foreach (string service in data.Keys)
                 {
@@ -385,7 +382,6 @@ namespace MinerControl
                         case "nicehash": break;
                         case "ltcrabbit": break;
                         case "wepaybtc": break;
-                        //case "manual": break;
                         default :
                             if (service.StartsWith("manual"))
                             {

@@ -70,14 +70,10 @@
     <Compile Include="History\TotalHistoryForm.Designer.cs">
       <DependentUpon>TotalHistoryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PriceEntries\FFPoolPriceEntry.cs" />
     <Compile Include="PriceEntries\YaampPriceEntry.cs" />
-    <Compile Include="PriceEntries\HashpowerPriceEntry.cs" />
     <Compile Include="PriceEntries\LtcRabbitPriceEntry.cs" />
     <Compile Include="PriceEntries\WePayBtcPriceEntry.cs" />
-    <Compile Include="Services\FFPoolService.cs" />
     <Compile Include="Services\YaampCloneService.cs" />
-    <Compile Include="Services\HashpowerService.cs" />
     <Compile Include="Services\LtcRabbitService.cs" />
     <Compile Include="Services\WePayBtcService.cs" />
     <Compile Include="Utility\ErrorLogger.cs" />
