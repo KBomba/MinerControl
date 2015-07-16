@@ -723,7 +723,7 @@ namespace MinerControl
 
         private string DetectNiceHashStratum(PriceEntryBase entry)
         {
-            if (entry.ServiceEntry.ServiceName != "NiceHash") return string.Empty;
+           if (entry.ServiceEntry.ServiceName != "NiceHash" && entry.ServiceEntry.ServiceName != "WestHash") return string.Empty;
             NiceHashService niceHash = entry.ServiceEntry as NiceHashService;
             if (niceHash == null || niceHash.DetectStratum == false) return string.Empty;
 
