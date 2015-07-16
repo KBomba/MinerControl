@@ -50,7 +50,14 @@ namespace MinerControl.Services
             else
             {
                 DetectStratum = false;
-                if (!_param1.Contains(".eu.")) _useWestHash = true;
+                if (_param1.Contains(".eu.") || _param2.Contains(".eu.") || _param3.Contains(".eu."))
+                {
+                    _useWestHash = false;
+                }
+                else
+                {
+                    _useWestHash = true;
+                }
             }
 
             object[] items = data["algos"] as object[];
