@@ -26,19 +26,19 @@ namespace MinerControl.History
 
         private void HistoryChartOnMouseClick(object sender, MouseEventArgs mouseEventArgs)
         {
-            UpdateDataGrid();
+            UpdateDataGrid(true);
         }
 
         public void UpdateChart()
         {
             historyChart.UpdateChart();
-            UpdateDataGrid();
+            UpdateDataGrid(true);
         }
 
-        private void UpdateDataGrid()
+        private void UpdateDataGrid(bool limit = false)
         {
-            if (historyChart.ChartHistories != null &&
-                historyChart.ChartHistories.Count > 0)
+            if (historyChart.ChartHistories != null && historyChart.ChartHistories.Count > 0 
+                && (!limit || historyChart.ChartHistories.Count <= 1000))
             {
                 dgPrices.DataSource = null;
 
