@@ -70,7 +70,7 @@
     <Compile Include="History\TotalHistoryForm.Designer.cs">
       <DependentUpon>TotalHistoryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PriceEntries\YaampPriceEntry.cs" />
+    <Compile Include="PriceEntries\YaampClonePriceEntry.cs" />
     <Compile Include="PriceEntries\LtcRabbitPriceEntry.cs" />
     <Compile Include="PriceEntries\WePayBtcPriceEntry.cs" />
     <Compile Include="Services\YaampCloneService.cs" />
