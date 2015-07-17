@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("KBomba Mod Corp")]
 [assembly: AssemblyProduct("Miner Control")]
-[assembly: AssemblyCopyright("Copyright © 2014 StuffOfInterest & KBomba")]
+[assembly: AssemblyCopyright("Copyright © 2014 StuffOfInterest & KBomba & Fuzzbawls")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("1.6.4.0")]
-[assembly: AssemblyFileVersion("1.6.4.0")]
+[assembly: AssemblyVersion("1.6.5.0")]
+[assembly: AssemblyFileVersion("1.6.5.0")]
