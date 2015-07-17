@@ -1,6 +1,6 @@
 ﻿namespace MinerControl.PriceEntries
 {
-    public class YaampPriceEntry : PriceEntryBase
+    public class YaampClonePriceEntry : PriceEntryBase
     {
         public decimal FeePercent { get; set; }
 

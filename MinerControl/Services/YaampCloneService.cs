@@ -5,7 +5,7 @@ using MinerControl.Utility;
 
 namespace MinerControl.Services
 {
-    public class YaampCloneService: ServiceBase<YaampPriceEntry>
+    public class YaampCloneService: ServiceBase<YaampClonePriceEntry>
     {
         // {
         //   "scrypt": {"name": "scrypt", "port": 3433, "coins": 21, "fees": 0.5, "hashrate": 1585708947, "estimate_current": 0.00017441, "estimate_last24h": 0.00018214, "actual_last24h": 0.00019935}, 
@@ -55,7 +55,7 @@ namespace MinerControl.Services
             foreach (object rawitem in items)
             {
                 Dictionary<string, object> item = rawitem as Dictionary<string, object>;
-                YaampPriceEntry entry = CreateEntry(item);
+                YaampClonePriceEntry entry = CreateEntry(item);
 
                 Add(entry);
             }
@@ -81,7 +81,7 @@ namespace MinerControl.Services
                     Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                     string algo = key.ToLower();
 
-                    YaampPriceEntry entry = GetEntry(algo);
+                    YaampClonePriceEntry entry = GetEntry(algo);
                     if (entry == null) continue;
 
                     decimal price;
@@ -138,14 +138,14 @@ namespace MinerControl.Services
                 }
 
 
-                foreach (YaampPriceEntry entry in PriceEntries)
+                foreach (YaampClonePriceEntry entry in PriceEntries)
                     entry.AcceptSpeed = 0;
 
                 if (!data.ContainsKey("miners")) return;
                 Dictionary<string, object> miners = data["miners"] as Dictionary<string, object>;
                 foreach (string key in miners.Keys)
                 {
-                    YaampPriceEntry entry = GetEntry(key.ToLower());
+                    YaampClonePriceEntry entry = GetEntry(key.ToLower());
                     if (entry == null) continue;
                     Dictionary<string, object> item = miners[key] as Dictionary<string, object>;
                     entry.AcceptSpeed = item["hashrate"].ExtractDecimal()/1000000;
