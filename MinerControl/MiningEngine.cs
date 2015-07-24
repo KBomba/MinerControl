@@ -383,7 +383,7 @@ namespace MinerControl
                         case "ltcrabbit": break;
                         case "wepaybtc": break;
                         default :
-                            if (service.StartsWith("manual"))
+                            if (service.StartsWith("manual", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 Dictionary<string, object> serviceData = data[service] as Dictionary<string, object>;
                                 if (serviceData != null && serviceData.ContainsKey("name"))

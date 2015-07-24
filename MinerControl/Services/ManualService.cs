@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MinerControl.PriceEntries;
 
 namespace MinerControl.Services
@@ -36,6 +37,15 @@ namespace MinerControl.Services
 
         public override void CheckPrices()
         {
+            lock (MiningEngine)
+            {
+                MiningEngine.PricesUpdated = true;
+                MiningEngine.HasPrices = true;
+
+                LastUpdated = DateTime.Now;
+
+                UpdateHistory();
+            }
         }
     }
 }
