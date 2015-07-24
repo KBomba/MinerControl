@@ -32,6 +32,7 @@ namespace MinerControl
         private string _currencyCode;
         private string _currencySymbol;
 
+        private bool _showHistory;
         private bool _logactivity;
         private bool _mineByAverage;
 
@@ -233,6 +234,12 @@ namespace MinerControl
         {
             get { return _hasPrices; }
             set { _hasPrices = value; }
+        }
+
+        public bool ShowHistory
+        {
+            get { return _showHistory; }
+            set { _showHistory = value; }
         }
 
         #region Donation mining settings
@@ -481,6 +488,8 @@ namespace MinerControl
             _outlierPercentage = data.ContainsKey("outlierpercentage")
                 ? (double) data["outlierpercentage"].ExtractDecimal()
                 : 0.99;
+
+            _showHistory = !data.ContainsKey("showhistory") || bool.Parse(data["showhistory"].ToString());
 
             if (data.ContainsKey("logerrors"))
                 ErrorLogger.LogExceptions = bool.Parse(data["logerrors"].ToString());
@@ -1011,7 +1020,7 @@ namespace MinerControl
 
         public Action<string> WriteConsoleAction { get; set; }
         public Action<IPAddress, string> WriteRemoteAction { get; set; }
-        
+
         private void WriteConsole(string text, bool prefixTime = false)
         {
             if (WriteConsoleAction == null) return;

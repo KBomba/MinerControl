@@ -86,7 +86,15 @@ namespace MinerControl
                 RunBestAlgo();
             }
 
-            InitHistoryChart();
+            if (_engine.ShowHistory)
+            {
+                InitHistoryChart();
+            }
+            else
+            {
+                tabHistory.Controls.Clear();
+                tabPage.TabPages.Remove(tabHistory);
+            }
         }
 
         private void InitHistoryChart()
@@ -222,19 +230,22 @@ namespace MinerControl
 
         private void WriteRemote(IPAddress source, string text)
         {
-            Invoke(new MethodInvoker(
-                delegate
-                {
-                    _remoteBuffer.Add(string.Format("[{0}] {1}", source, text));
+            if (!_engine.RemoteReceive)
+            {
+                Invoke(new MethodInvoker(
+                    delegate
+                    {
+                        _remoteBuffer.Add(string.Format("[{0}] {1}", source, text));
 
-                    textRemote.Lines = _remoteBuffer.ToArray();
-                    textRemote.Focus();
-                    textRemote.SelectionStart = textRemote.Text.Length;
-                    textRemote.SelectionLength = 0;
-                    textRemote.ScrollToCaret();
-                    textRemote.Refresh();
-                }
-                ));
+                        textRemote.Lines = _remoteBuffer.ToArray();
+                        textRemote.Focus();
+                        textRemote.SelectionStart = textRemote.Text.Length;
+                        textRemote.SelectionLength = 0;
+                        textRemote.ScrollToCaret();
+                        textRemote.Refresh();
+                    }
+                    ));
+            }
         }
 
         #region Show/hide window
@@ -405,9 +416,12 @@ namespace MinerControl
             {
                 UpdateGrid();
 
-                HistoryChart historyChart = tabHistory.Controls["historyChart"] as HistoryChart;
-                if (historyChart != null) historyChart.UpdateChart(_engine.StatWindow, 3);
-                if (_totalHistoryForm != null) _totalHistoryForm.UpdateChart();
+                if (_engine.ShowHistory)
+                {
+                    HistoryChart historyChart = tabHistory.Controls["historyChart"] as HistoryChart;
+                    historyChart?.UpdateChart(_engine.StatWindow, 3);
+                    _totalHistoryForm?.UpdateChart();
+                }
 
                 _engine.PricesUpdated = false;
             }
@@ -422,7 +436,7 @@ namespace MinerControl
         {
             IService service = _engine.Services.FirstOrDefault(s => s.ServiceName == "NiceHash");
             NiceHashService niceHash = service as NiceHashService;
-            if(niceHash != null) niceHash.CheckPingTimes();
+            niceHash?.CheckPingTimes();
         }
 
         #endregion

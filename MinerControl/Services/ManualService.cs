@@ -39,9 +39,6 @@ namespace MinerControl.Services
         {
             lock (MiningEngine)
             {
-                MiningEngine.PricesUpdated = true;
-                MiningEngine.HasPrices = true;
-
                 LastUpdated = DateTime.Now;
 
                 UpdateHistory();
