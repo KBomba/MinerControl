@@ -20,7 +20,7 @@ namespace MinerControl.Services
 
         void Initialize(IDictionary<string, object> data);
         void CheckPrices();
-        void UpdateHistory();
+        void UpdateHistory(bool error = false);
         void UpdateTime();
         void UpdateExchange();
     }

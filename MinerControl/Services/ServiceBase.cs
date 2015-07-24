@@ -224,14 +224,17 @@ namespace MinerControl.Services
                 entry.Price = 0;
         }
 
-        public void UpdateHistory()
+        public void UpdateHistory(bool error = false)
         {
             ServiceHistory serviceHistory = ServiceHistory;
             if(serviceHistory == null) return;
 
             IList<TEntry> priceEntries = PriceEntries;
             foreach (TEntry entry in priceEntries)
+            {
+                if (error) entry.Price = 0;
                 serviceHistory.UpdatePrice(entry);
+            }
         }
     }
 }

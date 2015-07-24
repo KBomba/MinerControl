@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.ServiceProcess;
 using System.Text;
 using System.Web.Script.Serialization;
 using MinerControl.Services;
@@ -24,27 +23,32 @@ namespace MinerControl.Utility
             catch (Exception ex)
             {
                 IService service = jsonProcessor.Target as IService;
-                if (service != null) service.UpdateHistory();
-                // Makes sure the service us updated if price retrieval errors out
+                if (service != null && jsonProcessor.Method.Name == "ProcessPrices") service.UpdateHistory(true);
+                // Makes sure the service is updated if price retrieval errors out
                 ErrorLogger.Log(ex);
             }
         }
 
         private static void DownloadJsonComplete(object sender, DownloadStringCompletedEventArgs e)
         {
-            try
+            Action<object> jsonProcessor = e.UserState as Action<object>;
+            if (jsonProcessor != null)
             {
-                string pageString = e.Result;
-                if (pageString == null) return;
-                Action<object> jsonProcessor = e.UserState as Action<object>;
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                object data = serializer.DeserializeObject(pageString);
+                try
+                {
+                    string pageString = e.Result;
+                    if (pageString == null) return;
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    object data = serializer.DeserializeObject(pageString);
 
-                jsonProcessor(data);
-            }
-            catch (Exception ex)
-            {
-                ErrorLogger.Log(ex);
+                    jsonProcessor(data);
+                }
+                catch (Exception ex)
+                {
+                    IService service = jsonProcessor.Target as IService;
+                    if (service != null && jsonProcessor.Method.Name == "ProcessPrices") service.UpdateHistory(true);
+                    ErrorLogger.Log(ex);
+                }
             }
         }
     }
