@@ -23,7 +23,9 @@ namespace MinerControl.Services
             {"lyra2", 9},
             {"whirlpoolx", 10},
             {"qubit", 11},
-            {"quark", 12}
+            {"quark", 12},
+            {"axiom", 13},
+            {"lyra2v2", 14}
         };
 
         private Dictionary<string, double> _pingTimes;
@@ -258,6 +260,9 @@ namespace MinerControl.Services
             {
                 case "lyra2":
                     substituteAlgo = "lyra2re";
+                    break;
+                case "lyra2v2":
+                    substituteAlgo = "lyra2rev2";
                     break;
                 case "scryptn":
                     substituteAlgo = "scryptnf";
