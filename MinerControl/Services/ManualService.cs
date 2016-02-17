@@ -20,17 +20,19 @@ namespace MinerControl.Services
         {
             ExtractCommon(data);
 
+            decimal price = 0, fee = 0;
+            if (data.ContainsKey("price"))
+                price = data["price"].ExtractDecimal();
+            if (data.ContainsKey("fee"))
+                fee = data["fee"].ExtractDecimal();
+
             object[] items = data["algos"] as object[];
             foreach (object rawitem in items)
             {
                 Dictionary<string, object> item = rawitem as Dictionary<string, object>;
                 ManualPriceEntry entry = CreateEntry(item);
-
-                if (item.ContainsKey("price"))
-                    entry.Price = item["price"].ExtractDecimal();
-                if (item.ContainsKey("fee"))
-                    entry.FeePercent = item["fee"].ExtractDecimal();
-
+                entry.Price = price;
+                entry.FeePercent = fee;
                 Add(entry);
             }
         }

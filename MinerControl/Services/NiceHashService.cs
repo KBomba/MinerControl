@@ -29,7 +29,6 @@ namespace MinerControl.Services
         };
 
         private Dictionary<string, double> _pingTimes;
-        private bool _useWestHash; // When .usa, .hk, or .jp is used, balance calls should be done to westhash 
         public bool DetectStratum; 
 
         public NiceHashService()
@@ -52,7 +51,6 @@ namespace MinerControl.Services
             else
             {
                 DetectStratum = false;
-                if (!_param1.Contains(".eu.") && !_param2.Contains(".eu.") && !_param3.Contains(".eu.")) _useWestHash = true;
             }
 
             object[] items = data["algos"] as object[];
@@ -72,9 +70,7 @@ namespace MinerControl.Services
             ClearStalePrices();
             WebUtil.DownloadJson("https://www.nicehash.com/api?method=stats.global.current", ProcessPrices);
 
-            string apiUrl = _useWestHash
-                ? "https://www.westhash.com/api?method=stats.provider&addr={0}"
-                : "https://www.nicehash.com/api?method=stats.provider&addr={0}";
+            string apiUrl = "https://www.nicehash.com/api?method=stats.provider&addr={0}";
             WebUtil.DownloadJson(
                 string.Format(apiUrl, _account), ProcessBalances);
         }
@@ -190,7 +186,6 @@ namespace MinerControl.Services
             }
 
             _pingTimes = clone;
-            DetermineWestHashUsage();
         }
 
         public async void CheckPingTimes()
@@ -219,7 +214,6 @@ namespace MinerControl.Services
             }
 
             _pingTimes = clone;
-            DetermineWestHashUsage();
         }
 
         private static double CheckRoundTripTime(PingReply reply, string url, double roundTripTime)
@@ -245,12 +239,6 @@ namespace MinerControl.Services
             }
 
             return roundTripTime;
-        }
-
-        private void DetermineWestHashUsage()
-        {
-            _useWestHash = _pingTimes.OrderBy(ping => ping.Value).First().Key != ".eu.nicehash.com";
-            ServiceName = _useWestHash ? "WestHash" : "NiceHash";
         }
 
         public string GetBestStratum(string algorithmName)

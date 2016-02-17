@@ -390,22 +390,33 @@ namespace MinerControl
                         case "ltcrabbit": break;
                         case "wepaybtc": break;
                         default :
+                            Dictionary<string, object> serviceData = data[service] as Dictionary<string, object>;
                             if (service.StartsWith("manual", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                Dictionary<string, object> serviceData = data[service] as Dictionary<string, object>;
                                 if (serviceData != null && serviceData.ContainsKey("name"))
                                 {
-                                    LoadService(new ManualService(serviceData.GetString("name")), data, service);
+                                    LoadService(new ManualService(serviceData.GetString("name")), serviceData);
                                 }
                                 else
                                 {
-                                    LoadService(new ManualService(service), data, service);
+                                    LoadService(new ManualService(service), serviceData);
+                                }
+                            }
+                            else if (service.EndsWith("coin", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                if (serviceData != null && serviceData.ContainsKey("name"))
+                                {
+                                    LoadService(new CoinService(serviceData.GetString("name")), serviceData);
+                                }
+                                else
+                                {
+                                    LoadService(new CoinService(service), serviceData);
                                 }
                             }
                             else
                             {
                                 //All others are treated as YaampClones
-                                LoadService(new YaampCloneService(service), data, service);
+                                LoadService(new YaampCloneService(service), serviceData);
                             }
                             break;
                     }
@@ -455,6 +466,11 @@ namespace MinerControl
 
             Dictionary<string, object> serviceData = data[name] as Dictionary<string, object>;
             
+            LoadService(service, serviceData);
+        }
+
+        private void LoadService(IService service, Dictionary<string, object> serviceData)
+        {
             service.MiningEngine = this;
             _services.Add(service);
             service.Initialize(serviceData);
